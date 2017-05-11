@@ -1,0 +1,118 @@
+---
+title: "Assessment of treeinform before and after on null models of gene gain and loss"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+library(ape)
+library(ggtree)
+library(treeio)
+library(parallel)
+library(dplyr)
+knitr::opts_knit$set(root.dir = "~/Dropbox-Brown/treeinform/ms_treeinform/code")
+
+cores = detectCores()
+if (cores < 1) { cores = 1 }
+set.seed(1287234)
+
+l=0.00617025240076
+m=0.00634249271090
+
+processTree = function(x) tryCatch({ readLines(x) },
+         error = function(e) { NULL })
+
+#' Parses nhx text from gene trees and returns branch lengths
+#' for duplication events
+#' 
+#' @param tree_text Character string representing nhx tree
+#' @return A list of branch lengths
+#' @export
+parse_gene_trees = function( tree_text ){
+  if (is.null(tree_text)) { return(NULL) }
+	tree_tc = textConnection( tree_text )
+	tree = treeio::read.nhx( tree_tc )
+	close( tree_tc )
+	
+	# calibrate branch lengths to units of time
+	phylo <- chronos(tree@phylo)
+	phylo$edge.length <- phylo$edge.length*1000000
+	l <- length(phylo$edge.length)
+
+	# match up edge lengths to duplication events
+	data <- filter(tree@data, ND != l)
+	edge <- data.frame(phylo$edge)
+	edge$index <- rownames(edge)
+	edge <- arrange(edge, X2)
+	data$index <- edge$index
+	dup_events <- as.numeric(filter(data, Ev=='D')$index)
+	dup_lengths <- phylo$edge.length[dup_events]
+	
+	return(dup_lengths)
+}
+```
+
+In order to run CAFE, we first have to have a tab delimited file of gene family sizes as well as a species tree with ultrametric, integer branch lengths with units in time.
+
+We have a script cafe.py to create tab-delimited files from the gene trees, and we use chronos from ape to date the tree.
+
+```{r, tree_dating}
+t<-read.tree("species_tree.tre")
+chron<-chronos(t)
+chron$edge.length<-chron$edge.length*1000000
+```
+
+```{r, duplication_pdf}
+dup_pdf <- function(s,t,lambda,mu) {
+  #if(s > t) { return(0) }
+  #else {
+    num <- (lambda-mu)^2*exp(-(lambda-mu)*s)*(lambda - mu*exp(-(lambda-mu)*t))
+    denom <- (lambda-mu*exp(-(lambda-mu)*s))^2*(1-exp(-(lambda-mu)*t))
+    f <- num/denom
+    return(f)
+  #}
+}
+```
+
+Trying for a few different rates of duplication and loss...
+
+```{r, plot}
+u = runif(10000, min=0, max=100)
+y = unlist(lapply(u, function(x) dup_pdf(x, 100, l, m)))
+plot(u, y)
+```
+
+```{r, pre-treeinform}
+#5299 gene trees + 5301 (missing 5300)
+# test with 100 for now
+setwd("~/Dropbox (Brown)/treeinform/phyldog-before")
+s <- 1:100
+edges_before <- unlist(mclapply(s, function(x) parse_gene_trees(processTree(paste0(x, ".ReconciledTree"))), mc.cores = cores))
+save(edges_before, file="edges_before.Rdata")
+
+setwd("~/Dropbox (Brown)/treeinform/phyldog-after")
+k = 7000:7100 #weird
+edges_after <- unlist(mclapply(k, function(x) parse_gene_trees(processTree(paste0(x, ".ReconciledTree"))), mc.cores = cores))
+save(edges_after, file="edges_after.Rdata")
+
+l = 0.00000060751289
+m = 0.00000062389678
+
+edges <- c(edges_before, edges_after)
+l1 = length(edges_before)
+l2 = length(edges_after)
+grp <- rep(NA, l1+l2)
+grp[1:l1] <- "Before"
+grp[l1+1:l2] <- "After"
+data = data.frame(edges, grp)
+f = function(x) dup_pdf(x,1000000, 0.00000060751289, 0.00000062389678)
+ggplot(data, aes(edges)) + geom_density(aes(group=grp, color=grp)) + stat_function(fun=f)
+
+f2 = function(x) dup_pdf(x,1000000, 0.00000042965398, 0.0000005518364)
+f3 = function(x) dup_pdf(x,1000000, 0.0000065, 0.0000055)
+```
+
+# Analysis under a Mixture Model
+
+```{r, mixture}
+
+```
