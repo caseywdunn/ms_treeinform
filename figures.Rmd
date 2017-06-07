@@ -1,0 +1,76 @@
+---
+title: "treeinform manuscript figure generator"
+output: html_notebook
+---
+
+This is a notebook snippet to generate some of the figures for the treeinform manuscript.
+
+# Figure 1: Gene tree before and gene tree after
+
+
+# Figure 2a: Percentage of tips fused
+
+The percentage of tips fused is...
+
+```{r, fused_percentage}
+
+```
+
+# Figure 2b: Theoretical duplication times compared to empirical duplication times from before treeinform and after treeinform
+
+In order to validate that treeinform produces more accurate gene trees, we compare the density of duplication times under a birth-death model with parameter $\lambda$=birth rate, $\mu$=death rate, and $t_{or}$=time of tree origin to the distribution of estimated duplication times for gene trees from before treeinform, and gene trees from after treeinform under 3 different thresholds: xx, xx, and xx.
+
+For the distribution of estimated duplication times of gene trees before and after treeinform, we used phylDOG to estimate duplication times in units of expected number of substitutions, then used chronos in ape to convert branch lengths to units of time with $t_{or}=1,000,000$.
+
+The pdf of duplication times under a birth-death model and given a time of origin is:
+$$
+f(x_i | t_{or}, \lambda, \mu) = (\lambda - \mu)^2 \frac{e^{-(\lambda-\mu)x_i}}{(\lambda - \mu e^{-(\lambda - \mu)x_i})^2} \frac{\lambda - \mu e^{-(\lambda - \mu)t}}{1 - e^{-(\lambda - \mu)t}} 
+$$
+as derived by Gernhard 2008. To compute this, we first estimate $\lambda$ and $\mu$ using CAFE3 with the same fixed $t_{or}=1,000,000$ and $G=\{ G_1, \ldots, G_k \}$=gene family sizes for gene trees $1, \ldots, k$, then plug the $\lambda$ and $\mu$ estimates from CAFE in along with again the same $t_{or}=1,000,000$. A key assumption here is that the fixed $t_{or}$ allows for accurate comparisons between the theoretical density of duplication times and the estimated duplication times even if it is technically an incorrect estimate of the age of the gene trees.
+
+# Figure 3: Mixture model fit
+
+Under the assumption that transcript annotation errors bias duplication times towards 0 and can be modeled as a gamma distribution, we can view the empirical distribution of duplication times before treeinform as a 2-component mixture of the gamma distribution and the theoretical provided by Gernhard:
+
+$$ P(x_i) = \pi_1 \Gamma(x_i|\alpha, \beta) + \pi_2 f(x_i | t_{or}=t, \lambda, \mu)$$
+where $\Gamma(x_i | \alpha, \beta)$ is the pdf for the gamma distribution with shape $\alpha$ and rate $\beta$, and $f(x_i | t_{or} = t, \lambda, \mu)$ is the pdf for the duplication times under birth rate $\lambda$ and death rate $\mu$ from above. $\pi_1$ and $\pi_2$ denote the mixing proportions, thus $\pi_1 + \pi_2 = 1$.
+
+We can use a modified EM algorithm that computes the Expectation step and Maximization step for the Gamma component as usual, but instead of computing the Maximization step for $f(x_i|t_{or},\lambda,\mu)$ with either a closed form solution or numerically, re-estimates $\lambda, \mu$ with CAFE and $\hat{\pi_2}G$ where $\hat{\pi_2}$ is the posterior proportion of transcripts correctly assigned to different genes computed from the Expectation step.
+
+Using this modified EM algorithm we can thus estimate not only the proportions of transcripts in each component - i.e. the proportion of transcripts assigned to different transcripts that should be from the same transcript, as well as the proportion of transcripts correctly assigned to different transcripts - but also iteratively more accurate estimates of the duplication rates $\lambda$ and loss rates $\mu$.
+
+A step-by-step of the modified EM algorithm is below:
+
+1.  compute E-step
+2.  compute M for $\alpha, \beta$
+3.  Use $\hat{\pi_2}G$, $t_{or}=1,000,000$ to re-estimate $\lambda, \mu$ with CAFE3
+4.  repeat until convergence
+  
+We initialize assignment of the labels using k-means.
+
+```{r, kmeans_initialization}
+load("data/edges_before.Rdata")
+edges_before.km <- kmeans(edges_before, 2)
+edges_before.df <- data.frame(x = edges_before, cluster = edges_before.km$cluster)
+edges_before.df %>%
+  mutate(num = row_number()) %>%
+  ggplot(aes(y = num, x = x, color = factor(cluster))) +
+  geom_point() +
+  ylab("Values") +
+  ylab("Data Point Number") +
+  scale_color_discrete(name = "Cluster") +
+  ggtitle("K-means Clustering")
+```
+
+```{r, expectation}
+comp1.prod <- dgamma(x=edges_before, shape=edges_before.summary.df$mu[1]^2/edges_before.summary.df$std[1]^2, rate=edges_before.summary.df$mu[1]/edges_before.summary.df$std[1]^2) * edges_before.summary.df$alpha[1]
+comp2.prod <- edges_before.df %>% mutate(pdf=f(x)*edges_before.summary.df$alpha[2]) %>% select(pdf)
+normalizer <- comp1.prod + comp2.prod
+comp1.post <- comp1.prod / normalizer
+comp2.post <- comp2.prod/normalizer
+```
+
+```{r, mixture}
+```
+
+# Calibration of times

@@ -1,6 +1,8 @@
 ---
 title: "Assessment of treeinform before and after on null models of gene gain and loss"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 ```{r setup, include=FALSE}
@@ -9,7 +11,7 @@ library(ggtree)
 library(treeio)
 library(parallel)
 library(dplyr)
-knitr::opts_knit$set(root.dir = "~/Dropbox-Brown/treeinform/ms_treeinform/code")
+#knitr::opts_knit$set(root.dir = "~/Dropbox-Brown/treeinform/ms_treeinform/code")
 
 cores = detectCores()
 if (cores < 1) { cores = 1 }
@@ -56,7 +58,7 @@ In order to run CAFE, we first have to have a tab delimited file of gene family 
 We have a script cafe.py to create tab-delimited files from the gene trees, and we use chronos from ape to date the tree.
 
 ```{r, tree_dating}
-t<-read.tree("species_tree.tre")
+t<-read.tree("code/species_tree.tre")
 chron<-chronos(t)
 chron$edge.length<-chron$edge.length*1000000
 ```
@@ -84,15 +86,15 @@ plot(u, y)
 ```{r, pre-treeinform}
 #5299 gene trees + 5301 (missing 5300)
 # test with 100 for now
-setwd("~/Dropbox (Brown)/treeinform/phyldog-before")
-s <- 1:100
-edges_before <- unlist(mclapply(s, function(x) parse_gene_trees(processTree(paste0(x, ".ReconciledTree"))), mc.cores = cores))
-save(edges_before, file="edges_before.Rdata")
+#s <- 1:100
+#edges_before <- unlist(mclapply(s, function(x) parse_gene_trees(processTree(paste0("../phyldog-before/", x, ".ReconciledTree"))), mc.cores = cores))
+#save(edges_before, file="edges_before.Rdata")
+load("data/edges_before.Rdata")
 
-setwd("~/Dropbox (Brown)/treeinform/phyldog-after")
-k = 7000:7100 #weird
-edges_after <- unlist(mclapply(k, function(x) parse_gene_trees(processTree(paste0(x, ".ReconciledTree"))), mc.cores = cores))
-save(edges_after, file="edges_after.Rdata")
+#k = 7000:7100 #weird
+#edges_after <- unlist(mclapply(k, function(x) parse_gene_trees(processTree(paste0(x, ".ReconciledTree"))), mc.cores = cores))
+#save(edges_after, file="edges_after.Rdata")
+load("data/edges_after.Rdata")
 
 l = 0.00000060751289
 m = 0.00000062389678
@@ -113,6 +115,64 @@ f3 = function(x) dup_pdf(x,1000000, 0.0000065, 0.0000055)
 
 # Analysis under a Mixture Model
 
-```{r, mixture}
+## Simple Gamma Mixture
 
+```{r, gammamix}
+library(mixtools)
+load("data/edges_before.Rdata")
+gm <- gammamixEM(edges_before)
+x <- sort(gm$x)
+a <- hist(x, plot=FALSE)
+maxy <- max(max(a$density), .3989*gm$lambda/gm$sigma)
+```
+
+Under the assumption that transcripts from the same gene that have been labeled as different genes will have inferred dupication times from a gamma distribution, we can create a 2-component mixture model and run an EM algorithm to back out the parameters of the mixture.
+
+Our mixture has the following form:
+$$ P(x_i) = a_{k_1} \Gamma(x_i|\alpha, \beta) + a_{k_2} f(x_i | t_{or}=t, \lambda, \mu)$$
+where $\Gamma(x_i | \alpha, \beta)$ is the pdf for the gamma distribution with shape $\alpha$ and rate $\beta$, and $f(x_i | t_{or} = t, \lambda, \mu)$ is the pdf for the duplication times under birth rate $\lambda$ and death rate $\mu$ from Gernhardt 2008.
+
+We initialize assignment of the labels using k-means.
+
+```{r, kmeans_initialization}
+load("data/edges_before.Rdata")
+edges_before.km <- kmeans(edges_before, 2)
+edges_before.df <- data.frame(x = edges_before, cluster = edges_before.km$cluster)
+edges_before.df %>%
+  mutate(num = row_number()) %>%
+  ggplot(aes(y = num, x = x, color = factor(cluster))) +
+  geom_point() +
+  ylab("Values") +
+  ylab("Data Point Number") +
+  scale_color_discrete(name = "Cluster") +
+  ggtitle("K-means Clustering")
+```
+
+The means, standard deviations, and initial mixing weights are as follows:
+
+```{r, kmeans_meanstd}
+edges_before.summary.df <- edges_before.df %>%
+  group_by(cluster) %>%
+  summarize(mu = mean(x), std = sd(x), size = n())
+edges_before.summary.df %>%
+  select(cluster, mu, std)
+edges_before.summary.df <- edges_before.summary.df %>%
+  mutate(alpha = size / sum(size))
+edges_before.summary.df %>%
+  select(cluster, size, alpha)
+```
+
+Now for the EM part.
+
+```{r, expectation}
+comp1.prod <- dgamma(x=edges_before, shape=edges_before.summary.df$mu[1]^2/edges_before.summary.df$std[1]^2, rate=edges_before.summary.df$mu[1]/edges_before.summary.df$std[1]^2) * edges_before.summary.df$alpha[1]
+comp2.prod <- edges_before.df %>% mutate(pdf=f(x)*edges_before.summary.df$alpha[2]) %>% select(pdf)
+normalizer <- comp1.prod + comp2.prod
+comp1.post <- comp1.prod / normalizer
+comp2.post <- comp2.prod/normalizer
+```
+
+```{r, maximization}
+fitdistr(x, "gamma", start)
+comp2.n <- sum(comp2.post)
 ```
