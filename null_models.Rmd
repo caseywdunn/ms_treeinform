@@ -20,37 +20,7 @@ set.seed(1287234)
 l=0.00617025240076
 m=0.00634249271090
 
-processTree = function(x) tryCatch({ readLines(x) },
-         error = function(e) { NULL })
-
-#' Parses nhx text from gene trees and returns branch lengths
-#' for duplication events
-#' 
-#' @param tree_text Character string representing nhx tree
-#' @return A list of branch lengths
-#' @export
-parse_gene_trees = function( tree_text ){
-  if (is.null(tree_text)) { return(NULL) }
-	tree_tc = textConnection( tree_text )
-	tree = treeio::read.nhx( tree_tc )
-	close( tree_tc )
-	
-	# calibrate branch lengths to units of time
-	phylo <- chronos(tree@phylo)
-	phylo$edge.length <- phylo$edge.length*1000000
-	l <- length(phylo$edge.length)
-
-	# match up edge lengths to duplication events
-	data <- filter(tree@data, ND != l)
-	edge <- data.frame(phylo$edge)
-	edge$index <- rownames(edge)
-	edge <- arrange(edge, X2)
-	data$index <- edge$index
-	dup_events <- as.numeric(filter(data, Ev=='D')$index)
-	dup_lengths <- phylo$edge.length[dup_events]
-	
-	return(dup_lengths)
-}
+source("code/functions.R")
 ```
 
 In order to run CAFE, we first have to have a tab delimited file of gene family sizes as well as a species tree with ultrametric, integer branch lengths with units in time.

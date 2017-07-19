@@ -9,12 +9,14 @@ output:
 library(ape)
 library(ggplot2)
 library(dplyr)
+library(hutan)
+
+source("code/functions.R")
 ```
 
 This is a notebook snippet to generate some of the figures for the treeinform manuscript.
 
 # Figure 1: Gene tree before and gene tree after
-
 
 # Figure 2a: Percentage of reassigned tips
 
@@ -92,3 +94,13 @@ edges_before.df %>%
 ```
 
 # Calibration of times
+
+We need to calibrate gene tree branch lengths relative to time in order to [xxx] Basically use speciation times to calibrate duplication times. From ms_comparative_expression.
+
+```{r, calibration}
+# make speciation calibration times (taken from chronos)
+age <- c(0.1718036, 0.1430510, 0.2490215, 0.3227746, 0.5157844, 1.0000000)
+clade <- c("Calycophora", "Agalmatidae", "Chodorophora", "Siphonophora", "Hydrozoa", "Cnidaria")
+calibration_times = data.frame(age, clade, stringsAsFactors = FALSE)
+
+```
