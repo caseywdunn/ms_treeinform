@@ -1,0 +1,176 @@
+## SLURM PROLOG ###############################################################
+##    Job ID : 16927655
+##  Job Name : phyldog
+##  Nodelist : node[604,611,643,816,819-820,822,835]
+##      CPUs : 12
+##  Mem/Node : 112640 MB
+## Directory : /gpfs_home/bguang/repos/ms_treeinform/code
+##   Started : Wed Jul 19 08:41:43 EDT 2017
+###############################################################################
+/var/spool/slurmd/job16927655/slurm_script: line 10: activate: No such file or directory
+module: loading 'phyldog/Aug2016'
+module: loading 'agalma/1.0.0'
+
+
+	Welcome to the PHYLDOG file preparation script.
+
+
+This script will ask you for two input directories, one containing
+only alignment files, and one containing only link files. Link files
+relate sequences in the alignments to species. They are formatted as
+follows:
+
+Species_A:gene_A1
+Species_B:gene_B1;gene_B2
+Species_A:gene_A2
+Species_C:gene_C1
+...
+The script will ask you for a folder that will contain option files,
+and another that will contain results output by PHYLDOG.
+This script does not intend to cover all the options that PHYLDOG can
+accept. Rather, it is meant to be a convenient way to quickly generate
+a list of reasonable option files, with default values that should
+work in the general case. In particular, this script is pretty dumb
+about the models of sequence evolution it can set up, and it sets up
+the same model for all the gene families. PHYLDOG can work with a much
+larger array of models, including different models for different gene
+families, but to use them you will need to edit the option files using
+a text editor or custom scripts.
+For comments and questions, please contact Bastien Boussau:
+
+	boussau@gmail.com
+
+
+
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Absolute PATH to the folder containing all the alignment files?	/users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/multalign-29/alignments exists and contains 17316 files, presumably all alignments.
+
+What alphabet? DNA or RNA or CODON or PROTEIN?	Alphabet: PROTEIN
+
+We are going to be setting a LG08+Gamma4 model, by default, in all gene family-specific option files.
+
+This can be changed directly in the family-specific option files along with many other options.
+
+What alignment format? FASTA or MASE or PHYLIP or CLUSTAL or DCSE or NEXUS?	Alignment format: FASTA
+
+Absolute PATH to the folder containing all the link files?	/users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/links exists and contains 5773 files, presumably all link files.
+
+Absolute PATH to the folder that will contain all the option files?	/users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles exists and will contain the option files.
+
+Absolute PATH to the folder that will contain all the result files?	/users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/ResultFiles exists and will contain the result files.
+
+Do you want to provide a starting species tree (Newick)?	Absolute PATH to the starting species tree file (Newick)?	Starting from /users/bguang/repos/ms_treeinform/code/species_tree.tre 
+
+Do you want to optimize the species tree topology?	NOT optimizing the species tree topology.
+
+Do you want to optimize the duplication and loss parameters?	How do you want to optimize the duplication and loss parameters? Branchwise or average ?	Optimizing the duplication and loss parameters, using BRANCHWISE.
+
+Do you want to assume that all genomes, if they had no missing data, would have the same number of genes?	NOT assuming that all the genomes have the same number of genes.
+
+Do you want to optimize the gene tree topologies?	Optimizing the gene tree topologies.
+
+What time limit do you want to set, in hours (minimum 2h)?	We will stop at the latest about 1 hour before 72.
+
+Now we create one option file per gene family, but we do so only if we find an alignment file and a link file that correspond to each other.
+
+Correspondance is based on the radical of the file names (file name without .extension).
+
+
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	Taxonomic distribution in the gene families for which we created option files:
+
+Abylopsis_tetragona : 13617 genes.
+Nanomia_bijuga : 15762 genes.
+Agalma_elegans : 16269 genes.
+Nematostella_vectensis : 11274 genes.
+Hydra_magnipapillata : 14658 genes.
+Physalia_physalis : 13491 genes.
+Craseoa_lathetica : 15714 genes.
+
+	Average number of genes: 14397 ; Maximum: 16269 ; Minimum: 11274
+
+
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+	To launch PHYLDOG, you will need to run something like:
+
+
+	mpirun -np NUMBER_OF_PROCESSES PATH_TO_PHYLDOG/phyldog param=/users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt
+
+
+
+	Thank you for using this PHYLDOG file preparation script!
+
+
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+******************************************************************
+*                   PHYLDOG, version 1.1.0                       *
+* Author: B. Boussau                            Created 16/07/07 *
+******************************************************************
+
+Server of rank 0 with PID 17193
+Input species tree.....................: user
+WARNING!!! Parameter reconciliation.model not specified. Default used instead: DL
+Species Tree file......................: /users/bguang/repos/ms_treeinform/code/species_tree.tre
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+Number of leaves.......................: 7
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+WARNING!!! Parameter debug not specified. Default used instead: 0
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+WARNING!!! Parameter PATH not specified. Default used instead: 
+WARNING!!! Parameter debug not specified. Default used instead: 0
+WARNING!!! Parameter PATH not specified. Default used instead: 
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+WARNING!!! Parameter debug not specified. Default used instead: 0
+WARNING!!! Parameter debug not specified. Default used instead: 0
+WARNING!!! Parameter PATH not specified. Default used instead: 
+WARNING!!! Parameter PATH not specified. Default used instead: 
+WARNING!!! Parameter debug not specified. Default used instead: 0
+WARNING!!! Parameter PATH not specified. Default used instead: 
+WARNING!!! Parameter fix.outgroup not specified. Default used instead: 0
+WARNING!!! Parameter branch.expected.numbers.optimization not specified. Default used instead: average
+Optimization of the branch-wise expected numbers of duplications and losses: average
+WARNING!!! Parameter genome.coverage.file not specified. Default used instead: none
+No file for genome.coverage.file, we assume that all genomes are covered at 100%.
+The program will exit after 255600 seconds.
+WARNING!!! Parameter current.step not specified. Default used instead: 0
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+WARNING!!! Parameter debug not specified. Default used instead: 0
+WARNING!!! Parameter PATH not specified. Default used instead: 
+Using 17316 gene families.
+Using 12 nodes
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+Parsing file /users/bguang/scratch/treeinform/thresholds/scratch/threshold-1/OptionFiles/GeneralOptions.txt for options.
+WARNING!!! Parameter debug not specified. Default used instead: 0
+WARNING!!! Parameter debug not specified. Default used instead: 0
+WARNING!!! Parameter debug not specified. Default used instead: 0
+WARNING!!! Parameter debug not specified. Default used instead: 0
+WARNING!!! Parameter debug not specified. Default used instead: 0
+WARNING!!! Parameter PATH not specified. Default used instead: 
+WARNING!!! Parameter PATH not specified. Default used instead: 
+WARNING!!! Parameter PATH not specified. Default used instead: 
+WARNING!!! Parameter PATH not specified. Default used instead: 
+WARNING!!! Parameter PATH not specified. Default used instead: 
+Client 0 is in charge of 1574 gene families; Total Weight : 2.88171e+07
+Client 1 is in charge of 1574 gene families; Total Weight : 2.88169e+07
+Client 2 is in charge of 1574 gene families; Total Weight : 2.88169e+07
+Client 3 is in charge of 1574 gene families; Total Weight : 2.8817e+07
+Client 4 is in charge of 1574 gene families; Total Weight : 2.8817e+07
+Client 5 is in charge of 1574 gene families; Total Weight : 2.8817e+07
+Client 6 is in charge of 1574 gene families; Total Weight : 2.8817e+07
+Client 7 is in charge of 1574 gene families; Total Weight : 2.8817e+07
+Client 8 is in charge of 1574 gene families; Total Weight : 2.8817e+07
+Client 9 is in charge of 1575 gene families; Total Weight : 2.88171e+07
+Client 10 is in charge of 1575 gene families; Total Weight : 2.88171e+07
+WARNING!!! Parameter output.file.suffix not specified. Default used instead: 
