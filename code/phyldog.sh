@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -t 2-0:00:00
-#SBATCH --array=1
+#SBATCH --array=2-10
 #SBATCH -n 12
 #SBATCH -N 8
 #SBATCH --qos=epscor-condo
@@ -11,26 +11,31 @@ source activate treeinform
 module load phyldog/Aug2016
 module load agalma/1.0.0
 
-WORKDIR=/users/bguang/scratch/treeinform/thresholds/scratch/threshold-1
-#WORKDIR=/users/bguang/scratch/treeinform/thresholds/scratch/threshold-${SLURM_ARRAY_TASK_ID}
+#WORKDIR=/users/bguang/scratch/treeinform/thresholds/scratch/threshold-1
+WORKDIR=/users/bguang/scratch/treeinform/thresholds/scratch/threshold-${SLURM_ARRAY_TASK_ID}
 CODEDIR=/users/bguang/repos/ms_treeinform/code
 
 cd $WORKDIR
 mkdir -p links
 mkdir -p OptionFiles
 mkdir -p ResultFiles
-cd multalign-29/alignments
-for f in *.fa
+
+cd multalign-29
+mkdir -p fa-gb # move fa-gb files for phyldog into here
+cd alignments
+for f in *.fa-gb
 do
-  NAME=${f%.fa}
+  NAME=${f%.fa-gb}
   OUT="$WORKDIR/links/$f"
   cat $f | python $CODEDIR/parse_links.py >$OUT
+  mv $f ../fa-gb
 done
+
 cd ../..
 cut -d: -f1 $WORKDIR/links/* | sort -u >SpeciesNames.txt
 
 # inputFile.txt for prepareData.py
-echo $WORKDIR/multalign-29/alignments > inputFile.txt
+echo $WORKDIR/multalign-29/fa-gb > inputFile.txt
 echo Protein >> inputFile.txt
 echo fasta >> inputFile.txt
 echo $WORKDIR/links >> inputFile.txt
