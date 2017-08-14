@@ -10,6 +10,17 @@ library(ape)
 library(ggplot2)
 library(dplyr)
 library(hutan)
+library(treeio)
+library(parallel)
+library(dplyr)
+library(runjags)
+
+cores = detectCores()
+if (cores < 1) { cores = 1 }
+set.seed(1287234)
+
+l=0.00617025240076
+m=0.00634249271090
 
 source("code/functions.R")
 ```
@@ -38,7 +49,7 @@ ggplot(fused.df.percents, aes(threshold, reassigned)) + geom_jitter() + scale_x_
 
 # Figure 2b: Theoretical duplication times compared to empirical duplication times from before treeinform and after treeinform
 
-In order to validate that treeinform produces more accurate gene trees, we compare the density of duplication times under a birth-death model with parameter $\lambda$=birth rate, $\mu$=death rate, and $t_{or}=\{ t_{or,1}, t_{or,2}, \ldots, t_{or,K} \}$=time of tree origin for gene families $1, \ldots, K$ to the distribution of estimated duplication times for gene trees from before treeinform, and gene trees from after treeinform under 3 different thresholds: xx, xx, and xx.
+In order to validate that treeinform produces more accurate gene trees, we compare the density of duplication times under a birth-death model with parameter $\lambda$=birth rate, $\mu$=death rate, and $t_{or}=\{ t_{or,1}, t_{or,2}, \ldots, t_{or,K} \}$=time of tree origin for gene families $1, \ldots, K$ to the distribution of estimated duplication times for gene trees from before treeinform, and gene trees from after treeinform under 3 different thresholds: 50, 0.05, and 5e-05.
 
 For the distribution of estimated duplication times of gene trees before and after treeinform, we used phylDOG to estimate duplication times in units of expected number of substitutions, then used calibrated branch lengths to units of time under the scheme from ms_comparative_expression (see [Calibration of times](#calibration-of-times)).
 
@@ -46,30 +57,108 @@ The pdf of duplication times under a birth-death model and given a time of origi
 $$
 f(x_{i,k} | t_{or,k}, \lambda, \mu) = (\lambda - \mu)^2 \frac{e^{-(\lambda-\mu)x_i}}{(\lambda - \mu e^{-(\lambda - \mu)x_i})^2} \frac{\lambda - \mu e^{-(\lambda - \mu)t}}{1 - e^{-(\lambda - \mu)t}} 
 $$
-as derived by Gernhard 2008. To compute this, we first estimate $\lambda$ and $\mu$ using CAFE3 with the same fixed $t_{or}=1,000,000$ and $G=\{ G_1, \ldots, G_K \}$=gene family sizes for gene trees $1, \ldots, K$, then plug the $\lambda$ and $\mu$ estimates from CAFE in along with the same calibrated $t_{or,k}$s. A key assumption here is that the fixed $t_{or,k}$s allows for accurate comparisons between the theoretical density of duplication times and the estimated duplication times even if it is technically an incorrect estimate of the age of the gene trees (and species tree).
+where $x_{i, k}$ represents duplication times $i$ from gene tree $G_k$, as derived by Gernhard 2008. To compute this, we first estimate $\lambda$ and $\mu$ using CAFE3 with the same fixed $t_{or}=1,000,000$ and $G=\{ G_1, \ldots, G_K \}$=gene family sizes for gene trees $1, \ldots, K$, then plug the $\lambda$ and $\mu$ estimates from CAFE in along with the same calibrated $t_{or,k}$s. A key assumption here is that the fixed $t_{or,k}$s allows for accurate comparisons between the theoretical density of duplication times and the estimated duplication times even if it is technically an incorrect estimate of the age of the gene trees (and species tree).
+
+```{r, parse_trees, include=FALSE}
+# make speciation calibration times (taken from chronos)
+age <- c(0.1718036, 0.1430510, 0.2490215, 0.3227746, 0.5157844, 1.0000000)
+clade <- c("Calycophora", "Agalmatidae", "Chodorophora", "Siphonophora", "Hydrozoa", "Cnidaria")
+calibration_times = data.frame(age, clade, stringsAsFactors = FALSE)
+
+#5299 gene trees + 5301 (missing 5300)
+# try with 200
+#s <- 1:200
+#edges_before <- mclapply(s, function(x) #parse_gene_trees(processTree(paste0("../phyldog-before/", x, ".ReconciledTree"))), mc.cores = cores)
+#edges_before <- edges_before[which(!unlist(mclapply(edges_before, is.null)))]
+#save(edges_before, file="data/edges_before.Rdata")
+#load("data/edges_before.Rdata")
+#calibrated = mclapply(edges_before, function(x) calibrate_tree(x, calibration_times), mc.cores=cores)
+#calibrated = calibrated[which(!is.na(calibrated))]
+#dt_before = unlist(mclapply(calibrated, duplication_times, mc.cores=cores))
+#dt_before = dt_before[which(!is.na(dt_before))]
+#save(dt_before, file="data/dt_before.Rdata")
+load("data/dt_before.Rdata")
+
+#k <- 7000:7200
+#edges_after <- edges_after[which(!unlist(mclapply(edges_after, is.null)))]
+#save(edges_after, file="data/edges_after.Rdata")
+#load("data/edges_after.Rdata")
+#calibrated_after = mclapply(edges_after, function(x) calibrate_tree(x, calibration_times), mc.cores=cores)
+#calibrated_after = calibrated_after[which(!is.na(calibrated_after))]
+#threshold_5 = unlist(mclapply(calibrated_after, duplication_times, mc.cores=cores))
+#threshold_5 = threshold_5[which(!is.na(threshold_5))]
+#save(threshold_5, file="data/dt_threshold-5.Rdata")
+load("data/dt_threshold-5.Rdata")
+
+#l <- 27804:28004
+#threshold_2 <- dt_phyldog(l, "../threshold-2/", calibration_times)
+#save(threshold_2, file="data/dt_threshold-2.Rdata")
+load("data/dt_threshold-2.Rdata")
+
+#threshold_8 <- dt_phyldog(l, "../threshold-8/", calibration_times)
+#save(threshold_8, file="data/dt_threshold-8.Rdata")
+load("data/dt_threshold-8.Rdata")
+```
+
+```{r, fig2b}
+dt <- c(dt_before, threshold_5, threshold_2, threshold_8)
+l1 = length(dt_before)
+l2 = length(threshold_5)
+l3 = length(threshold_2)
+l4 = length(threshold_8)
+grp <- rep(NA, l1+l2+l3+l4)
+grp[1:l1] <- "Before"
+grp[l1+1:l2] <- "threshold=0.05"
+grp[l1+l2+1:l3] <- "threshold=50"
+grp[l1+l2+l3+1:l4] <- "threshold=5e-05"
+data = data.frame(dt, grp)
+f = function(x) dup_pdf(x, 1, 0.617025240076, 0.6334249271090)
+ggplot(data, aes(dt)) + geom_density(aes(group=grp, color=grp)) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density")
+```
+
+Additionally, we can run the Kolmogorov-Smirnov test on the CDFs of the thresholds to compare. The CDF of the theoretical distribution is:
+$$
+F(x_{i,k} | t=t_{or, k}, \lambda, \mu) = \frac{1 - e^{-(\lambda - \mu x_{i,k})}}{\lambda - \mu e^{-(\lambda - \mu)x_{i,k}}} \frac{\lambda - \mu e^{-(\lambda - \mu) t}}{1 - e^{-(\lambda - \mu) t}}
+$$
+
+```{r, ks}
+theoretical = function(x) dup_cdf(x, 1, 0.617025240076, 0.6334249271090)
+ks.test(dt_before, theoretical)
+ks.test(threshold_2, theoretical)
+ks.test(threshold_5, theoretical)
+ks.test(threshold_8, theoretical)
+```
 
 # Figure 3: Mixture model fit
+
+TODO: this finished running but forgot to impose constraints $\lambda, \mu > 0$ so have to rerun. Took about 21 hours.
 
 Under the assumption that transcript annotation errors bias duplication times towards 0 and can be modeled as a gamma distribution, we can view the empirical distribution of duplication times before treeinform as a 2-component mixture of the gamma distribution and the theoretical provided by Gernhard:
 
 $$ P(x_{i,k}) = \pi_1 \Gamma(x_{i,k}|\alpha, \beta) + \pi_2 f(x_{i,k} | t_{or,k}=t, \lambda, \mu)$$
 where $\Gamma(x_{i,k} | \alpha, \beta)$ is the pdf for the gamma distribution with shape $\alpha$ and rate $\beta$, and $f(x_{i,k} | t_{or,k} = t, \lambda, \mu)$ is the pdf for the duplication times under birth rate $\lambda$ and death rate $\mu$ from above. $\pi_1$ and $\pi_2$ denote the mixing proportions, thus $\pi_1 + \pi_2 = 1$.
 
-We can use a modified EM algorithm that computes the Expectation step and Maximization step for the Gamma component as usual, but instead of computing the Maximization step for $f(x_{i,k}|t_{or,k},\lambda,\mu)$ with either a closed form solution or numerically, re-estimates $\lambda, \mu$ with CAFE and $\hat{\pi_2}G$ where $\hat{\pi_2}$ is the posterior proportion of transcripts correctly assigned to different genes computed from the Expectation step.
+```{r, kmeans_initialization, eval=FALSE}
+load("data/dt_before.Rdata")
 
-Using this modified EM algorithm we can thus estimate not only the proportions of transcripts in each component - i.e. the proportion of transcripts assigned to different transcripts that should be from the same transcript, as well as the proportion of transcripts correctly assigned to different transcripts - but also iteratively more accurate estimates of the duplication rates $\lambda$ and loss rates $\mu$.
+# Data
+Y = dt_before
+N = length(dt_before)
 
-A step-by-step of the modified EM algorithm is below:
+# Initial values to get the chains started:
+alpha <- 1
+beta <- 1
+lambda <- 0.637025240076
+mu <- 0.614249271090
+t <- 1
+Constant <- 10
 
-1.  compute E-step
-2.  compute M for $\alpha, \beta$
-3.  Use $\hat{\pi_2}G$, $t_{or}=1,000,000$ to re-estimate $\lambda, \mu$ with CAFE3
-4.  repeat until convergence
-  
-We initialize assignment of the labels using k-means.
+Ones <- rep(1, N)
 
-```{r, kmeans_initialization}
-load("data/edges_before.Rdata")
+results <- run.jags(model="code/runjags.txt", n.chains=3, thin=1)
+results
+
+plot(results)
 edges_before.km <- kmeans(edges_before, 2)
 edges_before.df <- data.frame(x = edges_before, cluster = edges_before.km$cluster)
 edges_before.df %>%
@@ -91,16 +180,4 @@ edges_before.df %>%
 ```
 
 ```{r, mixture}
-```
-
-# Calibration of times
-
-We need to calibrate gene tree branch lengths relative to time in order to [xxx] Basically use speciation times to calibrate duplication times. From ms_comparative_expression.
-
-```{r, calibration}
-# make speciation calibration times (taken from chronos)
-age <- c(0.1718036, 0.1430510, 0.2490215, 0.3227746, 0.5157844, 1.0000000)
-clade <- c("Calycophora", "Agalmatidae", "Chodorophora", "Siphonophora", "Hydrozoa", "Cnidaria")
-calibration_times = data.frame(age, clade, stringsAsFactors = FALSE)
-
 ```

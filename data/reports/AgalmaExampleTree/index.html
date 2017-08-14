@@ -1,0 +1,1130 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>AgalmaExampleTree</title>
+<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+<style type="text/css">
+body {
+  margin: 30px 50px;
+}
+.stats {
+  margin: 10px;
+  display: none;
+}
+.table {
+  font-size: 14px;
+  font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+.table-mini {
+  width: 50%;
+}
+div.stage { padding: 10px 0 10px 0; border-top: 5px solid #eee; }
+blockquote p { font-size: 14px; }
+.btn-lg,
+.btn-group-lg > .btn {
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 6px;
+}
+</style>
+<script type="text/javascript">
+function togglestats(element){
+element.nextElementSibling.style.display == "none" || element.nextElementSibling.style.display == "" ?
+element.nextElementSibling.style.display = "table" :
+element.nextElementSibling.style.display = "none";
+}
+</script>
+<script type="text/javascript" src="js/d3.v3.min.js"></script>
+<script type="text/javascript" src="js/newick.js"></script>
+<script type="text/javascript" src="js/d3.phylogram.js"></script>
+</style>
+</head>
+<body>
+<h1><em>AgalmaExampleTree</em></h1>
+<blockquote>
+<table class="table table-striped table-condensed">
+<tr><td><b>id</b></td><td>AgalmaExampleTree</td></tr>
+</table>
+</blockquote>
+<h2 id="toc">Table of Contents</a></h2><table class="table table-striped">
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 10</b><br/><i>homologize</i><br/>2017-02-08T16:41:27.521839<br/>node1001
+</td>
+<td class="minimal">
+<ul><li><a href="#homologize_10">homologize</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :      6274.77
+User Time (s)      :     97932.70
+System Time (s)    :       111.43
+Max Memory (KB)    :      722,800</pre>
+</td>
+</tr>
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 11</b><br/><i>multalign</i><br/>2017-02-08T18:26:03.786641<br/>node1001
+</td>
+<td class="minimal">
+<ul><li><a href="#multalign_11">multalign</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :      4972.94
+User Time (s)      :     10752.37
+System Time (s)    :      4346.20
+Max Memory (KB)    :   11,783,580</pre>
+</td>
+</tr>
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 12</b><br/><i>genetree</i><br/>2017-02-08T19:49:10.228527<br/>node1001
+</td>
+<td class="minimal">
+<ul><li><a href="#genetree_12">genetree</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :      2466.55
+User Time (s)      :     39073.42
+System Time (s)    :        72.01
+Max Memory (KB)    :      169,032</pre>
+</td>
+</tr>
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 13</b><br/><i>treeinform</i><br/>2017-02-08T22:40:03.232881<br/>node1011
+</td>
+<td class="minimal">
+<ul></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :        37.30
+User Time (s)      :        19.15
+System Time (s)    :         0.96
+Max Memory (KB)    :      480,380</pre>
+</td>
+</tr>
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 14</b><br/><i>homologize</i><br/>2017-02-08T22:40:41.855916<br/>node1011
+</td>
+<td class="minimal">
+<ul><li><a href="#homologize_14">homologize</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :      5941.68
+User Time (s)      :     91840.83
+System Time (s)    :       104.99
+Max Memory (KB)    :      722,968</pre>
+</td>
+</tr>
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 15</b><br/><i>multalign</i><br/>2017-02-09T00:19:45.571462<br/>node1011
+</td>
+<td class="minimal">
+<ul><li><a href="#multalign_15">multalign</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :      4985.49
+User Time (s)      :     10412.35
+System Time (s)    :      4213.67
+Max Memory (KB)    :   11,621,164</pre>
+</td>
+</tr>
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 16</b><br/><i>genetree</i><br/>2017-02-09T01:43:08.444965<br/>node1011
+</td>
+<td class="minimal">
+<ul><li><a href="#genetree_16">genetree</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :      1971.99
+User Time (s)      :     31165.64
+System Time (s)    :        69.93
+Max Memory (KB)    :      166,132</pre>
+</td>
+</tr>
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 17</b><br/><i>treeprune</i><br/>2017-02-09T02:17:01.100104<br/>node934
+</td>
+<td class="minimal">
+<ul><li><a href="#treeprune_17">treeprune</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :        69.60
+User Time (s)      :        67.79
+System Time (s)    :         1.51
+Max Memory (KB)    :    1,471,804</pre>
+</td>
+</tr>
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 18</b><br/><i>multalign</i><br/>2017-02-09T02:18:14.340861<br/>node934
+</td>
+<td class="minimal">
+<ul><li><a href="#multalign_18">multalign</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :      2755.16
+User Time (s)      :      1472.22
+System Time (s)    :      3014.64
+Max Memory (KB)    :    2,361,908</pre>
+</td>
+</tr>
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 19</b><br/><i>supermatrix</i><br/>2017-02-09T03:04:18.886223<br/>node934
+</td>
+<td class="minimal">
+<ul><li><a href="#supermatrix_19">supermatrix</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :         3.65
+User Time (s)      :         3.91
+System Time (s)    :         0.64
+Max Memory (KB)    :      243,992</pre>
+</td>
+</tr>
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 20</b><br/><i>supermatrix</i><br/>2017-02-09T03:04:24.410872<br/>node934
+</td>
+<td class="minimal">
+<ul><li><a href="#supermatrix_20">supermatrix</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :         3.36
+User Time (s)      :         3.73
+System Time (s)    :         0.43
+Max Memory (KB)    :      199,856</pre>
+</td>
+</tr>
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 21</b><br/><i>speciestree</i><br/>2017-02-09T03:04:28.824153<br/>node934
+</td>
+<td class="minimal">
+<ul><li><a href="#speciestree_21">speciestree</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :      1846.15
+User Time (s)      :     36873.25
+System Time (s)    :         6.83
+Max Memory (KB)    :      685,584</pre>
+</td>
+</tr>
+</table>
+<div id="homologize_10" class="stage">
+<h2>homologize <small>(Run 10)</small></h2>
+<blockquote>
+<p>Identifies homologous sequences across datasets. Takes assembly or group of
+assemblies and prepares a set of comprehensive comparisons between them. First
+an all by all BLAST is run with a stringent threshold, and the hits which match
+above a given score are used as edges between two transcripts which then form a
+graph. This graph is the basis of a series of comparative scores.</p>
+
+</blockquote>
+<p>Total sequences: 111348</p>
+<blockquote><p>Summary of all species processed.</p>
+</blockquote>
+<img src="10.cluster.hist.png"/>
+<blockquote><p>Distribution of the number of nodes in each cluster.</p>
+</blockquote>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">6244.60 [sum]</td>
+<td class="right">97898.98 [sum]</td>
+<td class="right">110.30 [sum]</td>
+<td class="right">357,120 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+makeblastdb
+</td>
+<td>
+prepare_blast
+</td>
+<td class="right">
+11.14
+</td>
+<td class="right">
+5.62
+</td>
+<td class="right">
+5.37
+</td>
+<td class="right">
+354,660
+</td>
+</tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+run_blast
+</td>
+<td class="right">
+6200.78
+</td>
+<td class="right">
+97878.95
+</td>
+<td class="right">
+64.40
+</td>
+<td class="right">
+354,908
+</td>
+</tr>
+<tr>
+<td>
+mcxload
+</td>
+<td>
+parse_edges
+</td>
+<td class="right">
+25.38
+</td>
+<td class="right">
+1.48
+</td>
+<td class="right">
+0.07
+</td>
+<td class="right">
+357,120
+</td>
+</tr>
+<tr>
+<td>
+mcl
+</td>
+<td>
+mcl_cluster
+</td>
+<td class="right">
+7.30
+</td>
+<td class="right">
+12.94
+</td>
+<td class="right">
+40.47
+</td>
+<td class="right">
+355,640
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="multalign_11" class="stage">
+<h2>multalign <small>(Run 11)</small></h2>
+<blockquote>
+<p>Applies sampling and length filters to each cluster of homologous sequences.</p>
+<p>Creates multiple sequence alignments for each cluster of homologous sequences
+using MAFFT using the E-INS-i algorithm; see doi: 10.1093/molbev/mst010.</p>
+<p>Cleans up alignments using Gblocks.</p>
+
+</blockquote>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">4923.36 [sum]</td>
+<td class="right">10737.93 [sum]</td>
+<td class="right">4343.23 [sum]</td>
+<td class="right">11,472,140 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+align_sequences
+</td>
+<td class="right">
+4899.48
+</td>
+<td class="right">
+10709.32
+</td>
+<td class="right">
+4288.21
+</td>
+<td class="right">
+11,472,140
+</td>
+</tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+cleanup_alignments
+</td>
+<td class="right">
+23.88
+</td>
+<td class="right">
+28.60
+</td>
+<td class="right">
+55.03
+</td>
+<td class="right">
+290,344
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="genetree_12" class="stage">
+<h2>genetree <small>(Run 12)</small></h2>
+<blockquote>
+<p>Builds gene trees for each alignment of homologous sequences, it builds a
+phylogenetic tree using the maximum likelihood optimality criterion as
+implemented in RAxML (see <a class="reference external" href="http://www.exelixis-lab.org/">http://www.exelixis-lab.org/</a> and
+doi:10.1093/bioinformatics/btl446).</p>
+<p>Use --previous for a specific set of alignments, otherwise this pipeline will
+search for the output from the most recent run of multalign for the given
+catalog ID.</p>
+
+</blockquote>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">2455.20 [sum]</td>
+<td class="right">39071.36 [sum]</td>
+<td class="right">70.05 [sum]</td>
+<td class="right">80,796 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+genetrees
+</td>
+<td class="right">
+2455.20
+</td>
+<td class="right">
+39071.36
+</td>
+<td class="right">
+70.05
+</td>
+<td class="right">
+80,796
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="homologize_14" class="stage">
+<h2>homologize <small>(Run 14)</small></h2>
+<blockquote>
+<p>Identifies homologous sequences across datasets. Takes assembly or group of
+assemblies and prepares a set of comprehensive comparisons between them. First
+an all by all BLAST is run with a stringent threshold, and the hits which match
+above a given score are used as edges between two transcripts which then form a
+graph. This graph is the basis of a series of comparative scores.</p>
+
+</blockquote>
+<p>Total sequences: 107067</p>
+<blockquote><p>Summary of all species processed.</p>
+</blockquote>
+<img src="14.cluster.hist.png"/>
+<blockquote><p>Distribution of the number of nodes in each cluster.</p>
+</blockquote>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">5911.53 [sum]</td>
+<td class="right">91808.42 [sum]</td>
+<td class="right">104.10 [sum]</td>
+<td class="right">356,888 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+makeblastdb
+</td>
+<td>
+prepare_blast
+</td>
+<td class="right">
+10.86
+</td>
+<td class="right">
+5.37
+</td>
+<td class="right">
+5.37
+</td>
+<td class="right">
+355,944
+</td>
+</tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+run_blast
+</td>
+<td class="right">
+5869.33
+</td>
+<td class="right">
+91789.30
+</td>
+<td class="right">
+60.81
+</td>
+<td class="right">
+356,192
+</td>
+</tr>
+<tr>
+<td>
+mcxload
+</td>
+<td>
+parse_edges
+</td>
+<td class="right">
+24.45
+</td>
+<td class="right">
+1.39
+</td>
+<td class="right">
+0.07
+</td>
+<td class="right">
+356,344
+</td>
+</tr>
+<tr>
+<td>
+mcl
+</td>
+<td>
+mcl_cluster
+</td>
+<td class="right">
+6.89
+</td>
+<td class="right">
+12.36
+</td>
+<td class="right">
+37.84
+</td>
+<td class="right">
+356,888
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="multalign_15" class="stage">
+<h2>multalign <small>(Run 15)</small></h2>
+<blockquote>
+<p>Applies sampling and length filters to each cluster of homologous sequences.</p>
+<p>Creates multiple sequence alignments for each cluster of homologous sequences
+using MAFFT using the E-INS-i algorithm; see doi: 10.1093/molbev/mst010.</p>
+<p>Cleans up alignments using Gblocks.</p>
+
+</blockquote>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">4931.80 [sum]</td>
+<td class="right">10398.97 [sum]</td>
+<td class="right">4210.70 [sum]</td>
+<td class="right">11,310,684 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+align_sequences
+</td>
+<td class="right">
+4912.36
+</td>
+<td class="right">
+10371.18
+</td>
+<td class="right">
+4157.15
+</td>
+<td class="right">
+11,310,684
+</td>
+</tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+cleanup_alignments
+</td>
+<td class="right">
+19.44
+</td>
+<td class="right">
+27.80
+</td>
+<td class="right">
+53.55
+</td>
+<td class="right">
+290,496
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="genetree_16" class="stage">
+<h2>genetree <small>(Run 16)</small></h2>
+<blockquote>
+<p>Builds gene trees for each alignment of homologous sequences, it builds a
+phylogenetic tree using the maximum likelihood optimality criterion as
+implemented in RAxML (see <a class="reference external" href="http://www.exelixis-lab.org/">http://www.exelixis-lab.org/</a> and
+doi:10.1093/bioinformatics/btl446).</p>
+<p>Use --previous for a specific set of alignments, otherwise this pipeline will
+search for the output from the most recent run of multalign for the given
+catalog ID.</p>
+
+</blockquote>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">1960.22 [sum]</td>
+<td class="right">31163.67 [sum]</td>
+<td class="right">67.92 [sum]</td>
+<td class="right">79,516 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+genetrees
+</td>
+<td class="right">
+1960.22
+</td>
+<td class="right">
+31163.67
+</td>
+<td class="right">
+67.92
+</td>
+<td class="right">
+79,516
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="treeprune_17" class="stage">
+<h2>treeprune <small>(Run 17)</small></h2>
+<blockquote>
+<p>For each gene tree generated in genetree, prune the tree to include only one
+representative sequence per taxon when sequences form a monophyletic group
+(here called 'monophyly masking'). Then prune the monophyly-masked tree into
+maximally inclusive subtrees with no more than one sequence per taxon (here
+called 'paralogy pruning').</p>
+<p>Use --previous for a specific set of trees, otherwise this pipeline will search
+for the output from the most recent run of genetree for the given catalog ID.</p>
+
+</blockquote>
+<table class="table table-striped table-condensed table-mini">
+<tr>
+<td>Cluster Size</td>
+<td>Frequency</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1094</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1467</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1567</td>
+</tr>
+<tr>
+<td>6</td>
+<td>1406</td>
+</tr>
+<tr>
+<td>7</td>
+<td>644</td>
+</tr>
+</table>
+<blockquote><p>Distribution of the number of orthologs in each gene cluster.</p>
+</blockquote>
+<table class="table table-striped table-condensed table-mini">
+<tr>
+<td>Threshold</td>
+<td># Clusters</td>
+<td>% Missing Genes</td>
+</tr>
+<tr>
+<td>3</td>
+<td>6178</td>
+<td>30.8%</td>
+</tr>
+<tr>
+<td>4</td>
+<td>5084</td>
+<td>25.1%</td>
+</tr>
+<tr>
+<td>5</td>
+<td>3617</td>
+<td>17.9%</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2050</td>
+<td>9.8%</td>
+</tr>
+<tr>
+<td>7</td>
+<td>644</td>
+<td>0.0%</td>
+</tr>
+</table>
+<blockquote></blockquote>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="multalign_18" class="stage">
+<h2>multalign <small>(Run 18)</small></h2>
+<blockquote>
+<p>Applies sampling and length filters to each cluster of homologous sequences.</p>
+<p>Creates multiple sequence alignments for each cluster of homologous sequences
+using MAFFT using the E-INS-i algorithm; see doi: 10.1093/molbev/mst010.</p>
+<p>Cleans up alignments using Gblocks.</p>
+
+</blockquote>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">2712.44 [sum]</td>
+<td class="right">1462.28 [sum]</td>
+<td class="right">3011.98 [sum]</td>
+<td class="right">2,076,256 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+align_sequences
+</td>
+<td class="right">
+2695.22
+</td>
+<td class="right">
+1442.27
+</td>
+<td class="right">
+2960.18
+</td>
+<td class="right">
+2,076,256
+</td>
+</tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+cleanup_alignments
+</td>
+<td class="right">
+17.22
+</td>
+<td class="right">
+20.01
+</td>
+<td class="right">
+51.80
+</td>
+<td class="right">
+269,420
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="supermatrix_19" class="stage">
+<h2>supermatrix <small>(Run 19)</small></h2>
+<blockquote>
+<p>Concatenates alignments of orhologous sequences to create a supermatrix.
+It also creates a supermatrix with a given proportion of gene occupancy.</p>
+
+</blockquote>
+<p>Files: 
+[<a href="19.supermatrix.fa">FASTA</a>] [<a href="19.supermatrix.partition.txt">partition</a>]
+</p>
+<table class="table table-striped table-condensed table-mini">
+<tr>
+<td>Sequence type</td>
+<td style="text-align:right">aa</td>
+</tr>
+<tr>
+<td>Target gene occupancy</td>
+<td style="text-align:right">100.0%</td>
+</tr>
+<tr>
+<td>Actual gene occupancy</td>
+<td style="text-align:right">74.9%</td>
+</tr>
+<tr>
+<td>Number of genes</td>
+<td style="text-align:right">5,071</td>
+</tr>
+<tr>
+<td>Number of columns</td>
+<td style="text-align:right">1,762,759</td>
+</tr>
+</table>
+<img src="19.supermatrix.png"/>
+<blockquote><p>Image of the gene occupancy in the supermatrix, ordered by most
+complete taxa, then most complete gene. Black indicates the gene is
+present, white that it is absent.</p>
+</blockquote>
+<img src="19.supermatrix.cumalitve.png"/>
+<blockquote><p>Plot of gene occupancies for cumulatively larger subsets of genes in
+the supermatrix, ordered by most complete gene.</p>
+</blockquote>
+<table class="table table-striped table-condensed table-mini">
+<tr>
+<td>Species</td>
+<td style="text-align:right">Number of genes</td>
+<td style="text-align:right">Percent</td>
+</tr>
+<tr>
+<td>Agalma_elegans</td>
+<td style="text-align:right">4498</td>
+<td style="text-align:right">88.7%</td>
+</tr>
+<tr>
+<td>Nanomia_bijuga</td>
+<td style="text-align:right">4255</td>
+<td style="text-align:right">83.9%</td>
+</tr>
+<tr>
+<td>Craseoa_lathetica</td>
+<td style="text-align:right">4172</td>
+<td style="text-align:right">82.3%</td>
+</tr>
+<tr>
+<td>Hydra_magnipapillata</td>
+<td style="text-align:right">3844</td>
+<td style="text-align:right">75.8%</td>
+</tr>
+<tr>
+<td>Abylopsis_tetragona</td>
+<td style="text-align:right">3623</td>
+<td style="text-align:right">71.4%</td>
+</tr>
+<tr>
+<td>Physalia_physalis</td>
+<td style="text-align:right">3312</td>
+<td style="text-align:right">65.3%</td>
+</tr>
+<tr>
+<td>Nematostella_vectensis</td>
+<td style="text-align:right">2876</td>
+<td style="text-align:right">56.7%</td>
+</tr>
+</table>
+<blockquote><p>Number and percent of genes per taxon in supermatrix.</p>
+</blockquote>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="supermatrix_20" class="stage">
+<h2>supermatrix <small>(Run 20)</small></h2>
+<blockquote>
+<p>Concatenates alignments of orhologous sequences to create a supermatrix.
+It also creates a supermatrix with a given proportion of gene occupancy.</p>
+
+</blockquote>
+<p>Files: 
+[<a href="20.supermatrix.fa">FASTA</a>] [<a href="20.supermatrix.partition.txt">partition</a>]
+</p>
+<table class="table table-striped table-condensed table-mini">
+<tr>
+<td>Sequence type</td>
+<td style="text-align:right">aa</td>
+</tr>
+<tr>
+<td>Target gene occupancy</td>
+<td style="text-align:right">95.0%</td>
+</tr>
+<tr>
+<td>Actual gene occupancy</td>
+<td style="text-align:right">95.0%</td>
+</tr>
+<tr>
+<td>Number of genes</td>
+<td style="text-align:right">989</td>
+</tr>
+<tr>
+<td>Number of columns</td>
+<td style="text-align:right">373,730</td>
+</tr>
+</table>
+<img src="20.supermatrix.png"/>
+<blockquote><p>Image of the gene occupancy in the supermatrix, ordered by most
+complete taxa, then most complete gene. Black indicates the gene is
+present, white that it is absent.</p>
+</blockquote>
+<img src="20.supermatrix.cumalitve.png"/>
+<blockquote><p>Plot of gene occupancies for cumulatively larger subsets of genes in
+the supermatrix, ordered by most complete gene.</p>
+</blockquote>
+<table class="table table-striped table-condensed table-mini">
+<tr>
+<td>Species</td>
+<td style="text-align:right">Number of genes</td>
+<td style="text-align:right">Percent</td>
+</tr>
+<tr>
+<td>Agalma_elegans</td>
+<td style="text-align:right">980</td>
+<td style="text-align:right">99.1%</td>
+</tr>
+<tr>
+<td>Nanomia_bijuga</td>
+<td style="text-align:right">985</td>
+<td style="text-align:right">99.6%</td>
+</tr>
+<tr>
+<td>Craseoa_lathetica</td>
+<td style="text-align:right">980</td>
+<td style="text-align:right">99.1%</td>
+</tr>
+<tr>
+<td>Hydra_magnipapillata</td>
+<td style="text-align:right">980</td>
+<td style="text-align:right">99.1%</td>
+</tr>
+<tr>
+<td>Abylopsis_tetragona</td>
+<td style="text-align:right">735</td>
+<td style="text-align:right">74.3%</td>
+</tr>
+<tr>
+<td>Physalia_physalis</td>
+<td style="text-align:right">948</td>
+<td style="text-align:right">95.9%</td>
+</tr>
+<tr>
+<td>Nematostella_vectensis</td>
+<td style="text-align:right">969</td>
+<td style="text-align:right">98.0%</td>
+</tr>
+</table>
+<blockquote><p>Number and percent of genes per taxon in supermatrix.</p>
+</blockquote>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="speciestree_21" class="stage">
+<h2>speciestree <small>(Run 21)</small></h2>
+<blockquote>
+<p>Builds a species tree from a supermatrix.</p>
+
+</blockquote>
+
+<div id="run_21_canvas"></div>
+<pre id="run_21_newick_text" onclick="selectText(this)">(((((Craseoa_lathetica:0.07418923182691430918,Abylopsis_tetragona:0.16772386243023812424)100:0.06036465795666499934,(Agalma_elegans:0.06274253674624589994,Nanomia_bijuga:0.10587937657822119042)100:0.06144479586857096859)100:0.05547080388864688433,Physalia_physalis:0.14972242108465486088)100:0.12918114863769267209,Hydra_magnipapillata:0.31719632445317125224):0.35361922261528849765,Nematostella_vectensis:0.35361922261528849765);</pre>
+<script type="text/javascript">
+var run_21_newick = Newick.parse("(((((Craseoa_lathetica:0.07418923182691430918,Abylopsis_tetragona:0.16772386243023812424)100:0.06036465795666499934,(Agalma_elegans:0.06274253674624589994,Nanomia_bijuga:0.10587937657822119042)100:0.06144479586857096859)100:0.05547080388864688433,Physalia_physalis:0.14972242108465486088)100:0.12918114863769267209,Hydra_magnipapillata:0.31719632445317125224):0.35361922261528849765,Nematostella_vectensis:0.35361922261528849765);");
+var newickNodes = []
+function buildNewickNodes(node, callback) {
+newickNodes.push(node)
+if (node.branchset) {
+for (var i=0; i < node.branchset.length; i++) {
+buildNewickNodes(node.branchset[i])
+}
+}
+}
+buildNewickNodes(run_21_newick);
+
+d3.phylogram.build("#run_21_canvas", run_21_newick, {
+width: 800,
+height: 800
+});
+
+function selectText(elem) {
+if (document.selection) {
+var range = document.body.createTextRange();
+range.moveToElementText(elem);
+range.select();
+} else if (window.getSelection) {
+var range = document.createRange();
+range.selectNode(elem);
+window.getSelection().addRange(range);
+}
+}
+</script>
+
+<blockquote><p>Maximum-likelihood tree for the supermatrix.</p>
+</blockquote>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">1845.96 [sum]</td>
+<td class="right">36872.65 [sum]</td>
+<td class="right">6.49 [sum]</td>
+<td class="right">596,108 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+raxml-pthreads
+</td>
+<td>
+speciestree
+</td>
+<td class="right">
+1845.96
+</td>
+<td class="right">
+36872.65
+</td>
+<td class="right">
+6.49
+</td>
+<td class="right">
+596,108
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+</body></html>

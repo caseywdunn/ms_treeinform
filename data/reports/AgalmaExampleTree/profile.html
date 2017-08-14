@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>BioLite Resource Profile</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="css/bootstrap.min.css" rel="stylesheet"/>
+<style>
+@media print {
+body {-webkit-print-color-adjust: exact;}
+}
+.container {
+width: 1152px;			/* width of figure */
+margin: 30px auto;
+}
+.table {
+font-size: 14px;
+font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+.table td, .table th {
+text-align:right;
+}
+.table td.left, .table th.left {
+text-align:left;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Resource Usage for <em>AgalmaExampleTree</em> <small>(Runs 10-21)</small></h2>
+<object data="profile.svg" type="image/svg+xml"></object>
+<h4>Calls longer than 1% of total runtime</h4>
+<table class="table table-striped table-condensed">
+<tr><th>#</th><th class="left">Stage / Call</th><th>Runtime</th><th>User CPU%</th><th>System CPU%</th><th>Peak Memory</th></tr>
+<tr><td>0</td><td class="left"><span style="color:#8DD3C7 !important">&#x25A3;</span> homologize.prepare_blast.makeblastdb</td><td>1:43:20</td><td>1578%</td><td>1%</td><td>346.6 MB</td></tr>
+<tr><td>2</td><td class="left"><span style="color:#FFED6F !important">&#x25A3;</span> homologize.parse_edges.mcxload</td><td>1:21:39</td><td>219%</td><td>88%</td><td>10.9 GB</td></tr>
+<tr><td>3</td><td class="left"><span style="color:#BEBADA !important">&#x25A3;</span> homologize.mcl_cluster.mcl</td><td>40:55</td><td>1591%</td><td>3%</td><td>78.9 MB</td></tr>
+<tr><td>4</td><td class="left"><span style="color:#FB8072 !important">&#x25A3;</span> genetree.genetrees.parallel</td><td>1:37:49</td><td>1564%</td><td>1%</td><td>347.8 MB</td></tr>
+<tr><td>5</td><td class="left"><span style="color:#80B1D3 !important">&#x25A3;</span> multalign.align_sequences.parallel</td><td>1:21:52</td><td>211%</td><td>85%</td><td>10.8 GB</td></tr>
+<tr><td>6</td><td class="left"><span style="color:#FDB462 !important">&#x25A3;</span> multalign.cleanup_alignments.parallel</td><td>32:40</td><td>1590%</td><td>3%</td><td>77.7 MB</td></tr>
+<tr><td>6</td><td class="left"><span style="color:#B3DE69 !important">&#x25A3;</span> multalign.cleanup_alignments.parallel</td><td>44:55</td><td>54%</td><td>110%</td><td>2.0 GB</td></tr>
+<tr><td>7</td><td class="left"><span style="color:#FCCDE5 !important">&#x25A3;</span> speciestree.speciestree.raxml-pthreads</td><td>30:45</td><td>1997%</td><td>0%</td><td>582.1 MB</td></tr>
+</table>
+</div>
+</body>
+</html>
