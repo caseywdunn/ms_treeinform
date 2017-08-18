@@ -1,8 +1,9 @@
 ---
 title: "treeinform manuscript figure generator"
 output:
-  html_document: default
+  pdf_document: default
   html_notebook: default
+  html_document: default
 ---
 
 ```{r, setup, include=FALSE}
@@ -51,7 +52,7 @@ ggplot(fused.df.percents, aes(threshold, reassigned)) + geom_jitter() + scale_x_
 
 In order to validate that treeinform produces more accurate gene trees, we compare the density of duplication times under a birth-death model with parameter $\lambda$=birth rate, $\mu$=death rate, and $t_{or}=\{ t_{or,1}, t_{or,2}, \ldots, t_{or,K} \}$=time of tree origin for gene families $1, \ldots, K$ to the distribution of estimated duplication times for gene trees from before treeinform, and gene trees from after treeinform under 3 different thresholds: 50, 0.05, and 5e-05.
 
-For the distribution of estimated duplication times of gene trees before and after treeinform, we used phylDOG to estimate duplication times in units of expected number of substitutions, then used calibrated branch lengths to units of time under the scheme from ms_comparative_expression (see [Calibration of times](#calibration-of-times)).
+For the distribution of estimated duplication times of gene trees before and after treeinform, we used phylDOG to estimate duplication times in units of expected number of substitutions, then used calibrated branch lengths to units of time under a scheme similar to ms_comparative_expression.
 
 The pdf of duplication times under a birth-death model and given a time of origin is:
 $$
@@ -90,10 +91,15 @@ load("data/dt_before.Rdata")
 #save(threshold_5, file="data/dt_threshold-5.Rdata")
 load("data/dt_threshold-5.Rdata")
 
-#l <- 27804:28004
+l <- 27804:28004
 #threshold_2 <- dt_phyldog(l, "../threshold-2/", calibration_times)
 #save(threshold_2, file="data/dt_threshold-2.Rdata")
 load("data/dt_threshold-2.Rdata")
+
+# don't have threshold_6 already downloaded dumbass
+#threshold_6 <- dt_phyldog(l, "../threshold-6/", calibration_times)
+#save(threshold_6, file="data/dt_threshold-6.Rdata")
+#load("data/dt_threshold-6.Rdata")
 
 #threshold_8 <- dt_phyldog(l, "../threshold-8/", calibration_times)
 #save(threshold_8, file="data/dt_threshold-8.Rdata")
@@ -106,11 +112,14 @@ l1 = length(dt_before)
 l2 = length(threshold_5)
 l3 = length(threshold_2)
 l4 = length(threshold_8)
+#l5 = length(threshold_6)
+#grp <- rep(NA, l1+l2+l3+l4+l5)
 grp <- rep(NA, l1+l2+l3+l4)
 grp[1:l1] <- "Before"
 grp[l1+1:l2] <- "threshold=0.05"
 grp[l1+l2+1:l3] <- "threshold=50"
 grp[l1+l2+l3+1:l4] <- "threshold=5e-05"
+#grp[l1+l2+l3+l4+1:l5] <- "threshold=0.005"
 data = data.frame(dt, grp)
 f = function(x) dup_pdf(x, 1, 0.617025240076, 0.6334249271090)
 ggplot(data, aes(dt)) + geom_density(aes(group=grp, color=grp)) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density")
@@ -126,39 +135,70 @@ theoretical = function(x) dup_cdf(x, 1, 0.617025240076, 0.6334249271090)
 ks.test(dt_before, theoretical)
 ks.test(threshold_2, theoretical)
 ks.test(threshold_5, theoretical)
+#ks.test(threshold_6, threoretical)
 ks.test(threshold_8, theoretical)
 ```
 
-# Figure 3: Mixture model fit
+The default threshold (threshold_5, which is 0.05) comes closest to the theoretical distribution.
 
-TODO: this finished running but forgot to impose constraints $\lambda, \mu > 0$ so have to rerun. Took about 21 hours.
+# Figure 3: Mixture model fit
 
 Under the assumption that transcript annotation errors bias duplication times towards 0 and can be modeled as a gamma distribution, we can view the empirical distribution of duplication times before treeinform as a 2-component mixture of the gamma distribution and the theoretical provided by Gernhard:
 
 $$ P(x_{i,k}) = \pi_1 \Gamma(x_{i,k}|\alpha, \beta) + \pi_2 f(x_{i,k} | t_{or,k}=t, \lambda, \mu)$$
 where $\Gamma(x_{i,k} | \alpha, \beta)$ is the pdf for the gamma distribution with shape $\alpha$ and rate $\beta$, and $f(x_{i,k} | t_{or,k} = t, \lambda, \mu)$ is the pdf for the duplication times under birth rate $\lambda$ and death rate $\mu$ from above. $\pi_1$ and $\pi_2$ denote the mixing proportions, thus $\pi_1 + \pi_2 = 1$.
 
-```{r, kmeans_initialization, eval=FALSE}
-load("data/dt_before.Rdata")
+```{r, runjags, include=FALSE}
+#load("data/dt_before.Rdata")
 
 # Data
-Y = dt_before
-N = length(dt_before)
+#Y = dt_before
+#N = length(dt_before)
 
 # Initial values to get the chains started:
-alpha <- 1
-beta <- 1
-lambda <- 0.637025240076
-mu <- 0.614249271090
-t <- 1
-Constant <- 10
+#alpha <- 1
+#beta <- 1
+#lambda <- 0.637025240076
+#mu <- 0.614249271090
+#t <- 1
+#Constant <- 10
 
-Ones <- rep(1, N)
+#Ones <- rep(1, N)
 
-results <- run.jags(model="code/runjags.txt", n.chains=3, thin=1)
-results
+#results <- run.jags(model="code/runjags.txt", n.chains=3, thin=1)
+#save(results, file="data/runjags_results.Rdata")
+load("data/runjags_results.Rdata")
+sum = summary(results)
 
-plot(results)
+alpha = sum[1,4]
+beta = sum[2,4]
+mu = sum[3,4]
+lambda = sum[4,4]
+p1 = sum[5,4]
+p2 = sum[6,4]
+
+mix2 <- lapply(dt_before, function(y) dup_pdf(y, 1, lambda, mu))
+
+mix1 = function(x, p1=p1, alpha=alpha, beta=beta) { p1*dgamma(x,shape=alpha,scale=beta)}
+mix2 = function(x, p2=p2, lambda=lambda,mu=mu) { p2*dup_pdf(x,1,lambda,mu)}
+```
+
+We use Bayesian Gibbs Sampling with the Bernoulli Ones trick to infer the parameters $\alpha$, $\beta$, $\lambda$, and $\mu$ as well as the mixing proportions $p_1$ and $p_2$. The package we use is Just Another Gibbs Sampler (JAGS).
+
+From JAGS we get the parameter estimates as:
+```{r, runjags_viz}
+sum
+
+ggplot(data.frame(x=dt_before)) + geom_histogram(aes(x=x,y=..density..), fill="white", color="black") + stat_function(geom="line",fun=mix1,args=list(p1,alpha,beta),xlim=c(0.005,1), color="#FF000080")+stat_function(geom="line",fun=mix2,args=list(p2,lambda,mu),color="blue")
+
+intersection = uniroot(function(x) mix1(x,p1,alpha,beta)-mix2(x,p2,lambda,mu), c(0,0.25))$root
+
+intersection
+```
+along with a plot of the mixtures and the intersection point between the two densities for the mixture. This intersection point confirms that a threshold choice of around 0.05 is appropriate.
+
+```{r, expectation, eval=FALSE}
+
 edges_before.km <- kmeans(edges_before, 2)
 edges_before.df <- data.frame(x = edges_before, cluster = edges_before.km$cluster)
 edges_before.df %>%
@@ -169,9 +209,6 @@ edges_before.df %>%
   ylab("Data Point Number") +
   scale_color_discrete(name = "Cluster") +
   ggtitle("K-means Clustering")
-```
-
-```{r, expectation}
 #comp1.prod <- dgamma(x=edges_before, shape=edges_before.summary.df$mu[1]^2/edges_before.summary.df$std[1]^2, rate=edges_before.summary.df$mu[1]/edges_before.summary.df$std[1]^2) * edges_before.summary.df$alpha[1]
 #comp2.prod <- edges_before.df %>% mutate(pdf=f(x)*edges_before.summary.df$alpha[2]) %>% select(pdf)
 #normalizer <- comp1.prod + comp2.prod
