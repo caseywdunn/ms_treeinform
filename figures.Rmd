@@ -1,9 +1,11 @@
 ---
-title: "treeinform manuscript figure generator"
+title: "treeinform: Revising assemblies with phylogenetic information - Supplementary Materials"
 output:
-  pdf_document: default
+  pdf_document:
+    toc: true
   html_notebook: default
   html_document: default
+bibliography: figures.bib
 ---
 
 ```{r, setup, include=FALSE}
@@ -14,27 +16,32 @@ library(hutan)
 library(treeio)
 library(parallel)
 library(dplyr)
-library(runjags)
+library(knitr)
+#library(runjags)
 
 cores = detectCores()
 if (cores < 1) { cores = 1 }
 set.seed(1287234)
 
-l=0.00617025240076
-m=0.00634249271090
-
 source("code/functions.R")
 ```
 
-This is a notebook snippet to generate some of the figures for the treeinform manuscript.
-
 # Figure 1: Gene tree before and gene tree after
 
-# Figure 2a: Percentage of reassigned tips
+Still have to do this...
 
-The percentage of reassigned tips is plotted below. The original assembly had 315,041 genes, with at most 23,396 possible candidates for reassignment.
+```{r, gene_tree_before}
+tree = read.tree("../before/1006.newick")
+plot(tree)
+```
 
-```{r, fused_percentage}
+# Figure 2: Threshold selection analysis
+
+## Figure 2a: Percentage of reassigned tips 
+
+The percentage of reassigned tips is plotted below. The original assembly had 315,041 genes, with at most 23,396 possible candidates (7.43% of genes) for reassignment.
+
+```{r, fused_percentage, echo=FALSE}
 orig_assembly = 315041
 t=1:10 # thresholds were 5000*10^(-t)
 threshold = 5000*10^(-t)
@@ -48,17 +55,17 @@ fused.df.percents <- transmute(fused.df, threshold, reassigned=reassigned/315041
 ggplot(fused.df.percents, aes(threshold, reassigned)) + geom_jitter() + scale_x_log10() + ggtitle("Percentage of reassigned genes vs threshold") + xlab("Threshold") + ylab("Percentage")
 ```
 
-# Figure 2b: Theoretical duplication times compared to empirical duplication times from before treeinform and after treeinform
+## Figure 2b: Theoretical duplication times compared to empirical duplication times from before treeinform and after treeinform
 
 In order to validate that treeinform produces more accurate gene trees, we compare the density of duplication times under a birth-death model with parameter $\lambda$=birth rate, $\mu$=death rate, and $t_{or}=\{ t_{or,1}, t_{or,2}, \ldots, t_{or,K} \}$=time of tree origin for gene families $1, \ldots, K$ to the distribution of estimated duplication times for gene trees from before treeinform, and gene trees from after treeinform under 3 different thresholds: 50, 0.05, and 5e-05.
 
-For the distribution of estimated duplication times of gene trees before and after treeinform, we used phylDOG to estimate duplication times in units of expected number of substitutions, then used calibrated branch lengths to units of time under a scheme similar to ms_comparative_expression.
+For the distribution of estimated duplication times of gene trees before and after treeinform, we used phylDOG [@boussau2013genome] to estimate duplication times in units of expected number of substitutions, then calibrated branch lengths to units of time based on the Siphonophora species tree that was calibrated to 1 using the chronos function from ape. (TODO: expand on this)
 
 The pdf of duplication times under a birth-death model and given a time of origin is:
 $$
 f(x_{i,k} | t_{or,k}, \lambda, \mu) = (\lambda - \mu)^2 \frac{e^{-(\lambda-\mu)x_i}}{(\lambda - \mu e^{-(\lambda - \mu)x_i})^2} \frac{\lambda - \mu e^{-(\lambda - \mu)t}}{1 - e^{-(\lambda - \mu)t}} 
 $$
-where $x_{i, k}$ represents duplication times $i$ from gene tree $G_k$, as derived by Gernhard 2008. To compute this, we first estimate $\lambda$ and $\mu$ using CAFE3 with the same fixed $t_{or}=1,000,000$ and $G=\{ G_1, \ldots, G_K \}$=gene family sizes for gene trees $1, \ldots, K$, then plug the $\lambda$ and $\mu$ estimates from CAFE in along with the same calibrated $t_{or,k}$s. A key assumption here is that the fixed $t_{or,k}$s allows for accurate comparisons between the theoretical density of duplication times and the estimated duplication times even if it is technically an incorrect estimate of the age of the gene trees (and species tree).
+where $x_{i, k}$ represents duplication times $i$ from gene tree $G_k$, as derived by Gernhard 2008. To compute this, we first estimate $\lambda$ and $\mu$ using CAFE3 [@han2013estimating] with the same fixed $t_{or}=1,000,000$ and $G=\{ G_1, \ldots, G_K \}$=gene family sizes for gene trees $1, \ldots, K$, then plug the $\lambda$ and $\mu$ estimates from CAFE3 in along with the same calibrated $t_{or,k}$s. A key assumption here is that the fixed $t_{or,k}$s allows for accurate comparisons between the theoretical density of duplication times and the estimated duplication times even if it is technically an incorrect estimate of the age of the gene trees (and species tree).
 
 ```{r, parse_trees, include=FALSE}
 # make speciation calibration times (taken from chronos)
@@ -96,50 +103,47 @@ l <- 27804:28004
 #save(threshold_2, file="data/dt_threshold-2.Rdata")
 load("data/dt_threshold-2.Rdata")
 
-# don't have threshold_6 already downloaded dumbass
-#threshold_6 <- dt_phyldog(l, "../threshold-6/", calibration_times)
-#save(threshold_6, file="data/dt_threshold-6.Rdata")
-#load("data/dt_threshold-6.Rdata")
-
 #threshold_8 <- dt_phyldog(l, "../threshold-8/", calibration_times)
 #save(threshold_8, file="data/dt_threshold-8.Rdata")
 load("data/dt_threshold-8.Rdata")
 ```
 
-```{r, fig2b}
+```{r, fig2b, echo=FALSE}
 dt <- c(dt_before, threshold_5, threshold_2, threshold_8)
 l1 = length(dt_before)
 l2 = length(threshold_5)
 l3 = length(threshold_2)
 l4 = length(threshold_8)
-#l5 = length(threshold_6)
 #grp <- rep(NA, l1+l2+l3+l4+l5)
-grp <- rep(NA, l1+l2+l3+l4)
-grp[1:l1] <- "Before"
-grp[l1+1:l2] <- "threshold=0.05"
-grp[l1+l2+1:l3] <- "threshold=50"
-grp[l1+l2+l3+1:l4] <- "threshold=5e-05"
+Threshold <- rep(NA, l1+l2+l3+l4)
+Threshold[1:l1] <- "Before"
+Threshold[l1+1:l2] <- "0.05"
+Threshold[l1+l2+1:l3] <- "50"
+Threshold[l1+l2+l3+1:l4] <- "5e-05"
 #grp[l1+l2+l3+l4+1:l5] <- "threshold=0.005"
-data = data.frame(dt, grp)
+data = data.frame(dt, Threshold)
 f = function(x) dup_pdf(x, 1, 0.617025240076, 0.6334249271090)
-ggplot(data, aes(dt)) + geom_density(aes(group=grp, color=grp)) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density")
+ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold)) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density")
 ```
+
+## Table 2c: Kolmogorov-Smirnov statistics for before treeinform and after treeinform
 
 Additionally, we can run the Kolmogorov-Smirnov test on the CDFs of the thresholds to compare. The CDF of the theoretical distribution is:
 $$
 F(x_{i,k} | t=t_{or, k}, \lambda, \mu) = \frac{1 - e^{-(\lambda - \mu x_{i,k})}}{\lambda - \mu e^{-(\lambda - \mu)x_{i,k}}} \frac{\lambda - \mu e^{-(\lambda - \mu) t}}{1 - e^{-(\lambda - \mu) t}}
 $$
 
-```{r, ks}
+```{r, ks, echo=FALSE}
 theoretical = function(x) dup_cdf(x, 1, 0.617025240076, 0.6334249271090)
-ks.test(dt_before, theoretical)
-ks.test(threshold_2, theoretical)
-ks.test(threshold_5, theoretical)
-#ks.test(threshold_6, threoretical)
-ks.test(threshold_8, theoretical)
+ks.stat <- c(ks.test(dt_before, theoretical)$statistic, ks.test(threshold_2, theoretical)$statistic, ks.test(threshold_5, theoretical)$statistic, ks.test(threshold_8, theoretical)$statistic)
+ks.pval <- c(ks.test(dt_before, theoretical)$p.value, ks.test(threshold_2, theoretical)$p.value, ks.test(threshold_5, theoretical)$p.value, ks.test(threshold_8, theoretical)$p.value)
+ks <- data.frame(ks.stat, ks.pval)
+colnames(ks) <- c("Statistic", "P-Value")
+rownames(ks) <- c("Before", "50", "0.05", "5e-05")
+kable(ks)
 ```
 
-The default threshold (threshold_5, which is 0.05) comes closest to the theoretical distribution.
+The default threshold (0.05) comes closest to the theoretical distribution.
 
 # Figure 3: Mixture model fit
 
@@ -168,16 +172,14 @@ where $\Gamma(x_{i,k} | \alpha, \beta)$ is the pdf for the gamma distribution wi
 #results <- run.jags(model="code/runjags.txt", n.chains=3, thin=1)
 #save(results, file="data/runjags_results.Rdata")
 load("data/runjags_results.Rdata")
-sum = summary(results)
+sum_results = results$summaries
 
-alpha = sum[1,4]
-beta = sum[2,4]
-mu = sum[3,4]
-lambda = sum[4,4]
-p1 = sum[5,4]
-p2 = sum[6,4]
-
-mix2 <- lapply(dt_before, function(y) dup_pdf(y, 1, lambda, mu))
+alpha = sum_results[1,4]
+beta = sum_results[2,4]
+mu = sum_results[3,4]
+lambda = sum_results[4,4]
+p1 = sum_results[5,4]
+p2 = sum_results[6,4]
 
 mix1 = function(x, p1=p1, alpha=alpha, beta=beta) { p1*dgamma(x,shape=alpha,scale=beta)}
 mix2 = function(x, p2=p2, lambda=lambda,mu=mu) { p2*dup_pdf(x,1,lambda,mu)}
@@ -186,35 +188,17 @@ mix2 = function(x, p2=p2, lambda=lambda,mu=mu) { p2*dup_pdf(x,1,lambda,mu)}
 We use Bayesian Gibbs Sampling with the Bernoulli Ones trick to infer the parameters $\alpha$, $\beta$, $\lambda$, and $\mu$ as well as the mixing proportions $p_1$ and $p_2$. The package we use is Just Another Gibbs Sampler (JAGS).
 
 From JAGS we get the parameter estimates as:
-```{r, runjags_viz}
-sum
+```{r, runjags_table, echo=FALSE}
+sum_format = sum_results[,c("Lower95", "Median", "Upper95", "Mean", "MCerr")]
+rownames(sum_format) <- c("$\\alpha$", "$\\beta$", "$\\mu$", "$\\lambda$", "$\\pi_1$", "$\\pi_2$")
+kable(sum_format)
+```
 
-ggplot(data.frame(x=dt_before)) + geom_histogram(aes(x=x,y=..density..), fill="white", color="black") + stat_function(geom="line",fun=mix1,args=list(p1,alpha,beta),xlim=c(0.005,1), color="#FF000080")+stat_function(geom="line",fun=mix2,args=list(p2,lambda,mu),color="blue")
+Plotted onto a histogram of the inferred duplication times, we see that most of the duplication times attributed to splice variants are < 0.05, with the actual intersection point between the two distribution curves being 0.009799746. This intersection point suggests that a threshold choice of around 0.05 is appropriate. (NOTE: duplication times is not the same as subtree height since it is calibrated vs uncalibrated, so the times are not directly comparable with threshold choice)
+```{r, runjags_viz, echo=FALSE, warnings=FALSE}
+ggplot(data.frame(x=dt_before)) + geom_histogram(aes(x=x,y=..density..), fill="white", color="black") + stat_function(geom="line",fun=mix1,args=list(p1,alpha,beta),xlim=c(0.005,1), color="#FF000080")+stat_function(geom="line",fun=mix2,args=list(p2,lambda,mu),color="blue") + ggtitle("Density Curves of Mixture Model Plotted on Histogram of\n Inferred Duplication Times Before Treeinform") + xlab("Duplication Times") + ylab("Density")
 
 intersection = uniroot(function(x) mix1(x,p1,alpha,beta)-mix2(x,p2,lambda,mu), c(0,0.25))$root
-
-intersection
-```
-along with a plot of the mixtures and the intersection point between the two densities for the mixture. This intersection point confirms that a threshold choice of around 0.05 is appropriate.
-
-```{r, expectation, eval=FALSE}
-
-edges_before.km <- kmeans(edges_before, 2)
-edges_before.df <- data.frame(x = edges_before, cluster = edges_before.km$cluster)
-edges_before.df %>%
-  mutate(num = row_number()) %>%
-  ggplot(aes(y = num, x = x, color = factor(cluster))) +
-  geom_point() +
-  ylab("Values") +
-  ylab("Data Point Number") +
-  scale_color_discrete(name = "Cluster") +
-  ggtitle("K-means Clustering")
-#comp1.prod <- dgamma(x=edges_before, shape=edges_before.summary.df$mu[1]^2/edges_before.summary.df$std[1]^2, rate=edges_before.summary.df$mu[1]/edges_before.summary.df$std[1]^2) * edges_before.summary.df$alpha[1]
-#comp2.prod <- edges_before.df %>% mutate(pdf=f(x)*edges_before.summary.df$alpha[2]) %>% select(pdf)
-#normalizer <- comp1.prod + comp2.prod
-#comp1.post <- comp1.prod / normalizer
-#comp2.post <- comp2.prod/normalizer
 ```
 
-```{r, mixture}
-```
+# References
