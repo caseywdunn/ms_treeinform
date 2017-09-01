@@ -17,7 +17,7 @@ library(treeio)
 library(parallel)
 library(dplyr)
 library(knitr)
-#library(runjags)
+library(runjags)
 
 cores = detectCores()
 if (cores < 1) { cores = 1 }
@@ -74,38 +74,24 @@ clade <- c("Calycophora", "Agalmatidae", "Chodorophora", "Siphonophora", "Hydroz
 calibration_times = data.frame(age, clade, stringsAsFactors = FALSE)
 
 #5299 gene trees + 5301 (missing 5300)
-# try with 200
-#s <- 1:200
-#edges_before <- mclapply(s, function(x) #parse_gene_trees(processTree(paste0("../phyldog-before/", x, ".ReconciledTree"))), mc.cores = cores)
-#edges_before <- edges_before[which(!unlist(mclapply(edges_before, is.null)))]
-#save(edges_before, file="data/edges_before.Rdata")
-#load("data/edges_before.Rdata")
-#calibrated = mclapply(edges_before, function(x) calibrate_tree(x, calibration_times), mc.cores=cores)
-#calibrated = calibrated[which(!is.na(calibrated))]
-#dt_before = unlist(mclapply(calibrated, duplication_times, mc.cores=cores))
-#dt_before = dt_before[which(!is.na(dt_before))]
+s <- 1:200
+dt_before <- dt_phyldog(s, "data/before", calibration_times)
 #save(dt_before, file="data/dt_before.Rdata")
 load("data/dt_before.Rdata")
 
-#k <- 7000:7200
-#edges_after <- edges_after[which(!unlist(mclapply(edges_after, is.null)))]
-#save(edges_after, file="data/edges_after.Rdata")
-#load("data/edges_after.Rdata")
-#calibrated_after = mclapply(edges_after, function(x) calibrate_tree(x, calibration_times), mc.cores=cores)
-#calibrated_after = calibrated_after[which(!is.na(calibrated_after))]
-#threshold_5 = unlist(mclapply(calibrated_after, duplication_times, mc.cores=cores))
-#threshold_5 = threshold_5[which(!is.na(threshold_5))]
+k <- 7000:7200
+threshold_5 <- dt_phyldog(k, "data/threshold-5/", calibration_times)
 #save(threshold_5, file="data/dt_threshold-5.Rdata")
-load("data/dt_threshold-5.Rdata")
+#load("data/dt_threshold-5.Rdata")
 
 l <- 27804:28004
-#threshold_2 <- dt_phyldog(l, "../threshold-2/", calibration_times)
+threshold_2 <- dt_phyldog(l, "data/threshold-2/", calibration_times)
 #save(threshold_2, file="data/dt_threshold-2.Rdata")
-load("data/dt_threshold-2.Rdata")
+#load("data/dt_threshold-2.Rdata")
 
-#threshold_8 <- dt_phyldog(l, "../threshold-8/", calibration_times)
+threshold_8 <- dt_phyldog(l, "data/threshold-8/", calibration_times)
 #save(threshold_8, file="data/dt_threshold-8.Rdata")
-load("data/dt_threshold-8.Rdata")
+#load("data/dt_threshold-8.Rdata")
 ```
 
 ```{r, fig2b, echo=FALSE}
@@ -156,22 +142,22 @@ where $\Gamma(x_{i,k} | \alpha, \beta)$ is the pdf for the gamma distribution wi
 #load("data/dt_before.Rdata")
 
 # Data
-#Y = dt_before
-#N = length(dt_before)
+Y = dt_before
+N = length(dt_before)
 
 # Initial values to get the chains started:
-#alpha <- 1
-#beta <- 1
-#lambda <- 0.637025240076
-#mu <- 0.614249271090
-#t <- 1
-#Constant <- 10
+alpha <- 1
+beta <- 1
+lambda <- 0.637025240076
+mu <- 0.614249271090
+t <- 1
+Constant <- 10
 
-#Ones <- rep(1, N)
+Ones <- rep(1, N)
 
-#results <- run.jags(model="code/runjags.txt", n.chains=3, thin=1)
+results <- run.jags(model="code/runjags.txt", n.chains=3, thin=1)
 #save(results, file="data/runjags_results.Rdata")
-load("data/runjags_results.Rdata")
+#load("data/runjags_results.Rdata")
 sum_results = results$summaries
 
 alpha = sum_results[1,4]
