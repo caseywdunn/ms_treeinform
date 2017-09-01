@@ -31,7 +31,7 @@ source("code/functions.R")
 Still have to do this...
 
 ```{r, gene_tree_before}
-tree = read.tree("../before/1006.newick")
+tree = read.tree("data/1006.newick")
 plot(tree)
 ```
 
