@@ -28,6 +28,18 @@ source("code/functions.R")
 
 # Figure 1: Gene tree before and gene tree after
 
+## Figure 1a
+
+```{r, fig1a}
+original_trees = read.tree("data/7taxa_original_headers.trees")
+# find tree with tips: 7697, 7696, 23896
+original_labels = mclapply(original_trees, function(x) unlist(strsplit(x$tip.label, "@")))
+fig1a_tree_ind = which(sapply(original_labels, function(x) any(7697==x) & any(7696==x) & any(23896==x)))
+fig1a_tree = original_trees[[fig1a_tree_ind]]
+```
+
+## Figure 1b
+
 Still have to do this...
 
 ```{r, gene_tree_before}
