@@ -1,5 +1,5 @@
 ---
-title: "treeinform: Revising assemblies with phylogenetic information - Supplementary Materials"
+title: "Revising transcriptome assemblies with phylogenetic information in Agalma1.0 - Supplementary Materials"
 output:
   pdf_document:
     toc: true
@@ -15,9 +15,10 @@ library(dplyr)
 library(hutan)
 library(treeio)
 library(parallel)
-library(dplyr)
 library(knitr)
 library(runjags)
+library(ggtree)
+library(phangorn)
 
 cores = detectCores()
 if (cores < 1) { cores = 1 }
@@ -26,19 +27,7 @@ set.seed(1287234)
 source("code/functions.R")
 ```
 
-# Figure 1: Gene tree before and gene tree after
-
-## Figure 1a
-
-```{r, fig1a}
-original_trees = read.tree("data/7taxa_original_headers.trees")
-# find tree with tips: 7697, 7696, 23896
-original_labels = mclapply(original_trees, function(x) unlist(strsplit(x$tip.label, "@")))
-fig1a_tree_ind = which(sapply(original_labels, function(x) any(7697==x) & any(7696==x) & any(23896==x)))
-fig1a_tree = original_trees[[fig1a_tree_ind]]
-```
-
-## Figure 1b
+# Figure 1: Histogram of subtree heights from clades of genes from the same species
 
 Still have to do this...
 
@@ -86,24 +75,24 @@ clade <- c("Calycophora", "Agalmatidae", "Chodorophora", "Siphonophora", "Hydroz
 calibration_times = data.frame(age, clade, stringsAsFactors = FALSE)
 
 #5299 gene trees + 5301 (missing 5300)
-s <- 1:200
-dt_before <- dt_phyldog(s, "data/before", calibration_times)
+#s <- 1:200
+#dt_before <- dt_phyldog(s, "data/before", calibration_times)
 #save(dt_before, file="data/dt_before.Rdata")
 load("data/dt_before.Rdata")
 
-k <- 7000:7200
-threshold_5 <- dt_phyldog(k, "data/threshold-5/", calibration_times)
+#k <- 7000:7200
+#threshold_5 <- dt_phyldog(k, "data/threshold-5/", calibration_times)
 #save(threshold_5, file="data/dt_threshold-5.Rdata")
-#load("data/dt_threshold-5.Rdata")
+load("data/dt_threshold-5.Rdata")
 
-l <- 27804:28004
-threshold_2 <- dt_phyldog(l, "data/threshold-2/", calibration_times)
+#l <- 27804:28004
+#threshold_2 <- dt_phyldog(l, "data/threshold-2/", calibration_times)
 #save(threshold_2, file="data/dt_threshold-2.Rdata")
-#load("data/dt_threshold-2.Rdata")
+load("data/dt_threshold-2.Rdata")
 
-threshold_8 <- dt_phyldog(l, "data/threshold-8/", calibration_times)
+#threshold_8 <- dt_phyldog(l, "data/threshold-8/", calibration_times)
 #save(threshold_8, file="data/dt_threshold-8.Rdata")
-#load("data/dt_threshold-8.Rdata")
+load("data/dt_threshold-8.Rdata")
 ```
 
 ```{r, fig2b, echo=FALSE}
@@ -121,7 +110,7 @@ Threshold[l1+l2+l3+1:l4] <- "5e-05"
 #grp[l1+l2+l3+l4+1:l5] <- "threshold=0.005"
 data = data.frame(dt, Threshold)
 f = function(x) dup_pdf(x, 1, 0.617025240076, 0.6334249271090)
-ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold)) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density")
+ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold)) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density") + theme_classic()
 ```
 
 ## Table 2c: Kolmogorov-Smirnov statistics for before treeinform and after treeinform
@@ -167,9 +156,9 @@ Constant <- 10
 
 Ones <- rep(1, N)
 
-results <- run.jags(model="code/runjags.txt", n.chains=3, thin=1)
+#results <- run.jags(model="code/runjags.txt", n.chains=3, thin=1)
 #save(results, file="data/runjags_results.Rdata")
-#load("data/runjags_results.Rdata")
+load("data/runjags_results.Rdata")
 sum_results = results$summaries
 
 alpha = sum_results[1,4]
@@ -194,7 +183,7 @@ kable(sum_format)
 
 Plotted onto a histogram of the inferred duplication times, we see that most of the duplication times attributed to splice variants are < 0.05, with the actual intersection point between the two distribution curves being 0.009799746. This intersection point suggests that a threshold choice of around 0.05 is appropriate. (NOTE: duplication times is not the same as subtree height since it is calibrated vs uncalibrated, so the times are not directly comparable with threshold choice)
 ```{r, runjags_viz, echo=FALSE, warnings=FALSE}
-ggplot(data.frame(x=dt_before)) + geom_histogram(aes(x=x,y=..density..), fill="white", color="black") + stat_function(geom="line",fun=mix1,args=list(p1,alpha,beta),xlim=c(0.005,1), color="#FF000080")+stat_function(geom="line",fun=mix2,args=list(p2,lambda,mu),color="blue") + ggtitle("Density Curves of Mixture Model Plotted on Histogram of\n Inferred Duplication Times Before Treeinform") + xlab("Duplication Times") + ylab("Density")
+ggplot(data.frame(x=dt_before)) + geom_histogram(aes(x=x,y=..density..), fill="white", color="black") + stat_function(geom="line",fun=mix1,args=list(p1,alpha,beta),xlim=c(0.005,1), color="#FF000080")+stat_function(geom="line",fun=mix2,args=list(p2,lambda,mu),color="blue") + ggtitle("Density Curves of Mixture Model Plotted on Histogram of\n Inferred Duplication Times Before Treeinform") + xlab("Duplication Times") + ylab("Density") + theme_classic()
 
 intersection = uniroot(function(x) mix1(x,p1,alpha,beta)-mix2(x,p2,lambda,mu), c(0,0.25))$root
 ```
