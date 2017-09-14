@@ -182,21 +182,42 @@ calibrate_tree = function ( nhx, calibration_times, ... ) {
   }
 }
 
+#' Calibrate a list of treeio::treedata objects
+#' 
+#' @param trees A list of treeio::treedata objects with branch lengths
+#'  in expected numbers of substitutions
+#' @param cores Number of cores to use for mclapply
+#' @return A list of calibrated treeio::treedata objects with
+#'  branch lengths in units of time
+calibrate_trees = function(trees, cores) {
+  return(mclapply(trees, function(x) calibrate_tree(x, calibration_times), mc.cores=cores))
+}
 
-#' Extract duplication times from a nhx object where @data contains a column corresponding
+#' Annotate a list of treeio::treedata objects with subtree heights
+#' 
+#' @param trees A list of treeio::treedata objects
+#' @param cores Number of cores to use for mclapply
+#' @return A list of calibrated treeio::treedata objects with
+#'  annotated heights
+heights_trees = function(trees, cores) {
+  mclapply(trees, function(x) {
+    if(is.na(x)) { return(NA) }
+    else { return(heights(x)) }
+  }, mc.cores=cores)
+}
+
+#' Compute inner node heights from a nhx object where @data contains a column corresponding
 #' to duplication events.
 #'
 #' @param nhx A phylogenetic tree as a treeio::treedata object, with speciation
 #' nodes annotated with a value of "N" in @data$D
-#' @return A vector of duplication times
+#' @return A phylogenetic tree with subtree heights annotated
 #' @export
-duplication_times = function(nhx) {
+heights = function(nhx) {
   phylo = nhx@phylo
-  data = nhx@data
-  heights = hutan::distance_from_tip(phylo)
-  if(max(heights) > 1) { return(NA) }
-  duplication_times = heights[unlist(data %>% filter(Ev=="D") %>% select(node))]
-  return(duplication_times)
+  h = hutan::distance_from_tip(phylo)
+  nhx@data[,"height"] = h
+  return(nhx)
 }
 
 #' Calibrates trees and extracts duplication times from phyldog gene trees.
@@ -212,9 +233,18 @@ dt_phyldog = function(k, ResultFiles, calibration_times) {
   trees <- mclapply(k, function(x) parse_gene_trees(processTree(paste0(ResultFiles, x, ".ReconciledTree"))), mc.cores = cores)
   trees <- trees[which(!unlist(mclapply(trees, is.null)))]
 
-  calibrated = mclapply(trees, function(x) calibrate_tree(x, calibration_times), mc.cores=cores)
-  calibrated = calibrated[which(!is.na(calibrated))]
-
-  dt = unlist(mclapply(calibrated, duplication_times, mc.cores=cores))
+  calibrated = calibrate_trees(trees, cores)
+  annotated = heights_trees(calibrated, cores)
+  no_na = annotated[which(!is.na(annotated))]
+  
+  # filter out trees with height > 1
+  no_heights = mclapply(no_na, function(x) {
+    h = x@data %>% select(height) %>% max
+    if(h > 1) { return(NA) }
+    else { return(x) }}, mc.cores=cores)
+  no_heights = no_heights[which(!is.na(no_heights))]
+  dt = unlist(mclapply(no_heights, function(x) unlist(x@data %>% filter(Ev=="D") %>% select(height))))
   dt = dt[which(!is.na(dt))]
+  
+  return(list(trees, annotated, dt))
 }
