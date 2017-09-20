@@ -105,25 +105,26 @@ In mathematical terms, if $x_{i, k}$ represents duplication times $i$ from gene 
 $$ P(x_{i,k}) = \pi_1 \Gamma(x_{i,k}|\alpha, \beta) + \pi_2 f(x_{i,k} | t_{or,k}=t, \lambda, \mu)$$
 
 ```{r, runjags, include=FALSE}
-#load("data/dt_before.Rdata")
+load("data/dt_before.Rdata")
 
 # Data
-#Y = dt_before
-#N = length(dt_before)
+Y = dt_before
+N = length(dt_before)
 
 # Initial values to get the chains started:
-#alpha <- 1
-#beta <- 1
-#lambda <- 0.637025240076
-#mu <- 0.614249271090
-#t <- 1
-#Constant <- 10
+alpha <- 1
+beta <- 1
+lambda <- 0.637025240076
+mu <- 0.614249271090
+t <- 1
+Constant <- 10
 
-#Ones <- rep(1, N)
+Ones <- rep(1, N)
 
-#results <- run.jags(model="code/runjags.txt", n.chains=3, thin=1)
+results <- run.jags(model="code/runjags.txt", n.chains=3, thin=1)
+save(results, file = "data/runjags_results3.Rdata")
 #save(results, file="data/runjags_results.Rdata")
-load("data/runjags_results.Rdata")
+#load("data/runjags_results.Rdata")
 sum_results = results$summaries
 
 alpha = sum_results[1,4]
