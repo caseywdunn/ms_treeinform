@@ -1,0 +1,6 @@
+event(11,"/users/bguang/scratch/treeinform/thresholds/scratch/threshold-mix2/OptionFiles/28084.opt",loss)
+event(5,"/users/bguang/scratch/treeinform/thresholds/scratch/threshold-mix2/OptionFiles/28084.opt",duplication)
+event(7,"/users/bguang/scratch/treeinform/thresholds/scratch/threshold-mix2/OptionFiles/28084.opt",loss)
+event(8,"/users/bguang/scratch/treeinform/thresholds/scratch/threshold-mix2/OptionFiles/28084.opt",loss)
+event(3,"/users/bguang/scratch/treeinform/thresholds/scratch/threshold-mix2/OptionFiles/28084.opt",duplication)
+event(6,"/users/bguang/scratch/treeinform/thresholds/scratch/threshold-mix2/OptionFiles/28084.opt",loss)

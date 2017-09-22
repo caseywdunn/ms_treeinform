@@ -12,12 +12,12 @@ model <- "
 		}
 
 		probs ~ ddirch(c(1,1))
-		alpha ~ dgamma(1, 1)
-		beta ~ dgamma(1, 1)
-		#lambda ~ dexp(1.64)
-		#mu ~ dexp(1.58)
-		lambda ~ dgamma(0.5, 0.85)
-		mu ~ dgamma(0.5, 0.85)
+		alpha ~ dgamma(1, 10^-6)
+		beta ~ dgamma(.01, .01)
+		lambda ~ dexp(1.64)
+		mu ~ dexp(1.58)
+		#lambda ~ dgamma(0.5, 0.85) # alternative priors; gave same results but increased
+		#mu ~ dgamma(0.5, 0.85) # number of samples before convergence
 
 		# Specify monitors, data and initial values
 		#monitor# alpha, beta, mu, lambda, probs
