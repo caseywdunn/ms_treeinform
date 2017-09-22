@@ -15,23 +15,30 @@ dup_pdf <- function(s,t,lambda,mu) {
   #}
 }
 
-#' Computes cdf of duplication event for time s given tree origin time t,
-#' birth rate lambda, death rate mu
+#' Cdf of duplication event for time s given tree origin time t,
+#' birth rate lambda, death rate mu - uniform (for sampling)
 #'
 #' @param s time of duplication event
 #' @param t time of tree origin
 #' @param lambda birth rate in duplication events/unit of time
+#' @param u sample from uniform distribution
 #' @param mu death rate in loss events/unit of time
-dup_cdf <- function(s,t,lambda,mu) {
-  #if(s > t) { return(1) }
-  #else {
+dup_cdf_sampler <- function(s,t,lambda,mu,u) {
+  if(s > t) { return(1-u) }
+  else {
   num <- (1-exp(-(lambda-mu)*s))*(lambda - mu*exp(-(lambda-mu)*t))
   denom <- (lambda-mu*exp(-(lambda-mu)*s))*(1-exp(-(lambda-mu)*t))
   f <- num/denom
-  return(f)
-  #}
+  return(f-u)
+  }
 }
 
+dup_cdf <- function(s,t,lambda,mu) {
+    num <- (1-exp(-(lambda-mu)*s))*(lambda - mu*exp(-(lambda-mu)*t))
+    denom <- (lambda-mu*exp(-(lambda-mu)*s))*(1-exp(-(lambda-mu)*t))
+    f <- num/denom
+    return(f)
+}
 
 #' Helper function to read in newick trees; will skip over a non-existent
 #' tree rather than return an error

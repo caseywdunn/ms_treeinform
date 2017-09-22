@@ -2,8 +2,6 @@ model <- "
 	model {
 		for(i in 1:N) {
 			ld_comp[i, 1] <- logdensity.gamma(Y[i], alpha, beta)
-			#ld_comp[i, 1] <- logdensity.unif(Y[i], alpha, beta)
-			#ld_comp[i, 2] <- logdensity.norm(Y[i], mu, tau)
 			ld_comp[i, 2] <- 2*log(lambda - mu) - ((lambda - mu) * Y[i]) + log(lambda - mu * exp(-(lambda - mu)*t)) - 2 *log(lambda - mu * exp(-(lambda - mu) * Y[i])) - log(1 - exp(-(lambda - mu)* t))
 
 			component_chosen[i] ~ dcat(probs)
@@ -14,12 +12,12 @@ model <- "
 		}
 
 		probs ~ ddirch(c(1,1))
-		alpha ~ dnorm(1, 10^-6) # ok what's the difference
-		beta ~ dgamma(0.01, 0.01)
+		alpha ~ dgamma(1, 10^-6)
+		beta ~ dgamma(.01, .01)
 		lambda ~ dexp(1.64)
 		mu ~ dexp(1.58)
-		#mu ~ dnorm(0, 10^-6)
-		#tau ~ dgamma(0.01, 0.01)
+		#lambda ~ dgamma(0.5, 0.85) # alternative priors; gave same results but increased
+		#mu ~ dgamma(0.5, 0.85) # number of samples before convergence
 
 		# Specify monitors, data and initial values
 		#monitor# alpha, beta, mu, lambda, probs
