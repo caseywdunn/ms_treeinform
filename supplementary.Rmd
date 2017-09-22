@@ -57,7 +57,9 @@ load("data/dt_threshold-2.Rdata")
 
 #threshold_8 <- dt_phyldog(l, "data/threshold-8/", calibration_times)[[3]]
 #save(threshold_8, file="data/dt_threshold-8.Rdata")
-#load("data/dt_threshold-8.Rdata")
+load("data/dt_threshold-8.Rdata")
+
+load("data/dt_threshold-6.Rdata")
 
 #threshold_mix <- dt_phyldog(l, "data/threshold-mix/", calibration_times)[[3]]
 #save(threshold_mix, file="data/dt_threshold-mix.Rdata")
@@ -191,7 +193,7 @@ ggplot(data.frame(x=dt_before)) + geom_histogram(aes(x=x,y=..density..), fill='w
 
 # Validating the effectiveness of treeinform
 
-```{r, fused_percentage, echo=FALSE, fig.cap='The percentage of reassigned tips is plotted above. The original assembly had 315,041 genes, with at most 23,396 possible candidates (7.43% of genes) for reassignment. The default threshold for treeinform is highlighted in blue.'}
+```{r, fused_percentage, echo=FALSE, fig.cap='The percentage of reassigned tips is plotted above on a log scale. The original assembly had 315,041 genes, with at most 23,396 possible candidates (7.43% of genes) for reassignment. The default threshold for treeinform is highlighted in blue. This threshold value is robust over a wide range from 0.02 down several orders of magnitude.'}
 orig_assembly = 315041
 t=1:10 # original thresholds were 5000*10^(-t)
 threshold = 5000*10^(-t)
@@ -216,7 +218,9 @@ fused.df.percents <- cbind(fused.df.percents, grp)
 ggplot(fused.df.percents, aes(threshold, reassigned)) + geom_jitter(aes(colour=grp)) + scale_x_log10() + ggtitle("Percentage of reassigned genes vs threshold") + xlab("Threshold") + ylab("Percentage") + theme_classic() + theme(legend.position="none")
 ```
 
-In order to validate that treeinform produces more accurate gene trees, we compared the density of duplication times under the model provided for Component 2 of the mixture model to the distribution of estimated duplication times for gene trees from Agalma1.0 before treeinform, and gene trees from Agalma1.0 after treeinform under 3 different thresholds: 50, 0.02, and 0.05 (Figure 4). We again fitted chronograms with the same user-inputted Siphonophora subset species tree onto all gene trees from Agalma1.0 and filtered out those gene trees with time of origin greater than 1, so that duplication times were comparable between trees.
+In order to validate that treeinform produces more accurate gene trees under the default threshold, we performed two analyses. First, we plotted the percentage of reassigned genes at different thresholds to confirm that the default threshold has good performance over a wide range of possible thresholds (Figure 3). Below the default, the percentage of reassigned genes begins to plateau, while above the default, the percentage of reassigned genes increases very quickly, increasing the likelihood of treeinform reassigning transcripts from different genes to the same gene in addition to reassigning transcripts from the same gene together.
+
+Second, we compared the density of duplication times under the model provided for Component 2 of the mixture model to the distribution of estimated duplication times for gene trees from Agalma1.0 before treeinform, and gene trees from Agalma1.0 after treeinform under 3 different thresholds: 50, 0.05, and 0.02 (Figure 3). We again fitted chronograms with the same user-inputted Siphonophora subset species tree onto all gene trees from Agalma1.0 and filtered out those gene trees with time of origin greater than 1, so that duplication times were comparable between trees. Visually, the default threshold comes closest to the theoretical.
 
 ```{r, fig3b, echo=FALSE, warnings=FALSE, fig.cap="Density from theoretical and the empirical density under the 3 different thresholds. It appears that 0.02 looks the closest to the theoretical density."}
 dt <- c(dt_before, threshold_mix, threshold_2, threshold_5)
@@ -234,7 +238,7 @@ f = function(x) dup_pdf(x, 1, lambda, mu)
 ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold), bw=0.01) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density") + theme_classic() + theme(legend.position = c(0.8, 0.6)) + geom_hline(yintercept=0, color="white") + geom_vline(xintercept=0, color="white")
 ```
 
-Additionally, we computed the Kullback-Leibler distance [@kullback1951] between the distributions of duplication times under different thresholds and the theoretical distribution of duplication times (Table 2). Kullback-Leibler distance, otherwise known as relative entropy, measures the distance between two distributions. The KL distance between the distribution of duplication times after running treeinform with the default threshold come closest to the theoretical distribution. This confirms that treeinform produces more accurate gene trees.
+Additionally, we computed the Kullback-Leibler distance [@kullback1951] between the distributions of duplication times under different thresholds and the theoretical distribution of duplication times (Table 2). Kullback-Leibler distance, otherwise known as relative entropy, measures the distance between two distributions. The KL distance between the distribution of duplication times after running treeinform with the default threshold come closest to the theoretical distribution as compared to both threshold levels below the default and threshold levels above the default. This confirms that treeinform produces more accurate gene trees with careful threshold selection.
 
 ```{r, kl, echo=FALSE, fig.cap=''}
 z.pre <- rep(NA, 10000)
@@ -248,10 +252,12 @@ d_before <- discretize(dt_before, numBins=100)
 d_mix <- discretize(threshold_mix, numBins=100)
 d_2 <- discretize(threshold_2, numBins=100)
 d_5 <- discretize(threshold_5, numBins=100)
-kl_dist <- c(KL.empirical(d_before, d_theo), KL.empirical(d_2, d_theo), KL.empirical(d_mix, d_theo), KL.empirical(d_5, d_theo))
+d_6 <- discretize(threshold_6, numBins=100)
+d_8 <- discretize(threshold_8, numBins=100)
+kl_dist <- c(KL.empirical(d_before, d_theo), KL.empirical(d_2, d_theo), KL.empirical(d_5, d_theo), KL.empirical(d_mix, d_theo), KL.empirical(d_6, d_theo), KL.empirical(d_8, d_theo))
 
 kl <- data.frame("KL Distance" = kl_dist)
-rownames(kl) <- c("Before", "50", "0.02", "0.05")
+rownames(kl) <- c("Before", "50", "0.05", "0.02", "0.005", "5e-05")
 kable(kl, format='pandoc', caption='Kullback-Leibler distances between duplication times after running treeinform with different thresholds and theoretical duplication times.')
 ```
 
