@@ -68,7 +68,7 @@ load("data/dt_threshold-mix.Rdata")
 
 ## Supplementary methods
 
-The code for the analyses presented here (including an executable version of this document) are available in a git repository at https://github.com/caseywdunn/ms_treeinform. The phylogenetic analyses considered here are based on a 7 taxon siphonophore (XX doi:10.1016/j.cub.2009.02.009) dataset. This dataset (XX explain the origin of this dataset and why it was selected). Full details on how the phylogenetic analyses were implemented in Agalma are available in the GitHub repository folder XXX. 
+The code for the analyses presented here (including an executable version of this document) are available in a git repository at https://github.com/caseywdunn/ms_treeinform. The phylogenetic analyses considered here are based on a 7 taxon siphonophore (XX doi:10.1016/j.cub.2009.02.009) dataset. This dataset (XX explain the origin of this dataset and why it was selected). Full details on how the phylogenetic analyses were implemented in Agalma are available in the GitHub repository folder XXX. The gene trees were built with Agalma1.0, and bash scripts for the run can be found [xxx]
 
 The phylogenetic analyses in Agalma followed standard approaches with default settings. Speciation and duplication nodes were identified in the gene trees with XX.
 
@@ -82,6 +82,7 @@ We first examined the prevalence of transcript misassignment. For each node in e
 There are a couple things that could create a misleading impression in this plot of subtree lengths. First, they consider all subtrees, including those for both speciation and duplication nodes. Misassigning transcripts from the same gene to multiple genes will artificially inflate the number of duplication nodes, since variation across transcripts within a gene are essentially misassigned to gene duplication events. Examining just the duplication events in the gene trees therefore provides a more direct perspective on the problem. Second, subtree lengths are in units of expected numbers of substitution, which depend on both rates of molecular evolution and time. Because the rates of evolution can vary within and between gene phylogenies, variations in rates could confound the interpretation of gene tree sublength. We therefor performed additional calibrated analyses. We first created a time calibrated species tree, with all tips with age 0 and the root node with age 1. We then transformed the branch lengths of the gene trees so that each speciation node in each gene tree had the same age as the corresponding node in the species tree (see source code for this document).
 
 A histogram of these calibrated duplication times (Supplementary Figure 2) indicates there is a large excess of recent duplications. This provides additional evidence for the frequent misassignment of transcripts from the same gene to artefactual recent gene duplicates.
+
 
 
 ```{r, subtree_histo, echo=FALSE, warning=FALSE, fig.cap="Histogram of subtree lengths for internal nodes in each Siphonophora subset gene tree from Agalma1.0 containing tip descendants from the same species. Subtree lengths greater than 1 were filtered out for clarity. 19.12% of internal nodes containing tip descendants from the same species from the same species have a subtree length of less than 0.01, with an additional 2.17% having a subtree length between 0.01 and 0.02. It is unlikely that all of these clades are gene duplication events. After 0.02, the distribution of subtree lengths levels out."}
@@ -178,6 +179,7 @@ subtree_lengths = mcmapply(function(x, y) {
 # select max out of subtree lengths
 thresh = unlist(subtree_lengths) %>% max
 ```
+
 
 A preliminary visual inspection of the histogram of subtree lengths (Supplementary Figure 1) suggested that 0.02 was an appropriate threshold for this particular dataset, as bin counts were very high under that threshold, and leveled out in frequency after. 
 
