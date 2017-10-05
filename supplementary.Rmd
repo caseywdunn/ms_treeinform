@@ -36,7 +36,7 @@ clade <- c("Calycophora", "Agalmatidae", "Chodorophora", "Siphonophora", "Hydroz
 calibration_times = data.frame(age, clade, stringsAsFactors = FALSE)
 
 #5299 gene trees + 5301 (missing 5300)
-s <- 1:360
+#s <- 1:5301
 #before <- dt_phyldog(s, "data/before/", calibration_times)
 #trees_before <- before[[1]]
 #calibrated_before <- before[[2]]
@@ -49,17 +49,21 @@ load("data/trees_before.Rdata")
 load("data/calibrated_before.Rdata")
 
 #l <- 27804:28204
+
+#l <- 5302:10507
+#threshold_5 <- dt_phyldog(l, "data/threshold-5/", calibration_times)[[3]]
+#save(threshold_5, file="data/dt_threshold-5.Rdata")
 load("data/dt_threshold-5.Rdata")
 
+#l <- 26881:33481
 #threshold_2 <- dt_phyldog(l, "data/threshold-2/", calibration_times)[[3]]
 #save(threshold_2, file="data/dt_threshold-2.Rdata")
 load("data/dt_threshold-2.Rdata")
 
+#l <- 26825:33580
 #threshold_8 <- dt_phyldog(l, "data/threshold-8/", calibration_times)[[3]]
 #save(threshold_8, file="data/dt_threshold-8.Rdata")
 load("data/dt_threshold-8.Rdata")
-
-load("data/dt_threshold-6.Rdata")
 
 #threshold_mix <- dt_phyldog(l, "data/threshold-mix/", calibration_times)[[3]]
 #save(threshold_mix, file="data/dt_threshold-mix.Rdata")
@@ -82,8 +86,6 @@ Two issues could create a misleading impression in the histogram of subtree leng
 
 We therefore performed a calibrated analysis and focused only on duplication nodes. We first created a time calibrated species tree, with all tips with age 0 and the root node with age 1. We then transformed the branch lengths of the gene trees so that each speciation node in each gene tree had the same age as the corresponding node in the species tree (see source code for this document). A histogram of the calibrated duplication times (Supplementary Figure 2) indicates there is a large excess of recent duplications. This provides additional evidence for the frequent misassignment of transcripts from the same gene to artefactual recent gene duplicates.
 
-
-
 ```{r, subtree_histo, echo=FALSE, warning=FALSE, fig.cap="Histogram of subtree lengths for internal nodes in each Siphonophora subset gene tree from Agalma1.0 containing tip descendants from the same species. Subtree lengths greater than 1 were filtered out for clarity."}
 lengths = mclapply(trees_before, function(x) {
   phylo = x@phylo
@@ -105,8 +107,7 @@ lengths = mclapply(trees_before, function(x) {
 
 lengths_lim = unlist(lengths)[which(unlist(lengths)<1)]
 
-ggplot(data=data.frame(x=lengths_lim)) + geom_histogram(aes(x=x,y=..count../sum(..count..)), binwidth=0.01, fill='white', color='black') + theme_classic() + xlab("Subtree length") + ylab("Frequency") + geom_vline(xintercept=0.02, linetype='dashed', color='blue') + geom_text(data=data.frame(x=0.02,y=0.08), map=aes(x=x, y=y), label="0.02", vjust=1.4, angle=90, colour="blue", size=3)
-# + scale_x_sqrt(breaks = trans_breaks("sqrt", function(x) x^2), labels = trans_format("sqrt", math_format(.x^2))) more striking difference on sqrt scale, but harder to compare with Supplementary Figure 2
+ggplot(data=data.frame(x=lengths_lim)) + geom_histogram(aes(x=x,y=..count../sum(..count..)), binwidth=0.01, fill='white', color='black') + theme_classic() + xlab("Subtree length") + ylab("Frequency") + geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=0.08), map=aes(x=x, y=y), label="0.02", vjust=1.4, angle=90, colour="#56B4E9", size=3)
 ```
 
 ## Selecting a threshold for transcript reassignment
@@ -180,11 +181,9 @@ thresh = unlist(subtree_lengths) %>% max
 
 A visual inspection of the histogram of subtree lengths (Supplementary Figure 1) suggested that 0.02 was an appropriate threshold for this particular dataset, as the frequency of subtree length for internal nodes was high below such threshold but leveled out above it. In addition, 19.12% of internal nodes containing tip descendants from the same species had a subtree length less than 0.01, with an additional 2.17% having a subtree length between 0.01 and 0.02. It is unlikely that all of these clades are gene duplication events.
 
-These observations suggest that two different processes are operating simultaneously to generate the observed subretree lengths, one for the misassigned transcripts and one for the correctly assigned transcripts. To model this pattern, we used a mixture model onto the inferred duplication times (equivalent to branch lenghts; see main text) from the gene trees. One component modelled duplication events and associated times arising from transcripts assigned to different genes that belong to the same gene (i.e., misassigned transcripts), and the other component modelled duplication events and associated times arising from transcripts assigned to different genes that in fact do belong to different genes (i.e., corrrectly assigned transcripts) (Supplementary Figure 2).
+These observations suggest that two different processes are operating simultaneously to generate the observed subtree lengths, one for the misassigned transcripts and one for the correctly assigned transcripts. To model this pattern, we applied a mixture model to the inferred duplication times (equivalent to branch lengths; see main text) from the gene trees. One component modelled duplication events and associated times arising from transcripts assigned to different genes that belong to the same gene (i.e., misassigned transcripts), and the other component modelled duplication events and associated times arising from transcripts assigned to different genes that in fact do belong to different genes (i.e., corrrectly assigned transcripts) (Supplementary Figure 2).
 
-The subtree length histogram further indicated that misassigned transcripts have a distinct signal differentiating them from correctly assigned transcripts. This suggested that a mixture model with two components, one to model misassigned transcripts and one to model correctly assigned transcripts, would provide a good fit on some function of the gene tree branch lengths as well as aid in the selection of a threshold. We used a standard birth-death process, which is often applied to gene duplication, to model the correctly assigned transcripts that are the products of true gene duplication events.
-
-To model each component of the mixture model, we used birth-death phylogenetic models, which are well studied and often applied to gene analyses of duplication and loss. We expected the implied duplication events of transcripts of the same gene that were misassigned to different genes to have very short implied duplication times approaching 0, and thus chose to model that component (Component 1) as a gamma distribution with parameters shape$=\alpha$ and rate$=\beta$. For duplication events from transcripts assigned to different genes that in fact do belong to different genes, we used the probability distribution function given by Gernhard [@gernhard2008conditioned] (Component 2) which has parameters birth rate $\lambda$, death rate $\mu$, and tree time of origin $t_{or}$. Because we fitted a chronogram with time of origin 1 onto the gene trees $G = \{ G_1, G_2, \ldots, G_K \}$, we made the assumption that all gene tree times of origin are $t_{or} = 1$, although technically it is an incorrect estimate of the age of both the gene tree and the species tree. Some gene trees have duplication events predating the first speciation event, thus when we fitted chronograms onto those gene trees they had times of origin greater than 1. We chose to filter these gene trees out of the mixture model and subsequent analyses.
+We expected the implied duplication events of transcripts of the same gene that were misassigned to different genes to have very short implied duplication times approaching 0, and thus chose to model that component (Component 1) as a gamma distribution with parameters shape$=\alpha$ and rate$=\beta$. To model duplication events and associated times arising from the correctly assigned transcripts (Component 2), we used a birth-death process [@gernhard2008conditioned], which is well studied and often applied to gene analyses of duplication and loss. The probability distribution function in the model we used has parameters birth rate $\lambda$, death rate $\mu$, and tree time of origin $t_{or}$. Because we fitted a chronogram with time of origin 1 onto the gene trees $G = \{ G_1, G_2, \ldots, G_K \}$, we made the assumption that all gene tree times of origin are $t_{or} = 1$. Some gene trees have duplication events predating the first speciation event, thus when we fitted chronograms onto those gene trees they had times of origin greater than 1. We chose to filter these gene trees out of the mixture model and subsequent analyses.
 
 If $x_{i, k}$ represents duplication times $i$ from gene tree $G_k$, $\pi_1$ and $\pi_2$ denote the probability that a duplication time belongs to the 1st and 2nd component respectively, $\Gamma(x_{i,k} | \alpha, \beta)$ is the probability density function for the gamma distribution, and $f(x_{i,k} | t_{or,k} = 1, \lambda, \mu)$, then we get the expression
 
@@ -198,16 +197,16 @@ rownames(sum_format) <- c("$\\alpha$", "$\\beta$", "$\\mu$", "$\\lambda$", "$\\p
 kable(sum_format, format='pandoc', caption='Summary of parameter estimates from JAGS.')
 ```
 
-As the intersection point of the two components of the mixture model signals the duplication time point at which more duplication events are likely to arise from transcripts from different genes assigned to different genes, back-calibrating that intersection point provided a threshold for use in treeinform. Specifically, we took all duplication events with times below the intersection point on all chronogram-fitted gene trees, mapped them to the equivalent events on the phyldog-outputted gene trees, computed the subtree length of all events, and then took the maximum of those subtree lengths. From the intersection point `r toString(intersection)`, this gave us a threshold of `r toString(thresh)`. This suggested that a threshold choice of 0.02 was appropriate, consistent with the threshold sugged by Supplementary Figure 1.
+As the intersection point of the two components of the mixture model signals the duplication time point at which more duplication events are likely to arise from transcripts from different genes assigned to different genes, back-calibrating that intersection point provided a threshold for use in treeinform. Specifically, we took all duplication events with times below the intersection point on all chronogram-fitted gene trees, mapped them to the equivalent events on the phyldog-outputted gene trees, computed the subtree length of all events, and then took the maximum of those subtree lengths. From the intersection point `r toString(signif(intersection,4))`, this gave us a threshold of `r toString(signif(thresh,3))`. This suggested that a threshold choice of 0.02 was appropriate, consistent with the threshold sugged by Supplementary Figure 1.
 
 
 ```{r, runjags_viz, echo=FALSE, warnings=FALSE, fig.cap='Histogram of the inferred duplication times. We first ran phyldog [@boussau2013genome] on the Siphonophora subset multiple sequence alignments from Agalma1.0 and a user-inputted species tree. This provided gene trees with internal nodes annotated as duplication or speciation events. We then fitted chronograms onto these gene trees with our user-inputted species tree. In the overlaid mixture model, the intersection point between the two distribution curves was 0.009.'}
-ggplot(data.frame(x=dt_before)) + geom_histogram(aes(x=x,y=..density..), fill='white', color='black', binwidth=0.01) + stat_function(geom="line",fun=mix1,args=list(p1,alpha,beta),xlim=c(0.005,1), aes(color="line1"))+stat_function(geom="line",fun=mix2,args=list(p2,lambda,mu),aes(color="line2"))+ggtitle("Density Curves of Mixture Model Plotted on Histogram of\n Inferred Duplication Times Before Treeinform") + scale_color_manual("Components of Mixture Model", labels=c('line1' = expression("Component 1, " * pi[1]*Gamma(x, alpha, beta)), 'line2' = expression("Component 2, "*pi[2]*f(x,1,lambda,mu))), values=c("#FF000080", "blue")) + xlab("Duplication Times") + ylab("Density") + theme_classic() + theme(legend.position = c(0.8, 0.6))
+ggplot(data.frame(x=dt_before)) + geom_histogram(aes(x=x,y=..density..), fill='white', color='black', binwidth=0.01) + stat_function(geom="line",fun=mix1,args=list(p1,alpha,beta),xlim=c(0.005,1), aes(color="line1"))+stat_function(geom="line",fun=mix2,args=list(p2,lambda,mu),aes(color="line2"))+ggtitle("Density Curves of Mixture Model Plotted on Histogram of\n Inferred Duplication Times Before Treeinform") + scale_color_manual("Components of Mixture Model", labels=c('line1' = expression("Component 1, " * pi[1]*Gamma(x, alpha, beta)), 'line2' = expression("Component 2, "*pi[2]*f(x,1,lambda,mu))), values=c("#FF000080", "blue")) + xlab("Duplication Times") + ylab("Density") + theme_classic() + theme(legend.position = c(0.8, 0.6)) + geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=5), map=aes(x=x, y=y), label="0.02", vjust=1.4, angle=90, colour="#56B4E9", size=3)
 ```
 
 ## Validating the effectiveness of treeinform
 
-```{r, fused_percentage, echo=FALSE, fig.cap='The percentage of reassigned tips is plotted above on a log scale. The original assembly had 315,041 genes, with at most 23,396 possible candidates (7.43% of genes) for reassignment. The default threshold for treeinform is highlighted in blue. This threshold value is robust over a wide range from 0.02 down several orders of magnitude.'}
+```{r, fused_percentage, echo=FALSE, fig.cap='The percentage of reassigned tips is plotted above on a log scale. The original assembly had 315,041 genes, with at most 23,396 possible candidates (7.43% of genes) for reassignment. The default threshold for treeinform is highlighted in light blue. This threshold value is robust over a wide range from 0.02 down several orders of magnitude.'}
 orig_assembly = 315041
 t=1:10 # original thresholds were 5000*10^(-t)
 threshold = 5000*10^(-t)
@@ -229,7 +228,7 @@ fused.df.percents <- transmute(fused.df, threshold, reassigned=reassigned/315041
 grp <- c(rep(1, 18), 2)
 fused.df.percents <- cbind(fused.df.percents, grp)
 
-ggplot(fused.df.percents, aes(threshold, reassigned)) + geom_jitter(aes(colour=grp)) + scale_x_log10() + ggtitle("Percentage of reassigned genes vs threshold") + xlab("Threshold") + ylab("Percentage") + theme_classic() + theme(legend.position="none")
+ggplot(fused.df.percents, aes(threshold, reassigned)) + geom_jitter(aes(colour=grp)) + scale_x_log10() + ggtitle("Percentage of reassigned genes vs threshold") + xlab("Threshold") + ylab("Percentage") + theme_classic() + theme(legend.position="none") + geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=0.015), map=aes(x=x, y=y), label="0.02", hjust=-0.4, colour="#56B4E9", size=3)
 ```
 
 In order to validate that treeinform improves the accuracy of assigning transcripts to genes under the specified threshold, we performed two analyses. First, we plotted the percentage of reassigned genes at different thresholds to assess the performance of the default threshold value of 0.02 (Supplementary Figure 3). Below the default value, the percentage of reassigned genes begins to plateau, while above the default value the percentage of reassigned genes increases very quickly, increasing the likelihood of treeinform to reassign transcripts from different genes to the same gene in addition to reassign transcripts from the same gene together.
@@ -249,7 +248,7 @@ Threshold[l1+l2+1:l3] <- "50"
 Threshold[l1+l2+l3+1:l4] <- "0.05"
 data = data.frame(dt, Threshold)
 f = function(x) dup_pdf(x, 1, lambda, mu)
-ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold), bw=0.01) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density") + theme_classic() + theme(legend.position = c(0.8, 0.6)) + geom_hline(yintercept=0, color="white") + geom_vline(xintercept=0, color="white")
+ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold), bw=0.02) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density") + theme_classic() + theme(legend.position = c(0.8, 0.6)) + geom_hline(yintercept=0, color="white") + geom_vline(xintercept=0, color="white")
 ```
 
 Additionally, we computed the Kullback-Leibler distance [@kullback1951] between the distributions of duplication times under different thresholds and the theoretical distribution of duplication times (Table 2). Kullback-Leibler distance, otherwise known as relative entropy, measures the distance between two distributions. The KL distance between the distribution of duplication times after running treeinform with the default threshold value of 0.02 come closest to the theoretical distribution as compared to both threshold levels below and above the default value. This indicates that treeinform produces more accurate gene trees with appropriate threshold selection.
@@ -266,12 +265,11 @@ d_before <- discretize(dt_before, numBins=100)
 d_mix <- discretize(threshold_mix, numBins=100)
 d_2 <- discretize(threshold_2, numBins=100)
 d_5 <- discretize(threshold_5, numBins=100)
-d_6 <- discretize(threshold_6, numBins=100)
 d_8 <- discretize(threshold_8, numBins=100)
-kl_dist <- c(KL.empirical(d_before, d_theo), KL.empirical(d_2, d_theo), KL.empirical(d_5, d_theo), KL.empirical(d_mix, d_theo), KL.empirical(d_6, d_theo), KL.empirical(d_8, d_theo))
+kl_dist <- c(KL.empirical(d_before, d_theo), KL.empirical(d_2, d_theo), KL.empirical(d_5, d_theo), KL.empirical(d_mix, d_theo), KL.empirical(d_8, d_theo))
 
 kl <- data.frame("KL Distance" = kl_dist)
-rownames(kl) <- c("Before", "50", "0.05", "0.02", "0.005", "5e-05")
+rownames(kl) <- c("Before", "50", "0.05", "0.02", "5e-05")
 kable(kl, format='pandoc', caption='Kullback-Leibler distances between duplication times after running treeinform with different thresholds and theoretical duplication times.')
 ```
 
