@@ -66,7 +66,10 @@ class(new_tree) = "phylo"
 ```
 
 ```{r, plot, echo=FALSE, warning=FALSE}
-msaplot(ggtree(new_tree), "data/modified.fasta", color=c("white","black","white","white"), offset=0.3, width=0.8) + geom_tiplab(size=5, aes(color=fig1a_colors), label=label)
-
-
+#tiff(filename="Figures/figure1.tiff",width=7,height=5,units="in",pointsize=8,res=350)
+#postscript(file="Figures/figure1.eps",width=7,height=5,fonts=c("sans"))
+#cairo_ps(file="Figures/figure1.eps",width=7,height=5,pointsize=8)
+msaplot(ggtree(new_tree), "data/modified.fasta", color=c("white","black","white","white"), offset=0.3, width=0.8) + geom_tiplab(size=5, aes(color=fig1a_colors), label=label) + geom_cladelabel(node=hydra_ancestor, label="Hydra")
+#msaplot(ggtree(new_tree), "data/modified.fasta", color=c("white","black","white","white"), offset=0.3, width=0.8) + geom_tiplab(size=5, label=label) + geom_hilight(node=hydra_ancestor, extend=0.25, fill='grey')
+#dev.off()
 ```

@@ -235,7 +235,7 @@ In order to validate that treeinform improves the accuracy of assigning transcri
 
 Second, we compared the density of duplication times under the model provided for Component 2 of the mixture model to the distribution of estimated duplication times for gene trees from Agalma1.0 before treeinform, and gene trees from Agalma1.0 after treeinform under 3 different thresholds: 50, 0.05, and the default value 0.02 (Supplementary Figure 4). We again fitted chronograms with the same Siphonophora species tree onto all gene trees from Agalma1.0 and filtered out those gene trees with time of origin greater than 1, so that duplication times were comparable between trees. Visually, the analyses with the 0.02 threshold comes closest to the theoretical.
 
-```{r, fig3b, echo=FALSE, warnings=FALSE, fig.cap="Density from theoretical and the empirical density under the 3 different thresholds. It appears that 0.02 looks the closest to the theoretical density."}
+```{r, fig3b, echo=FALSE, warnings=FALSE, fig.cap="Density from theoretical and the empirical density under the 3 different thresholds as well as before treeinform was run. The distribution before treeinform has a large peak on the left that is removed by treeinform with all examined thresholds. Of the evaluated thresholds, 0.02 is closest to the expected distribution."}
 dt <- c(dt_before, threshold_mix, threshold_2, threshold_5)
 l1 = length(dt_before)
 l2 = length(threshold_mix)
