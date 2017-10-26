@@ -73,3 +73,13 @@ msaplot(ggtree(new_tree), "data/modified.fasta", color=c("white","black","white"
 #msaplot(ggtree(new_tree), "data/modified.fasta", color=c("white","black","white","white"), offset=0.3, width=0.8) + geom_tiplab(size=5, label=label) + geom_hilight(node=hydra_ancestor, extend=0.25, fill='grey')
 #dev.off()
 ```
+
+```{r, for_presentation, eval=FALSE, include=FALSE}
+# CODE IN HERE FOR SLIDE PRESENTATIONS ONLY
+
+# problem in ggtree, for presentation
+#ggtree(new_tree, color="white") + geom_tiplab(size=5, aes(color=fig1a_colors), label=label) + theme_tree(bgcolor="#222222", fgcolor="white") + xlim(NA, 1.1) + scale_color_continuous(low="white",high="#34A5DA")
+
+# with MSA
+# msaplot(ggtree(new_tree, color="white"), "data/modified.fasta", color=c("#222222","gray","#222222","#222222"), offset=0.3, width=0.8) + geom_tiplab(size=5, aes(color=fig1a_colors), label=label) + theme_tree(bgcolor="#222222", fgcolor="white") + scale_color_continuous(low="white",high="#34A5DA")
+```

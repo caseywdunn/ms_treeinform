@@ -1,6 +1,6 @@
 # Revising assemblies with phylogenetic information
 
-This repository contains the code for our manuscript on using phylogenetic information to revise and improve transcriptome assemblies. It is organized thusly:
+This repository contains the code for our manuscript on using phylogenetic information to revise and improve transcriptome assemblies in [Agalma1.0](http://bitbucket.org/caseywdunn/agalma). It is organized thusly:
 
 * **supplementary.Rmd:** R notebook complete with code to generate all the figures and analyses for the Supplementary Information.
 * **figure1.Rmd:** R notebook with code to generate Figure 1 in the main manuscript.
