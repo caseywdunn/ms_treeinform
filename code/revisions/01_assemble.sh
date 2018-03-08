@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH -t 3-00:00:00
-#SBATCH --mem=24G
+#SBATCH -n 16
+#SBATCH --mem=120G
 
 module load conda
 source activate agalma
@@ -13,9 +14,10 @@ mkdir -p $DATADIR/trinity/scratch
 mkdir -p $DATADIR/trinity/reports
 
 export AGALMA_DB=$DATADIR/trinity/agalma_trinity.sqlite
+agalma -t 16 -m 120G
 
 cd $DATADIR/trinity/data
-#agalma testdata
+agalma testdata
 agalma catalog insert --id SRX288276 --paths SRX288276_1.fq SRX288276_2.fq --species "Abylopsis tetragona" --ncbi_id 316209
 agalma catalog insert --id SRX288285 --paths SRX288285_1.fq SRX288285_2.fq --species "Agalma elegans" --ncbi_id 316166
 agalma catalog insert --id SRX288432 --paths SRX288432_1.fq SRX288432_2.fq --species "Craseoa lathetica" --ncbi_id 316205

@@ -14,7 +14,7 @@ conda install -c conda-forge -n agalma libgcc-ng
 conda install -c conda-forge -n agalma libstdcxx-ng
 conda install -c dunnlab -n agalma agalma=1.0.1
 conda remove -n agalma agalma trinity
-conda install -c dunnlab -n agalma trinity=2.5.1
+conda install -c dunnlab -n agalma trinity=2.6.5
 conda install -f -c dunnlab -n agalma agalma=1.0.1
 
 source activate agalma
