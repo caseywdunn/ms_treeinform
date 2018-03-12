@@ -4,9 +4,10 @@
 
 module load conda
 conda create -n corset
-conda config --add bioconda
-conda install -n corset samtools
+conda config --add channels conda-forge
+conda config --add channels bioconda
 conda install -n corset corset
 conda install -n corset bowtie2
+conda install -n corset samtools
 
 source activate corset
