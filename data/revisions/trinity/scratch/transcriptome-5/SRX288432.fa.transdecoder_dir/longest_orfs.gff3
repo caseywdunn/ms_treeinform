@@ -1,0 +1,203 @@
+64	transdecoder	gene	1	2801	.	+	.	ID=64|g.1;Name=ORF%2064%7Cg.1%2064%7Cm.1%20type%3A3prime_partial%20len%3A906%20%28%2B%29
+64	transdecoder	mRNA	1	2801	.	+	.	ID=64|m.1;Parent=64|g.1;Name=ORF%2064%7Cg.1%2064%7Cm.1%20type%3A3prime_partial%20len%3A906%20%28%2B%29
+64	transdecoder	five_prime_UTR	1	85	.	+	.	ID=64|m.1.utr5p1;Parent=64|m.1
+64	transdecoder	exon	1	2801	.	+	.	ID=64|m.1.exon1;Parent=64|m.1
+64	transdecoder	CDS	86	2800	.	+	.	ID=cds.64|m.1;Parent=64|m.1
+64	transdecoder	three_prime_UTR	2801	2801	.	+	.	ID=64|m.1.utr3p1;Parent=64|m.1
+
+64	transdecoder	gene	1	2801	.	-	.	ID=64|g.2;Name=ORF%2064%7Cg.2%2064%7Cm.2%20type%3Acomplete%20len%3A144%20%28-%29
+64	transdecoder	mRNA	1	2801	.	-	.	ID=64|m.2;Parent=64|g.2;Name=ORF%2064%7Cg.2%2064%7Cm.2%20type%3Acomplete%20len%3A144%20%28-%29
+64	transdecoder	five_prime_UTR	553	2801	.	-	.	ID=64|m.2.utr5p1;Parent=64|m.2
+64	transdecoder	exon	1	2801	.	-	.	ID=64|m.2.exon1;Parent=64|m.2
+64	transdecoder	CDS	121	552	.	-	.	ID=cds.64|m.2;Parent=64|m.2
+64	transdecoder	three_prime_UTR	1	120	.	-	.	ID=64|m.2.utr3p1;Parent=64|m.2
+
+65	transdecoder	gene	1	1659	.	+	.	ID=65|g.3;Name=ORF%2065%7Cg.3%2065%7Cm.3%20type%3A3prime_partial%20len%3A526%20%28%2B%29
+65	transdecoder	mRNA	1	1659	.	+	.	ID=65|m.3;Parent=65|g.3;Name=ORF%2065%7Cg.3%2065%7Cm.3%20type%3A3prime_partial%20len%3A526%20%28%2B%29
+65	transdecoder	five_prime_UTR	1	83	.	+	.	ID=65|m.3.utr5p1;Parent=65|m.3
+65	transdecoder	exon	1	1659	.	+	.	ID=65|m.3.exon1;Parent=65|m.3
+65	transdecoder	CDS	84	1658	.	+	.	ID=cds.65|m.3;Parent=65|m.3
+65	transdecoder	three_prime_UTR	1659	1659	.	+	.	ID=65|m.3.utr3p1;Parent=65|m.3
+
+66	transdecoder	gene	1	858	.	+	.	ID=66|g.4;Name=ORF%2066%7Cg.4%2066%7Cm.4%20type%3Acomplete%20len%3A202%20%28%2B%29
+66	transdecoder	mRNA	1	858	.	+	.	ID=66|m.4;Parent=66|g.4;Name=ORF%2066%7Cg.4%2066%7Cm.4%20type%3Acomplete%20len%3A202%20%28%2B%29
+66	transdecoder	five_prime_UTR	1	56	.	+	.	ID=66|m.4.utr5p1;Parent=66|m.4
+66	transdecoder	exon	1	858	.	+	.	ID=66|m.4.exon1;Parent=66|m.4
+66	transdecoder	CDS	57	662	.	+	.	ID=cds.66|m.4;Parent=66|m.4
+66	transdecoder	three_prime_UTR	663	858	.	+	.	ID=66|m.4.utr3p1;Parent=66|m.4
+
+67	transdecoder	gene	1	1874	.	+	.	ID=67|g.5;Name=ORF%2067%7Cg.5%2067%7Cm.5%20type%3Acomplete%20len%3A514%20%28%2B%29
+67	transdecoder	mRNA	1	1874	.	+	.	ID=67|m.5;Parent=67|g.5;Name=ORF%2067%7Cg.5%2067%7Cm.5%20type%3Acomplete%20len%3A514%20%28%2B%29
+67	transdecoder	five_prime_UTR	1	77	.	+	.	ID=67|m.5.utr5p1;Parent=67|m.5
+67	transdecoder	exon	1	1874	.	+	.	ID=67|m.5.exon1;Parent=67|m.5
+67	transdecoder	CDS	78	1619	.	+	.	ID=cds.67|m.5;Parent=67|m.5
+67	transdecoder	three_prime_UTR	1620	1874	.	+	.	ID=67|m.5.utr3p1;Parent=67|m.5
+
+68	transdecoder	gene	1	709	.	+	.	ID=68|g.6;Name=ORF%2068%7Cg.6%2068%7Cm.6%20type%3Acomplete%20len%3A149%20%28%2B%29
+68	transdecoder	mRNA	1	709	.	+	.	ID=68|m.6;Parent=68|g.6;Name=ORF%2068%7Cg.6%2068%7Cm.6%20type%3Acomplete%20len%3A149%20%28%2B%29
+68	transdecoder	five_prime_UTR	1	151	.	+	.	ID=68|m.6.utr5p1;Parent=68|m.6
+68	transdecoder	exon	1	709	.	+	.	ID=68|m.6.exon1;Parent=68|m.6
+68	transdecoder	CDS	152	598	.	+	.	ID=cds.68|m.6;Parent=68|m.6
+68	transdecoder	three_prime_UTR	599	709	.	+	.	ID=68|m.6.utr3p1;Parent=68|m.6
+
+69	transdecoder	gene	1	1394	.	+	.	ID=69|g.7;Name=ORF%2069%7Cg.7%2069%7Cm.7%20type%3A3prime_partial%20len%3A451%20%28%2B%29
+69	transdecoder	mRNA	1	1394	.	+	.	ID=69|m.7;Parent=69|g.7;Name=ORF%2069%7Cg.7%2069%7Cm.7%20type%3A3prime_partial%20len%3A451%20%28%2B%29
+69	transdecoder	five_prime_UTR	1	44	.	+	.	ID=69|m.7.utr5p1;Parent=69|m.7
+69	transdecoder	exon	1	1394	.	+	.	ID=69|m.7.exon1;Parent=69|m.7
+69	transdecoder	CDS	45	1394	.	+	.	ID=cds.69|m.7;Parent=69|m.7
+
+70	transdecoder	gene	1	3623	.	-	.	ID=70|g.8;Name=ORF%2070%7Cg.8%2070%7Cm.8%20type%3A5prime_partial%20len%3A974%20%28-%29
+70	transdecoder	mRNA	1	3623	.	-	.	ID=70|m.8;Parent=70|g.8;Name=ORF%2070%7Cg.8%2070%7Cm.8%20type%3A5prime_partial%20len%3A974%20%28-%29
+70	transdecoder	exon	1	3623	.	-	.	ID=70|m.8.exon1;Parent=70|m.8
+70	transdecoder	CDS	702	3623	.	-	.	ID=cds.70|m.8;Parent=70|m.8
+70	transdecoder	three_prime_UTR	1	701	.	-	.	ID=70|m.8.utr3p1;Parent=70|m.8
+
+71	transdecoder	gene	1	782	.	+	.	ID=71|g.9;Name=ORF%2071%7Cg.9%2071%7Cm.9%20type%3A3prime_partial%20len%3A244%20%28%2B%29
+71	transdecoder	mRNA	1	782	.	+	.	ID=71|m.9;Parent=71|g.9;Name=ORF%2071%7Cg.9%2071%7Cm.9%20type%3A3prime_partial%20len%3A244%20%28%2B%29
+71	transdecoder	five_prime_UTR	1	53	.	+	.	ID=71|m.9.utr5p1;Parent=71|m.9
+71	transdecoder	exon	1	782	.	+	.	ID=71|m.9.exon1;Parent=71|m.9
+71	transdecoder	CDS	54	782	.	+	.	ID=cds.71|m.9;Parent=71|m.9
+
+72	transdecoder	gene	1	960	.	+	.	ID=72|g.10;Name=ORF%2072%7Cg.10%2072%7Cm.10%20type%3A3prime_partial%20len%3A191%20%28%2B%29
+72	transdecoder	mRNA	1	960	.	+	.	ID=72|m.10;Parent=72|g.10;Name=ORF%2072%7Cg.10%2072%7Cm.10%20type%3A3prime_partial%20len%3A191%20%28%2B%29
+72	transdecoder	five_prime_UTR	1	390	.	+	.	ID=72|m.10.utr5p1;Parent=72|m.10
+72	transdecoder	exon	1	960	.	+	.	ID=72|m.10.exon1;Parent=72|m.10
+72	transdecoder	CDS	391	960	.	+	.	ID=cds.72|m.10;Parent=72|m.10
+
+73	transdecoder	gene	1	3966	.	+	.	ID=73|g.11;Name=ORF%2073%7Cg.11%2073%7Cm.11%20type%3Acomplete%20len%3A1175%20%28%2B%29
+73	transdecoder	mRNA	1	3966	.	+	.	ID=73|m.11;Parent=73|g.11;Name=ORF%2073%7Cg.11%2073%7Cm.11%20type%3Acomplete%20len%3A1175%20%28%2B%29
+73	transdecoder	five_prime_UTR	1	412	.	+	.	ID=73|m.11.utr5p1;Parent=73|m.11
+73	transdecoder	exon	1	3966	.	+	.	ID=73|m.11.exon1;Parent=73|m.11
+73	transdecoder	CDS	413	3937	.	+	.	ID=cds.73|m.11;Parent=73|m.11
+73	transdecoder	three_prime_UTR	3938	3966	.	+	.	ID=73|m.11.utr3p1;Parent=73|m.11
+
+73	transdecoder	gene	1	3966	.	-	.	ID=73|g.12;Name=ORF%2073%7Cg.12%2073%7Cm.12%20type%3Acomplete%20len%3A162%20%28-%29
+73	transdecoder	mRNA	1	3966	.	-	.	ID=73|m.12;Parent=73|g.12;Name=ORF%2073%7Cg.12%2073%7Cm.12%20type%3Acomplete%20len%3A162%20%28-%29
+73	transdecoder	five_prime_UTR	955	3966	.	-	.	ID=73|m.12.utr5p1;Parent=73|m.12
+73	transdecoder	exon	1	3966	.	-	.	ID=73|m.12.exon1;Parent=73|m.12
+73	transdecoder	CDS	469	954	.	-	.	ID=cds.73|m.12;Parent=73|m.12
+73	transdecoder	three_prime_UTR	1	468	.	-	.	ID=73|m.12.utr3p1;Parent=73|m.12
+
+74	transdecoder	gene	1	646	.	+	.	ID=74|g.13;Name=ORF%2074%7Cg.13%2074%7Cm.13%20type%3Acomplete%20len%3A151%20%28%2B%29
+74	transdecoder	mRNA	1	646	.	+	.	ID=74|m.13;Parent=74|g.13;Name=ORF%2074%7Cg.13%2074%7Cm.13%20type%3Acomplete%20len%3A151%20%28%2B%29
+74	transdecoder	five_prime_UTR	1	82	.	+	.	ID=74|m.13.utr5p1;Parent=74|m.13
+74	transdecoder	exon	1	646	.	+	.	ID=74|m.13.exon1;Parent=74|m.13
+74	transdecoder	CDS	83	535	.	+	.	ID=cds.74|m.13;Parent=74|m.13
+74	transdecoder	three_prime_UTR	536	646	.	+	.	ID=74|m.13.utr3p1;Parent=74|m.13
+
+75	transdecoder	gene	1	3853	.	-	.	ID=75|g.14;Name=ORF%2075%7Cg.14%2075%7Cm.14%20type%3A5prime_partial%20len%3A1052%20%28-%29
+75	transdecoder	mRNA	1	3853	.	-	.	ID=75|m.14;Parent=75|g.14;Name=ORF%2075%7Cg.14%2075%7Cm.14%20type%3A5prime_partial%20len%3A1052%20%28-%29
+75	transdecoder	exon	1	3853	.	-	.	ID=75|m.14.exon1;Parent=75|m.14
+75	transdecoder	CDS	698	3853	.	-	.	ID=cds.75|m.14;Parent=75|m.14
+75	transdecoder	three_prime_UTR	1	697	.	-	.	ID=75|m.14.utr3p1;Parent=75|m.14
+
+76	transdecoder	gene	1	3947	.	+	.	ID=76|g.15;Name=ORF%2076%7Cg.15%2076%7Cm.15%20type%3Acomplete%20len%3A1170%20%28%2B%29
+76	transdecoder	mRNA	1	3947	.	+	.	ID=76|m.15;Parent=76|g.15;Name=ORF%2076%7Cg.15%2076%7Cm.15%20type%3Acomplete%20len%3A1170%20%28%2B%29
+76	transdecoder	five_prime_UTR	1	408	.	+	.	ID=76|m.15.utr5p1;Parent=76|m.15
+76	transdecoder	exon	1	3947	.	+	.	ID=76|m.15.exon1;Parent=76|m.15
+76	transdecoder	CDS	409	3918	.	+	.	ID=cds.76|m.15;Parent=76|m.15
+76	transdecoder	three_prime_UTR	3919	3947	.	+	.	ID=76|m.15.utr3p1;Parent=76|m.15
+
+76	transdecoder	gene	1	3947	.	-	.	ID=76|g.16;Name=ORF%2076%7Cg.16%2076%7Cm.16%20type%3Acomplete%20len%3A109%20%28-%29
+76	transdecoder	mRNA	1	3947	.	-	.	ID=76|m.16;Parent=76|g.16;Name=ORF%2076%7Cg.16%2076%7Cm.16%20type%3Acomplete%20len%3A109%20%28-%29
+76	transdecoder	five_prime_UTR	792	3947	.	-	.	ID=76|m.16.utr5p1;Parent=76|m.16
+76	transdecoder	exon	1	3947	.	-	.	ID=76|m.16.exon1;Parent=76|m.16
+76	transdecoder	CDS	465	791	.	-	.	ID=cds.76|m.16;Parent=76|m.16
+76	transdecoder	three_prime_UTR	1	464	.	-	.	ID=76|m.16.utr3p1;Parent=76|m.16
+
+77	transdecoder	gene	1	3783	.	+	.	ID=77|g.17;Name=ORF%2077%7Cg.17%2077%7Cm.17%20type%3Acomplete%20len%3A1193%20%28%2B%29
+77	transdecoder	mRNA	1	3783	.	+	.	ID=77|m.17;Parent=77|g.17;Name=ORF%2077%7Cg.17%2077%7Cm.17%20type%3Acomplete%20len%3A1193%20%28%2B%29
+77	transdecoder	five_prime_UTR	1	175	.	+	.	ID=77|m.17.utr5p1;Parent=77|m.17
+77	transdecoder	exon	1	3783	.	+	.	ID=77|m.17.exon1;Parent=77|m.17
+77	transdecoder	CDS	176	3754	.	+	.	ID=cds.77|m.17;Parent=77|m.17
+77	transdecoder	three_prime_UTR	3755	3783	.	+	.	ID=77|m.17.utr3p1;Parent=77|m.17
+
+78	transdecoder	gene	1	952	.	-	.	ID=78|g.18;Name=ORF%2078%7Cg.18%2078%7Cm.18%20type%3Ainternal%20len%3A318%20%28-%29
+78	transdecoder	mRNA	1	952	.	-	.	ID=78|m.18;Parent=78|g.18;Name=ORF%2078%7Cg.18%2078%7Cm.18%20type%3Ainternal%20len%3A318%20%28-%29
+78	transdecoder	exon	1	952	.	-	.	ID=78|m.18.exon1;Parent=78|m.18
+78	transdecoder	CDS	2	952	.	-	.	ID=cds.78|m.18;Parent=78|m.18
+78	transdecoder	three_prime_UTR	1	1	.	-	.	ID=78|m.18.utr3p1;Parent=78|m.18
+
+79	transdecoder	gene	1	654	.	+	.	ID=79|g.19;Name=ORF%2079%7Cg.19%2079%7Cm.19%20type%3A5prime_partial%20len%3A194%20%28%2B%29
+79	transdecoder	mRNA	1	654	.	+	.	ID=79|m.19;Parent=79|g.19;Name=ORF%2079%7Cg.19%2079%7Cm.19%20type%3A5prime_partial%20len%3A194%20%28%2B%29
+79	transdecoder	five_prime_UTR	1	2	.	+	.	ID=79|m.19.utr5p1;Parent=79|m.19
+79	transdecoder	exon	1	654	.	+	.	ID=79|m.19.exon1;Parent=79|m.19
+79	transdecoder	CDS	3	584	.	+	.	ID=cds.79|m.19;Parent=79|m.19
+79	transdecoder	three_prime_UTR	585	654	.	+	.	ID=79|m.19.utr3p1;Parent=79|m.19
+
+80	transdecoder	gene	1	1449	.	+	.	ID=80|g.20;Name=ORF%2080%7Cg.20%2080%7Cm.20%20type%3Ainternal%20len%3A483%20%28%2B%29
+80	transdecoder	mRNA	1	1449	.	+	.	ID=80|m.20;Parent=80|g.20;Name=ORF%2080%7Cg.20%2080%7Cm.20%20type%3Ainternal%20len%3A483%20%28%2B%29
+80	transdecoder	five_prime_UTR	1	1	.	+	.	ID=80|m.20.utr5p1;Parent=80|m.20
+80	transdecoder	exon	1	1449	.	+	.	ID=80|m.20.exon1;Parent=80|m.20
+80	transdecoder	CDS	2	1447	.	+	.	ID=cds.80|m.20;Parent=80|m.20
+80	transdecoder	three_prime_UTR	1448	1449	.	+	.	ID=80|m.20.utr3p1;Parent=80|m.20
+
+81	transdecoder	gene	1	563	.	+	.	ID=81|g.21;Name=ORF%2081%7Cg.21%2081%7Cm.21%20type%3Ainternal%20len%3A188%20%28%2B%29
+81	transdecoder	mRNA	1	563	.	+	.	ID=81|m.21;Parent=81|g.21;Name=ORF%2081%7Cg.21%2081%7Cm.21%20type%3Ainternal%20len%3A188%20%28%2B%29
+81	transdecoder	exon	1	563	.	+	.	ID=81|m.21.exon1;Parent=81|m.21
+81	transdecoder	CDS	1	561	.	+	.	ID=cds.81|m.21;Parent=81|m.21
+81	transdecoder	three_prime_UTR	562	563	.	+	.	ID=81|m.21.utr3p1;Parent=81|m.21
+
+82	transdecoder	gene	1	832	.	+	.	ID=82|g.22;Name=ORF%2082%7Cg.22%2082%7Cm.22%20type%3A3prime_partial%20len%3A220%20%28%2B%29
+82	transdecoder	mRNA	1	832	.	+	.	ID=82|m.22;Parent=82|g.22;Name=ORF%2082%7Cg.22%2082%7Cm.22%20type%3A3prime_partial%20len%3A220%20%28%2B%29
+82	transdecoder	five_prime_UTR	1	173	.	+	.	ID=82|m.22.utr5p1;Parent=82|m.22
+82	transdecoder	exon	1	832	.	+	.	ID=82|m.22.exon1;Parent=82|m.22
+82	transdecoder	CDS	174	830	.	+	.	ID=cds.82|m.22;Parent=82|m.22
+82	transdecoder	three_prime_UTR	831	832	.	+	.	ID=82|m.22.utr3p1;Parent=82|m.22
+
+83	transdecoder	gene	1	1407	.	+	.	ID=83|g.23;Name=ORF%2083%7Cg.23%2083%7Cm.23%20type%3Acomplete%20len%3A334%20%28%2B%29
+83	transdecoder	mRNA	1	1407	.	+	.	ID=83|m.23;Parent=83|g.23;Name=ORF%2083%7Cg.23%2083%7Cm.23%20type%3Acomplete%20len%3A334%20%28%2B%29
+83	transdecoder	five_prime_UTR	1	320	.	+	.	ID=83|m.23.utr5p1;Parent=83|m.23
+83	transdecoder	exon	1	1407	.	+	.	ID=83|m.23.exon1;Parent=83|m.23
+83	transdecoder	CDS	321	1322	.	+	.	ID=cds.83|m.23;Parent=83|m.23
+83	transdecoder	three_prime_UTR	1323	1407	.	+	.	ID=83|m.23.utr3p1;Parent=83|m.23
+
+84	transdecoder	gene	1	825	.	+	.	ID=84|g.24;Name=ORF%2084%7Cg.24%2084%7Cm.24%20type%3Ainternal%20len%3A276%20%28%2B%29
+84	transdecoder	mRNA	1	825	.	+	.	ID=84|m.24;Parent=84|g.24;Name=ORF%2084%7Cg.24%2084%7Cm.24%20type%3Ainternal%20len%3A276%20%28%2B%29
+84	transdecoder	exon	1	825	.	+	.	ID=84|m.24.exon1;Parent=84|m.24
+84	transdecoder	CDS	1	825	.	+	.	ID=cds.84|m.24;Parent=84|m.24
+
+85	transdecoder	gene	1	630	.	+	.	ID=85|g.25;Name=ORF%2085%7Cg.25%2085%7Cm.25%20type%3Ainternal%20len%3A211%20%28%2B%29
+85	transdecoder	mRNA	1	630	.	+	.	ID=85|m.25;Parent=85|g.25;Name=ORF%2085%7Cg.25%2085%7Cm.25%20type%3Ainternal%20len%3A211%20%28%2B%29
+85	transdecoder	exon	1	630	.	+	.	ID=85|m.25.exon1;Parent=85|m.25
+85	transdecoder	CDS	1	630	.	+	.	ID=cds.85|m.25;Parent=85|m.25
+
+86	transdecoder	gene	1	554	.	-	.	ID=86|g.26;Name=ORF%2086%7Cg.26%2086%7Cm.26%20type%3Ainternal%20len%3A185%20%28-%29
+86	transdecoder	mRNA	1	554	.	-	.	ID=86|m.26;Parent=86|g.26;Name=ORF%2086%7Cg.26%2086%7Cm.26%20type%3Ainternal%20len%3A185%20%28-%29
+86	transdecoder	exon	1	554	.	-	.	ID=86|m.26.exon1;Parent=86|m.26
+86	transdecoder	CDS	3	554	.	-	.	ID=cds.86|m.26;Parent=86|m.26
+86	transdecoder	three_prime_UTR	1	2	.	-	.	ID=86|m.26.utr3p1;Parent=86|m.26
+
+87	transdecoder	gene	1	2293	.	+	.	ID=87|g.27;Name=ORF%2087%7Cg.27%2087%7Cm.27%20type%3Acomplete%20len%3A425%20%28%2B%29
+87	transdecoder	mRNA	1	2293	.	+	.	ID=87|m.27;Parent=87|g.27;Name=ORF%2087%7Cg.27%2087%7Cm.27%20type%3Acomplete%20len%3A425%20%28%2B%29
+87	transdecoder	five_prime_UTR	1	222	.	+	.	ID=87|m.27.utr5p1;Parent=87|m.27
+87	transdecoder	exon	1	2293	.	+	.	ID=87|m.27.exon1;Parent=87|m.27
+87	transdecoder	CDS	223	1497	.	+	.	ID=cds.87|m.27;Parent=87|m.27
+87	transdecoder	three_prime_UTR	1498	2293	.	+	.	ID=87|m.27.utr3p1;Parent=87|m.27
+
+88	transdecoder	gene	1	523	.	+	.	ID=88|g.28;Name=ORF%2088%7Cg.28%2088%7Cm.28%20type%3A5prime_partial%20len%3A141%20%28%2B%29
+88	transdecoder	mRNA	1	523	.	+	.	ID=88|m.28;Parent=88|g.28;Name=ORF%2088%7Cg.28%2088%7Cm.28%20type%3A5prime_partial%20len%3A141%20%28%2B%29
+88	transdecoder	exon	1	523	.	+	.	ID=88|m.28.exon1;Parent=88|m.28
+88	transdecoder	CDS	1	423	.	+	.	ID=cds.88|m.28;Parent=88|m.28
+88	transdecoder	three_prime_UTR	424	523	.	+	.	ID=88|m.28.utr3p1;Parent=88|m.28
+
+89	transdecoder	gene	1	445	.	-	.	ID=89|g.29;Name=ORF%2089%7Cg.29%2089%7Cm.29%20type%3Ainternal%20len%3A148%20%28-%29
+89	transdecoder	mRNA	1	445	.	-	.	ID=89|m.29;Parent=89|g.29;Name=ORF%2089%7Cg.29%2089%7Cm.29%20type%3Ainternal%20len%3A148%20%28-%29
+89	transdecoder	five_prime_UTR	444	445	.	-	.	ID=89|m.29.utr5p1;Parent=89|m.29
+89	transdecoder	exon	1	445	.	-	.	ID=89|m.29.exon1;Parent=89|m.29
+89	transdecoder	CDS	3	443	.	-	.	ID=cds.89|m.29;Parent=89|m.29
+89	transdecoder	three_prime_UTR	1	2	.	-	.	ID=89|m.29.utr3p1;Parent=89|m.29
+
+90	transdecoder	gene	1	592	.	-	.	ID=90|g.30;Name=ORF%2090%7Cg.30%2090%7Cm.30%20type%3Ainternal%20len%3A197%20%28-%29
+90	transdecoder	mRNA	1	592	.	-	.	ID=90|m.30;Parent=90|g.30;Name=ORF%2090%7Cg.30%2090%7Cm.30%20type%3Ainternal%20len%3A197%20%28-%29
+90	transdecoder	five_prime_UTR	591	592	.	-	.	ID=90|m.30.utr5p1;Parent=90|m.30
+90	transdecoder	exon	1	592	.	-	.	ID=90|m.30.exon1;Parent=90|m.30
+90	transdecoder	CDS	3	590	.	-	.	ID=cds.90|m.30;Parent=90|m.30
+90	transdecoder	three_prime_UTR	1	2	.	-	.	ID=90|m.30.utr3p1;Parent=90|m.30
+
+91	transdecoder	gene	1	574	.	-	.	ID=91|g.31;Name=ORF%2091%7Cg.31%2091%7Cm.31%20type%3Ainternal%20len%3A192%20%28-%29
+91	transdecoder	mRNA	1	574	.	-	.	ID=91|m.31;Parent=91|g.31;Name=ORF%2091%7Cg.31%2091%7Cm.31%20type%3Ainternal%20len%3A192%20%28-%29
+91	transdecoder	five_prime_UTR	574	574	.	-	.	ID=91|m.31.utr5p1;Parent=91|m.31
+91	transdecoder	exon	1	574	.	-	.	ID=91|m.31.exon1;Parent=91|m.31
+91	transdecoder	CDS	1	573	.	-	.	ID=cds.91|m.31;Parent=91|m.31
+

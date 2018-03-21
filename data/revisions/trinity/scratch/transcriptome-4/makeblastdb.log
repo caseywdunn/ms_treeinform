@@ -1,0 +1,20 @@
+[biolite] timestamp=2018-03-21 12:59:08
+
+
+Building a new DB, current time: 03/21/2018 12:59:08
+New DB name:   /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-4/rrna
+New DB title:  /users/aguang/miniconda3/envs/agalma/lib/python2.7/site-packages/agalma/data/rRNA-animal.fasta
+Sequence type: Nucleotide
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 14 sequences in 0.00267696 seconds.
+[biolite] timestamp=2018-03-21 12:59:20
+
+
+Building a new DB, current time: 03/21/2018 12:59:20
+New DB name:   /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-4/rrna.db
+New DB title:  /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-4/rrna.db.fa
+Sequence type: Nucleotide
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 14 sequences in 0.00254512 seconds.

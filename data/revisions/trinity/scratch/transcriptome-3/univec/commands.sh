@@ -1,0 +1,1 @@
+blastn -evalue 0.0001 -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore stitle' -db /users/aguang/miniconda3/envs/agalma/lib/python2.7/site-packages/agalma/blastdb/UniVec -max_target_seqs 20 -query 1.fa

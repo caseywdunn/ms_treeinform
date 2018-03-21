@@ -1,0 +1,17 @@
+[biolite] timestamp=2018-03-21 12:52:20
+64392 reads; of these:
+  64392 (100.00%) were paired; of these:
+    19 (0.03%) aligned concordantly 0 times
+    57862 (89.86%) aligned concordantly exactly 1 time
+    6511 (10.11%) aligned concordantly >1 times
+99.97% overall alignment rate
+[biolite] mean=261.127 
+[biolite] stddev=67.8371 
+[biolite] hist_file=insert_hist.txt 
+insert_stats: mappings_read	128747
+insert_stats: paired_mappings	128746
+insert_stats: unpaired_mappings	1
+insert_stats: zero_insert_mappings	1
+insert_stats: less_zero_insert_mappings	64373
+insert_stats: greater_zero_insert_mappings	64373
+insert_stats: outside_histogram	0

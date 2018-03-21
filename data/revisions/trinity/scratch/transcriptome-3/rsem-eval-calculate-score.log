@@ -1,0 +1,701 @@
+[biolite] timestamp=2018-03-21 12:57:29
+rsem-synthesis-reference-transcripts rsem_eval.temp/rsem_eval 0 0 0 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-3/SRX288430.fa
+Transcript Information File is generated!
+Group File is generated!
+Extracted Sequences File is generated!
+
+rsem-preref rsem_eval.temp/rsem_eval.transcripts.fa 1 rsem_eval.temp/rsem_eval
+Refs.makeRefs finished!
+Refs.saveRefs finished!
+rsem_eval.temp/rsem_eval.idx.fa is generated!
+rsem_eval.temp/rsem_eval.n2g.idx.fa is generated!
+
+bowtie-build -f rsem_eval.temp/rsem_eval.n2g.idx.fa rsem_eval.temp/rsem_eval
+Settings:
+  Output files: "rsem_eval.temp/rsem_eval.*.ebwt"
+  Line rate: 6 (line is 64 bytes)
+  Lines per side: 1 (side is 64 bytes)
+  Offset rate: 5 (one in 32)
+  FTable chars: 10
+  Strings: unpacked
+  Max bucket size: default
+  Max bucket size, sqrt multiplier: default
+  Max bucket size, len divisor: 4
+  Difference-cover sample period: 1024
+  Endianness: little
+  Actual local endianness: little
+  Sanity checking: disabled
+  Assertions: disabled
+  Random seed: 0
+  Sizeofs: void*:8, int:4, long:8, size_t:8
+Input files DNA, FASTA:
+  rsem_eval.temp/rsem_eval.n2g.idx.fa
+Reading reference sizes
+  Time reading reference sizes: 00:00:00
+Calculating joined length
+Writing header
+Reserving space for joined string
+Joining reference sequences
+  Time to join reference sequences: 00:00:00
+bmax according to bmaxDivN setting: 4528
+Using parameters --bmax 3396 --dcv 1024
+  Doing ahead-of-time memory usage test
+  Passed!  Constructing with these parameters: --bmax 3396 --dcv 1024
+Constructing suffix-array element generator
+Building DifferenceCoverSample
+  Building sPrime
+  Building sPrimeOrder
+  V-Sorting samples
+  V-Sorting samples time: 00:00:00
+  Allocating rank array
+  Ranking v-sort output
+  Ranking v-sort output time: 00:00:00
+  Invoking Larsson-Sadakane on ranks
+  Invoking Larsson-Sadakane on ranks time: 00:00:00
+  Sanity-checking and returning
+Building samples
+Reserving space for 12 sample suffixes
+Generating random suffixes
+QSorting 12 sample offsets, eliminating duplicates
+QSorting sample offsets, eliminating duplicates time: 00:00:00
+Multikey QSorting 12 samples
+  (Using difference cover)
+  Multikey QSorting samples time: 00:00:00
+Calculating bucket sizes
+  Binary sorting into buckets
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Binary sorting into buckets time: 00:00:00
+Splitting and merging
+  Splitting and merging time: 00:00:00
+Split 2, merged 7; iterating...
+  Binary sorting into buckets
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Binary sorting into buckets time: 00:00:00
+Splitting and merging
+  Splitting and merging time: 00:00:00
+Split 1, merged 0; iterating...
+  Binary sorting into buckets
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Binary sorting into buckets time: 00:00:00
+Splitting and merging
+  Splitting and merging time: 00:00:00
+Split 1, merged 0; iterating...
+  Binary sorting into buckets
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Binary sorting into buckets time: 00:00:00
+Splitting and merging
+  Splitting and merging time: 00:00:00
+Avg bucket size: 2011.89 (target: 3395)
+Converting suffix-array elements to index image
+Allocating ftab, absorbFtab
+Entering Ebwt loop
+Getting block 1 of 9
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 1769
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 1770
+Getting block 2 of 9
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 1728
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 1729
+Getting block 3 of 9
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 1865
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 1866
+Getting block 4 of 9
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 2855
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 2856
+Getting block 5 of 9
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 1092
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 1093
+Getting block 6 of 9
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 2606
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 2607
+Getting block 7 of 9
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 1997
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 1998
+Getting block 8 of 9
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 3329
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 3330
+Getting block 9 of 9
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 866
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 867
+Exited Ebwt loop
+fchr[A]: 0
+fchr[C]: 5716
+fchr[G]: 9105
+fchr[T]: 12516
+fchr[$]: 18115
+Exiting Ebwt::buildToDisk()
+Returning from initFromVector
+Wrote 4199963 bytes to primary EBWT file: rsem_eval.temp/rsem_eval.1.ebwt
+Wrote 2272 bytes to secondary EBWT file: rsem_eval.temp/rsem_eval.2.ebwt
+Re-opening _in1 and _in2 as input streams
+Returning from Ebwt constructor
+Headers:
+    len: 18115
+    bwtLen: 18116
+    sz: 4529
+    bwtSz: 4529
+    lineRate: 6
+    linesPerSide: 1
+    offRate: 5
+    offMask: 0xffffffe0
+    isaRate: -1
+    isaMask: 0xffffffff
+    ftabChars: 10
+    eftabLen: 20
+    eftabSz: 80
+    ftabLen: 1048577
+    ftabSz: 4194308
+    offsLen: 567
+    offsSz: 2268
+    isaLen: 0
+    isaSz: 0
+    lineSz: 64
+    sideSz: 64
+    sideBwtSz: 56
+    sideBwtLen: 224
+    numSidePairs: 41
+    numSides: 82
+    numLines: 82
+    ebwtTotLen: 5248
+    ebwtTotSz: 5248
+    reverse: 0
+Total time for call to driver() for forward index: 00:00:01
+Reading reference sizes
+  Time reading reference sizes: 00:00:00
+Calculating joined length
+Writing header
+Reserving space for joined string
+Joining reference sequences
+  Time to join reference sequences: 00:00:00
+bmax according to bmaxDivN setting: 4528
+Using parameters --bmax 3396 --dcv 1024
+  Doing ahead-of-time memory usage test
+  Passed!  Constructing with these parameters: --bmax 3396 --dcv 1024
+Constructing suffix-array element generator
+Building DifferenceCoverSample
+  Building sPrime
+  Building sPrimeOrder
+  V-Sorting samples
+  V-Sorting samples time: 00:00:00
+  Allocating rank array
+  Ranking v-sort output
+  Ranking v-sort output time: 00:00:00
+  Invoking Larsson-Sadakane on ranks
+  Invoking Larsson-Sadakane on ranks time: 00:00:00
+  Sanity-checking and returning
+Building samples
+Reserving space for 12 sample suffixes
+Generating random suffixes
+QSorting 12 sample offsets, eliminating duplicates
+QSorting sample offsets, eliminating duplicates time: 00:00:00
+Multikey QSorting 12 samples
+  (Using difference cover)
+  Multikey QSorting samples time: 00:00:00
+Calculating bucket sizes
+  Binary sorting into buckets
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Binary sorting into buckets time: 00:00:00
+Splitting and merging
+  Splitting and merging time: 00:00:00
+Split 2, merged 6; iterating...
+  Binary sorting into buckets
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Binary sorting into buckets time: 00:00:00
+Splitting and merging
+  Splitting and merging time: 00:00:00
+Avg bucket size: 2587 (target: 3395)
+Converting suffix-array elements to index image
+Allocating ftab, absorbFtab
+Entering Ebwt loop
+Getting block 1 of 7
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 1650
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 1651
+Getting block 2 of 7
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 3330
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 3331
+Getting block 3 of 7
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 3144
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 3145
+Getting block 4 of 7
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 3242
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 3243
+Getting block 5 of 7
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 2545
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 2546
+Getting block 6 of 7
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 1404
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 1405
+Getting block 7 of 7
+  Reserving size (3396) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 2794
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 2795
+Exited Ebwt loop
+fchr[A]: 0
+fchr[C]: 5716
+fchr[G]: 9105
+fchr[T]: 12516
+fchr[$]: 18115
+Exiting Ebwt::buildToDisk()
+Returning from initFromVector
+Wrote 4199963 bytes to primary EBWT file: rsem_eval.temp/rsem_eval.rev.1.ebwt
+Wrote 2272 bytes to secondary EBWT file: rsem_eval.temp/rsem_eval.rev.2.ebwt
+Re-opening _in1 and _in2 as input streams
+Returning from Ebwt constructor
+Headers:
+    len: 18115
+    bwtLen: 18116
+    sz: 4529
+    bwtSz: 4529
+    lineRate: 6
+    linesPerSide: 1
+    offRate: 5
+    offMask: 0xffffffe0
+    isaRate: -1
+    isaMask: 0xffffffff
+    ftabChars: 10
+    eftabLen: 20
+    eftabSz: 80
+    ftabLen: 1048577
+    ftabSz: 4194308
+    offsLen: 567
+    offsSz: 2268
+    isaLen: 0
+    isaSz: 0
+    lineSz: 64
+    sideSz: 64
+    sideBwtSz: 56
+    sideBwtLen: 224
+    numSidePairs: 41
+    numSides: 82
+    numLines: 82
+    ebwtTotLen: 5248
+    ebwtTotSz: 5248
+    reverse: 0
+Total time for backward call to driver() for mirror index: 00:00:00
+
+bowtie -q --phred33-quals -n 2 -e 99999999 -l 25 -I 1 -X 1000 -p 8 -a -m 200 -S rsem_eval.temp/rsem_eval -1 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-3/filtered.0.fq -2 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-3/filtered.1.fq | samtools view -S -b -o rsem_eval.temp/rsem_eval.bam -
+# reads processed: 2339
+# reads with at least one reported alignment: 2160 (92.35%)
+# reads that failed to align: 179 (7.65%)
+Reported 2789 paired-end alignments to 1 output stream(s)
+
+rsem-parse-alignments rsem_eval.temp/rsem_eval rsem_eval.temp/rsem_eval rsem_eval.stat/rsem_eval b rsem_eval.temp/rsem_eval.bam -t 3 -tag XM
+Done!
+
+rsem-build-read-index 32 1 0 rsem_eval.temp/rsem_eval_alignable_1.fq rsem_eval.temp/rsem_eval_alignable_2.fq
+Build Index rsem_eval.temp/rsem_eval_alignable_1.fq is Done!
+Build Index rsem_eval.temp/rsem_eval_alignable_2.fq is Done!
+
+rsem-eval-run-em rsem_eval.temp/rsem_eval 3 rsem_eval rsem_eval.temp/rsem_eval rsem_eval.stat/rsem_eval 0.660424231913155 0.000450153681088881 274 0 -p 8
+Refs.loadRefs finished!
+Thread 0 : N = 275, NHit = 349
+Thread 1 : N = 275, NHit = 348
+Thread 2 : N = 257, NHit = 348
+Thread 3 : N = 268, NHit = 348
+Thread 4 : N = 288, NHit = 348
+Thread 5 : N = 267, NHit = 348
+Thread 6 : N = 265, NHit = 348
+DAT 0 reads left
+Thread 7 : N = 265, NHit = 352
+EM_init finished!
+estimateFromReads, N0 finished.
+estimateFromReads, N1 finished.
+ROUND = 1, SUM = 2339, bChange = 1.09352, totNum = 15
+ROUND = 2, SUM = 2339, bChange = 0.0904641, totNum = 9
+ROUND = 3, SUM = 2339, bChange = 0.0959194, totNum = 7
+ROUND = 4, SUM = 2339, bChange = 0.0235217, totNum = 6
+ROUND = 5, SUM = 2339, bChange = 0.0211398, totNum = 4
+ROUND = 6, SUM = 2339, bChange = 0.0218008, totNum = 2
+ROUND = 7, SUM = 2339, bChange = 0.0209079, totNum = 2
+ROUND = 8, SUM = 2339, bChange = 0.0200301, totNum = 2
+ROUND = 9, SUM = 2339, bChange = 0.0191693, totNum = 2
+ROUND = 10, SUM = 2339, bChange = 0.018327, totNum = 2
+ROUND = 11, SUM = 2339, bChange = 0.0175044, totNum = 2
+ROUND = 12, SUM = 2339, bChange = 0.0167021, totNum = 2
+ROUND = 13, SUM = 2339, bChange = 0.0159218, totNum = 2
+ROUND = 14, SUM = 2339, bChange = 0.0151644, totNum = 2
+ROUND = 15, SUM = 2339, bChange = 0.0144305, totNum = 2
+ROUND = 16, SUM = 2339, bChange = 0.0137206, totNum = 2
+ROUND = 17, SUM = 2339, bChange = 0.0130352, totNum = 2
+ROUND = 18, SUM = 2339, bChange = 0.0123744, totNum = 2
+ROUND = 19, SUM = 2339, bChange = 0.0117384, totNum = 2
+ROUND = 20, SUM = 2339, bChange = 0.0111272, totNum = 2
+ROUND = 21, SUM = 2339, bChange = 0.0105405, totNum = 2
+ROUND = 22, SUM = 2339, bChange = 0.0099783, totNum = 2
+ROUND = 23, SUM = 2339, bChange = 0.00944015, totNum = 2
+ROUND = 24, SUM = 2339, bChange = 0.0089257, totNum = 2
+ROUND = 25, SUM = 2339, bChange = 0.00843448, totNum = 2
+ROUND = 26, SUM = 2339, bChange = 0.00796597, totNum = 2
+ROUND = 27, SUM = 2339, bChange = 0.0075196, totNum = 2
+ROUND = 28, SUM = 2339, bChange = 0.00709476, totNum = 2
+ROUND = 29, SUM = 2339, bChange = 0.0066908, totNum = 2
+ROUND = 30, SUM = 2339, bChange = 0.00630704, totNum = 2
+ROUND = 31, SUM = 2339, bChange = 0.0059428, totNum = 2
+ROUND = 32, SUM = 2339, bChange = 0.00559737, totNum = 2
+ROUND = 33, SUM = 2339, bChange = 0.00527003, totNum = 2
+ROUND = 34, SUM = 2339, bChange = 0.00496006, totNum = 2
+ROUND = 35, SUM = 2339, bChange = 0.00466675, totNum = 2
+ROUND = 36, SUM = 2339, bChange = 0.00438938, totNum = 2
+ROUND = 37, SUM = 2339, bChange = 0.00412726, totNum = 2
+ROUND = 38, SUM = 2339, bChange = 0.00387968, totNum = 2
+ROUND = 39, SUM = 2339, bChange = 0.00364598, totNum = 2
+ROUND = 40, SUM = 2339, bChange = 0.00342548, totNum = 2
+ROUND = 41, SUM = 2339, bChange = 0.00321756, totNum = 2
+ROUND = 42, SUM = 2339, bChange = 0.00302157, totNum = 2
+ROUND = 43, SUM = 2339, bChange = 0.00283692, totNum = 2
+ROUND = 44, SUM = 2339, bChange = 0.00266303, totNum = 2
+ROUND = 45, SUM = 2339, bChange = 0.00249932, totNum = 2
+ROUND = 46, SUM = 2339, bChange = 0.00234526, totNum = 2
+ROUND = 47, SUM = 2339, bChange = 0.00220034, totNum = 1
+ROUND = 48, SUM = 2339, bChange = 0.00206404, totNum = 1
+ROUND = 49, SUM = 2339, bChange = 0.00193591, totNum = 1
+ROUND = 50, SUM = 2339, bChange = 0.00181548, totNum = 1
+ROUND = 51, SUM = 2339, bChange = 0.00170232, totNum = 1
+ROUND = 52, SUM = 2339, bChange = 0.00159602, totNum = 1
+ROUND = 53, SUM = 2339, bChange = 0.00149618, totNum = 1
+ROUND = 54, SUM = 2339, bChange = 0.00140244, totNum = 1
+ROUND = 55, SUM = 2339, bChange = 0.00131444, totNum = 1
+ROUND = 56, SUM = 2339, bChange = 0.00123185, totNum = 1
+ROUND = 57, SUM = 2339, bChange = 0.00115434, totNum = 1
+ROUND = 58, SUM = 2339, bChange = 0.00108162, totNum = 1
+ROUND = 59, SUM = 2339, bChange = 0.0010134, totNum = 1
+ROUND = 60, SUM = 2339, bChange = 0.000949419, totNum = 0
+Expression Results are written!
+ces is created.
+Calculating assembly priors.
+Assembly priors are calculated!
+Calculating maximum data likelihood in log space.
+Maximum data likelihood is calculated!
+Calculating data likelihood in log space.
+Data likelihood is calculated!
+Calculating correction score.
+Correction score is calculated!
+score is written.
+Time Used for EM.cpp : 0 h 00 m 00 s
+
+rm -rf rsem_eval.temp
+

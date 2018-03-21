@@ -1,0 +1,2 @@
+Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
+1	:	1521651947.420	    55.961	0	408357	0	0	blastp -evalue 1e-6 -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore stitle' -db /users/aguang/miniconda3/envs/agalma/lib/python2.7/site-packages/agalma/blastdb/swissprot -query 1.fa

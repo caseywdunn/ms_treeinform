@@ -1,0 +1,761 @@
+[biolite] timestamp=2018-03-21 13:02:19
+rsem-synthesis-reference-transcripts rsem_eval.temp/rsem_eval 0 0 0 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-5/SRX288432.fa
+Transcript Information File is generated!
+Group File is generated!
+Extracted Sequences File is generated!
+
+rsem-preref rsem_eval.temp/rsem_eval.transcripts.fa 1 rsem_eval.temp/rsem_eval
+Refs.makeRefs finished!
+Refs.saveRefs finished!
+rsem_eval.temp/rsem_eval.idx.fa is generated!
+rsem_eval.temp/rsem_eval.n2g.idx.fa is generated!
+
+bowtie-build -f rsem_eval.temp/rsem_eval.n2g.idx.fa rsem_eval.temp/rsem_eval
+Settings:
+  Output files: "rsem_eval.temp/rsem_eval.*.ebwt"
+  Line rate: 6 (line is 64 bytes)
+  Lines per side: 1 (side is 64 bytes)
+  Offset rate: 5 (one in 32)
+  FTable chars: 10
+  Strings: unpacked
+  Max bucket size: default
+  Max bucket size, sqrt multiplier: default
+  Max bucket size, len divisor: 4
+  Difference-cover sample period: 1024
+  Endianness: little
+  Actual local endianness: little
+  Sanity checking: disabled
+  Assertions: disabled
+  Random seed: 0
+  Sizeofs: void*:8, int:4, long:8, size_t:8
+Input files DNA, FASTA:
+  rsem_eval.temp/rsem_eval.n2g.idx.fa
+Reading reference sizes
+  Time reading reference sizes: 00:00:00
+Calculating joined length
+Writing header
+Reserving space for joined string
+Joining reference sequences
+  Time to join reference sequences: 00:00:01
+bmax according to bmaxDivN setting: 10787
+Using parameters --bmax 8091 --dcv 1024
+  Doing ahead-of-time memory usage test
+  Passed!  Constructing with these parameters: --bmax 8091 --dcv 1024
+Constructing suffix-array element generator
+Building DifferenceCoverSample
+  Building sPrime
+  Building sPrimeOrder
+  V-Sorting samples
+  V-Sorting samples time: 00:00:00
+  Allocating rank array
+  Ranking v-sort output
+  Ranking v-sort output time: 00:00:00
+  Invoking Larsson-Sadakane on ranks
+  Invoking Larsson-Sadakane on ranks time: 00:00:00
+  Sanity-checking and returning
+Building samples
+Reserving space for 12 sample suffixes
+Generating random suffixes
+QSorting 12 sample offsets, eliminating duplicates
+QSorting sample offsets, eliminating duplicates time: 00:00:00
+Multikey QSorting 12 samples
+  (Using difference cover)
+  Multikey QSorting samples time: 00:00:00
+Calculating bucket sizes
+  Binary sorting into buckets
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Binary sorting into buckets time: 00:00:00
+Splitting and merging
+  Splitting and merging time: 00:00:00
+Split 2, merged 6; iterating...
+  Binary sorting into buckets
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Binary sorting into buckets time: 00:00:00
+Splitting and merging
+  Splitting and merging time: 00:00:00
+Avg bucket size: 5392.62 (target: 8090)
+Converting suffix-array elements to index image
+Allocating ftab, absorbFtab
+Entering Ebwt loop
+Getting block 1 of 8
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 6529
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 6530
+Getting block 2 of 8
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 3684
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 3685
+Getting block 3 of 8
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 6880
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 6881
+Getting block 4 of 8
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 5639
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 5640
+Getting block 5 of 8
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 6264
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 6265
+Getting block 6 of 8
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 5988
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 5989
+Getting block 7 of 8
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 5295
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 5296
+Getting block 8 of 8
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 2862
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 2863
+Exited Ebwt loop
+fchr[A]: 0
+fchr[C]: 14427
+fchr[G]: 22196
+fchr[T]: 30059
+fchr[$]: 43148
+Exiting Ebwt::buildToDisk()
+Returning from initFromVector
+Wrote 4207397 bytes to primary EBWT file: rsem_eval.temp/rsem_eval.1.ebwt
+Wrote 5400 bytes to secondary EBWT file: rsem_eval.temp/rsem_eval.2.ebwt
+Re-opening _in1 and _in2 as input streams
+Returning from Ebwt constructor
+Headers:
+    len: 43148
+    bwtLen: 43149
+    sz: 10787
+    bwtSz: 10788
+    lineRate: 6
+    linesPerSide: 1
+    offRate: 5
+    offMask: 0xffffffe0
+    isaRate: -1
+    isaMask: 0xffffffff
+    ftabChars: 10
+    eftabLen: 20
+    eftabSz: 80
+    ftabLen: 1048577
+    ftabSz: 4194308
+    offsLen: 1349
+    offsSz: 5396
+    isaLen: 0
+    isaSz: 0
+    lineSz: 64
+    sideSz: 64
+    sideBwtSz: 56
+    sideBwtLen: 224
+    numSidePairs: 97
+    numSides: 194
+    numLines: 194
+    ebwtTotLen: 12416
+    ebwtTotSz: 12416
+    reverse: 0
+Total time for call to driver() for forward index: 00:00:01
+Reading reference sizes
+  Time reading reference sizes: 00:00:00
+Calculating joined length
+Writing header
+Reserving space for joined string
+Joining reference sequences
+  Time to join reference sequences: 00:00:00
+bmax according to bmaxDivN setting: 10787
+Using parameters --bmax 8091 --dcv 1024
+  Doing ahead-of-time memory usage test
+  Passed!  Constructing with these parameters: --bmax 8091 --dcv 1024
+Constructing suffix-array element generator
+Building DifferenceCoverSample
+  Building sPrime
+  Building sPrimeOrder
+  V-Sorting samples
+  V-Sorting samples time: 00:00:00
+  Allocating rank array
+  Ranking v-sort output
+  Ranking v-sort output time: 00:00:00
+  Invoking Larsson-Sadakane on ranks
+  Invoking Larsson-Sadakane on ranks time: 00:00:00
+  Sanity-checking and returning
+Building samples
+Reserving space for 12 sample suffixes
+Generating random suffixes
+QSorting 12 sample offsets, eliminating duplicates
+QSorting sample offsets, eliminating duplicates time: 00:00:00
+Multikey QSorting 12 samples
+  (Using difference cover)
+  Multikey QSorting samples time: 00:00:00
+Calculating bucket sizes
+  Binary sorting into buckets
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Binary sorting into buckets time: 00:00:00
+Splitting and merging
+  Splitting and merging time: 00:00:00
+Split 1, merged 7; iterating...
+  Binary sorting into buckets
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Binary sorting into buckets time: 00:00:00
+Splitting and merging
+  Splitting and merging time: 00:00:00
+Avg bucket size: 7190.5 (target: 8090)
+Converting suffix-array elements to index image
+Allocating ftab, absorbFtab
+Entering Ebwt loop
+Getting block 1 of 6
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 8025
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 8026
+Getting block 2 of 6
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 7580
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 7581
+Getting block 3 of 6
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 7639
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 7640
+Getting block 4 of 6
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 7037
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 7038
+Getting block 5 of 6
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 5676
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 5677
+Getting block 6 of 6
+  Reserving size (8091) for bucket
+  Calculating Z arrays
+  Calculating Z arrays time: 00:00:00
+  Entering block accumulator loop:
+  10%
+  20%
+  30%
+  40%
+  50%
+  60%
+  70%
+  80%
+  90%
+  100%
+  Block accumulator loop time: 00:00:00
+  Sorting block of length 7186
+  (Using difference cover)
+  Sorting block time: 00:00:00
+Returning block of 7187
+Exited Ebwt loop
+fchr[A]: 0
+fchr[C]: 14427
+fchr[G]: 22196
+fchr[T]: 30059
+fchr[$]: 43148
+Exiting Ebwt::buildToDisk()
+Returning from initFromVector
+Wrote 4207397 bytes to primary EBWT file: rsem_eval.temp/rsem_eval.rev.1.ebwt
+Wrote 5400 bytes to secondary EBWT file: rsem_eval.temp/rsem_eval.rev.2.ebwt
+Re-opening _in1 and _in2 as input streams
+Returning from Ebwt constructor
+Headers:
+    len: 43148
+    bwtLen: 43149
+    sz: 10787
+    bwtSz: 10788
+    lineRate: 6
+    linesPerSide: 1
+    offRate: 5
+    offMask: 0xffffffe0
+    isaRate: -1
+    isaMask: 0xffffffff
+    ftabChars: 10
+    eftabLen: 20
+    eftabSz: 80
+    ftabLen: 1048577
+    ftabSz: 4194308
+    offsLen: 1349
+    offsSz: 5396
+    isaLen: 0
+    isaSz: 0
+    lineSz: 64
+    sideSz: 64
+    sideBwtSz: 56
+    sideBwtLen: 224
+    numSidePairs: 97
+    numSides: 194
+    numLines: 194
+    ebwtTotLen: 12416
+    ebwtTotSz: 12416
+    reverse: 0
+Total time for backward call to driver() for mirror index: 00:00:00
+
+bowtie -q --phred33-quals -n 2 -e 99999999 -l 25 -I 1 -X 1000 -p 8 -a -m 200 -S rsem_eval.temp/rsem_eval -1 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-5/filtered.0.fq -2 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-5/filtered.1.fq | samtools view -S -b -o rsem_eval.temp/rsem_eval.bam -
+# reads processed: 7886
+# reads with at least one reported alignment: 7808 (99.01%)
+# reads that failed to align: 78 (0.99%)
+Reported 9332 paired-end alignments to 1 output stream(s)
+
+rsem-parse-alignments rsem_eval.temp/rsem_eval rsem_eval.temp/rsem_eval rsem_eval.stat/rsem_eval b rsem_eval.temp/rsem_eval.bam -t 3 -tag XM
+Done!
+
+rsem-build-read-index 32 1 0 rsem_eval.temp/rsem_eval_alignable_1.fq rsem_eval.temp/rsem_eval_alignable_2.fq
+Build Index rsem_eval.temp/rsem_eval_alignable_1.fq is Done!
+Build Index rsem_eval.temp/rsem_eval_alignable_2.fq is Done!
+
+rsem-eval-run-em rsem_eval.temp/rsem_eval 3 rsem_eval rsem_eval.temp/rsem_eval rsem_eval.stat/rsem_eval 0.660424231913155 0.000450153681088881 268 0 -p 8
+Refs.loadRefs finished!
+Thread 0 : N = 953, NHit = 1166
+Thread 1 : N = 995, NHit = 1166
+Thread 2 : N = 988, NHit = 1166
+Thread 3 : N = 972, NHit = 1166
+Thread 4 : N = 967, NHit = 1167
+Thread 5 : N = 977, NHit = 1166
+Thread 6 : N = 973, NHit = 1166
+DAT 0 reads left
+Thread 7 : N = 983, NHit = 1169
+EM_init finished!
+estimateFromReads, N0 finished.
+estimateFromReads, N1 finished.
+ROUND = 1, SUM = 7886, bChange = 5.68067, totNum = 29
+ROUND = 2, SUM = 7886, bChange = 0.282266, totNum = 17
+ROUND = 3, SUM = 7886, bChange = 0.227494, totNum = 13
+ROUND = 4, SUM = 7886, bChange = 0.191324, totNum = 13
+ROUND = 5, SUM = 7886, bChange = 0.16585, totNum = 8
+ROUND = 6, SUM = 7886, bChange = 0.147055, totNum = 8
+ROUND = 7, SUM = 7886, bChange = 0.132592, totNum = 7
+ROUND = 8, SUM = 7886, bChange = 0.121126, totNum = 7
+ROUND = 9, SUM = 7886, bChange = 0.11182, totNum = 4
+ROUND = 10, SUM = 7886, bChange = 0.104121, totNum = 4
+ROUND = 11, SUM = 7886, bChange = 0.0976507, totNum = 4
+ROUND = 12, SUM = 7886, bChange = 0.0921407, totNum = 4
+ROUND = 13, SUM = 7886, bChange = 0.0873951, totNum = 4
+ROUND = 14, SUM = 7886, bChange = 0.0832682, totNum = 4
+ROUND = 15, SUM = 7886, bChange = 0.0796488, totNum = 4
+ROUND = 16, SUM = 7886, bChange = 0.0764511, totNum = 4
+ROUND = 17, SUM = 7886, bChange = 0.0736075, totNum = 3
+ROUND = 18, SUM = 7886, bChange = 0.0710639, totNum = 3
+ROUND = 19, SUM = 7886, bChange = 0.068777, totNum = 2
+ROUND = 20, SUM = 7886, bChange = 0.0667111, totNum = 2
+ROUND = 21, SUM = 7886, bChange = 0.0648371, totNum = 2
+ROUND = 22, SUM = 7886, bChange = 0.0631306, totNum = 2
+ROUND = 23, SUM = 7886, bChange = 0.0615713, totNum = 2
+ROUND = 24, SUM = 7886, bChange = 0.0601419, totNum = 2
+ROUND = 25, SUM = 7886, bChange = 0.0588277, totNum = 2
+ROUND = 26, SUM = 7886, bChange = 0.0576163, totNum = 2
+ROUND = 27, SUM = 7886, bChange = 0.0564968, totNum = 2
+ROUND = 28, SUM = 7886, bChange = 0.0554599, totNum = 2
+ROUND = 29, SUM = 7886, bChange = 0.0544974, totNum = 2
+ROUND = 30, SUM = 7886, bChange = 0.0536024, totNum = 2
+ROUND = 31, SUM = 7886, bChange = 0.0527684, totNum = 1
+ROUND = 32, SUM = 7886, bChange = 0.0519901, totNum = 1
+ROUND = 33, SUM = 7886, bChange = 0.0512626, totNum = 1
+ROUND = 34, SUM = 7886, bChange = 0.0505815, totNum = 1
+ROUND = 35, SUM = 7886, bChange = 0.0499431, totNum = 1
+ROUND = 36, SUM = 7886, bChange = 0.0493437, totNum = 1
+ROUND = 37, SUM = 7886, bChange = 0.0487805, totNum = 1
+ROUND = 38, SUM = 7886, bChange = 0.0482505, totNum = 1
+ROUND = 39, SUM = 7886, bChange = 0.0477513, totNum = 1
+ROUND = 40, SUM = 7886, bChange = 0.0472806, totNum = 1
+ROUND = 41, SUM = 7886, bChange = 0.0468364, totNum = 1
+ROUND = 42, SUM = 7886, bChange = 0.0464168, totNum = 1
+ROUND = 43, SUM = 7886, bChange = 0.0460201, totNum = 1
+ROUND = 44, SUM = 7886, bChange = 0.0456447, totNum = 1
+ROUND = 45, SUM = 7886, bChange = 0.0452892, totNum = 1
+ROUND = 46, SUM = 7886, bChange = 0.0449523, totNum = 1
+ROUND = 47, SUM = 7886, bChange = 0.0446329, totNum = 1
+ROUND = 48, SUM = 7886, bChange = 0.0443298, totNum = 1
+ROUND = 49, SUM = 7886, bChange = 0.044042, totNum = 1
+ROUND = 50, SUM = 7886, bChange = 0.0437686, totNum = 1
+ROUND = 51, SUM = 7886, bChange = 0.0435087, totNum = 1
+ROUND = 52, SUM = 7886, bChange = 0.0432616, totNum = 1
+ROUND = 53, SUM = 7886, bChange = 0.0430264, totNum = 1
+ROUND = 54, SUM = 7886, bChange = 0.0428025, totNum = 1
+ROUND = 55, SUM = 7886, bChange = 0.0425892, totNum = 1
+ROUND = 56, SUM = 7886, bChange = 0.042386, totNum = 1
+ROUND = 57, SUM = 7886, bChange = 0.0421923, totNum = 1
+ROUND = 58, SUM = 7886, bChange = 0.0420076, totNum = 1
+ROUND = 59, SUM = 7886, bChange = 0.0418314, totNum = 1
+ROUND = 60, SUM = 7886, bChange = 0.0416632, totNum = 1
+ROUND = 61, SUM = 7886, bChange = 0.0415027, totNum = 1
+ROUND = 62, SUM = 7886, bChange = 0.0413493, totNum = 1
+ROUND = 63, SUM = 7886, bChange = 0.0412029, totNum = 1
+ROUND = 64, SUM = 7886, bChange = 0.041063, totNum = 1
+ROUND = 65, SUM = 7886, bChange = 0.0409292, totNum = 1
+ROUND = 66, SUM = 7886, bChange = 0.0408013, totNum = 1
+ROUND = 67, SUM = 7886, bChange = 0.040679, totNum = 1
+ROUND = 68, SUM = 7886, bChange = 0.040562, totNum = 1
+ROUND = 69, SUM = 7886, bChange = 0.0404501, totNum = 1
+ROUND = 70, SUM = 7886, bChange = 0.040343, totNum = 1
+ROUND = 71, SUM = 7886, bChange = 0.0402404, totNum = 1
+ROUND = 72, SUM = 7886, bChange = 0.0401423, totNum = 1
+ROUND = 73, SUM = 7886, bChange = 0.0400483, totNum = 1
+ROUND = 74, SUM = 7886, bChange = 0.0399582, totNum = 1
+ROUND = 75, SUM = 7886, bChange = 0.039872, totNum = 1
+ROUND = 76, SUM = 7886, bChange = 0.0397893, totNum = 1
+ROUND = 77, SUM = 7886, bChange = 0.0397101, totNum = 1
+ROUND = 78, SUM = 7886, bChange = 0.0396342, totNum = 1
+ROUND = 79, SUM = 7886, bChange = 0.0395614, totNum = 1
+ROUND = 80, SUM = 7886, bChange = 0.0394917, totNum = 1
+ROUND = 81, SUM = 7886, bChange = 0.0394248, totNum = 1
+ROUND = 82, SUM = 7886, bChange = 0.0393606, totNum = 1
+ROUND = 83, SUM = 7886, bChange = 0.0392991, totNum = 1
+ROUND = 84, SUM = 7886, bChange = 0.03924, totNum = 1
+ROUND = 85, SUM = 7886, bChange = 0.0391834, totNum = 1
+ROUND = 86, SUM = 7886, bChange = 0.0391291, totNum = 1
+ROUND = 87, SUM = 7886, bChange = 0.0390769, totNum = 1
+ROUND = 88, SUM = 7886, bChange = 0.0390269, totNum = 1
+ROUND = 89, SUM = 7886, bChange = 0.0389789, totNum = 1
+ROUND = 90, SUM = 7886, bChange = 0.0389328, totNum = 1
+ROUND = 91, SUM = 7886, bChange = 0.0388885, totNum = 1
+ROUND = 92, SUM = 7886, bChange = 0.038846, totNum = 1
+ROUND = 93, SUM = 7886, bChange = 0.0388052, totNum = 1
+ROUND = 94, SUM = 7886, bChange = 0.0387661, totNum = 1
+ROUND = 95, SUM = 7886, bChange = 0.0387284, totNum = 1
+ROUND = 96, SUM = 7886, bChange = 0.0386923, totNum = 1
+ROUND = 97, SUM = 7886, bChange = 0.0386576, totNum = 1
+ROUND = 98, SUM = 7886, bChange = 0.0386243, totNum = 1
+ROUND = 99, SUM = 7886, bChange = 0.0385923, totNum = 1
+ROUND = 100, SUM = 7886, bChange = 0.0385615, totNum = 1
+ROUND = 101, SUM = 7886, bChange = 0.038532, totNum = 1
+ROUND = 102, SUM = 7886, bChange = 0.0385036, totNum = 1
+ROUND = 103, SUM = 7886, bChange = 0.0384763, totNum = 1
+ROUND = 104, SUM = 7886, bChange = 0.0384501, totNum = 1
+ROUND = 105, SUM = 7886, bChange = 0.0384249, totNum = 1
+ROUND = 106, SUM = 7886, bChange = 0.0384007, totNum = 1
+ROUND = 107, SUM = 7886, bChange = 0.0383775, totNum = 1
+ROUND = 108, SUM = 7886, bChange = 0.0383551, totNum = 1
+ROUND = 109, SUM = 7886, bChange = 0.0383337, totNum = 1
+ROUND = 110, SUM = 7886, bChange = 0.038313, totNum = 1
+ROUND = 111, SUM = 7886, bChange = 0.0382932, totNum = 1
+ROUND = 112, SUM = 7886, bChange = 0.0382741, totNum = 1
+ROUND = 113, SUM = 7886, bChange = 0.0382557, totNum = 1
+ROUND = 114, SUM = 7886, bChange = 0.0382381, totNum = 1
+ROUND = 115, SUM = 7886, bChange = 0.0382212, totNum = 1
+ROUND = 116, SUM = 7886, bChange = 0.0382049, totNum = 1
+ROUND = 117, SUM = 7886, bChange = 0.0381892, totNum = 1
+ROUND = 118, SUM = 7886, bChange = 0.0381742, totNum = 1
+ROUND = 119, SUM = 7886, bChange = 0.0381597, totNum = 1
+ROUND = 120, SUM = 7886, bChange = 0.0381458, totNum = 1
+ROUND = 121, SUM = 7886, bChange = 0.0381324, totNum = 1
+ROUND = 122, SUM = 7886, bChange = 0.0381195, totNum = 1
+ROUND = 123, SUM = 7886, bChange = 0.0381071, totNum = 1
+ROUND = 124, SUM = 7886, bChange = 0.0380952, totNum = 1
+ROUND = 125, SUM = 7886, bChange = 0.0380838, totNum = 1
+ROUND = 126, SUM = 7886, bChange = 0.0380728, totNum = 1
+ROUND = 127, SUM = 7886, bChange = 0.0380622, totNum = 1
+ROUND = 128, SUM = 7886, bChange = 0.038052, totNum = 1
+ROUND = 129, SUM = 7886, bChange = 0.0380422, totNum = 1
+ROUND = 130, SUM = 7886, bChange = 0.0380328, totNum = 1
+ROUND = 131, SUM = 7886, bChange = 0.0380238, totNum = 1
+ROUND = 132, SUM = 7886, bChange = 0.0380151, totNum = 1
+ROUND = 133, SUM = 7886, bChange = 0.0380067, totNum = 1
+ROUND = 134, SUM = 7886, bChange = 0.0379986, totNum = 1
+ROUND = 135, SUM = 7886, bChange = 0.0379909, totNum = 1
+ROUND = 136, SUM = 7886, bChange = 0.0379834, totNum = 1
+ROUND = 137, SUM = 7886, bChange = 0.0379763, totNum = 1
+ROUND = 138, SUM = 7886, bChange = 0.0379694, totNum = 1
+ROUND = 139, SUM = 7886, bChange = 0.0379628, totNum = 1
+ROUND = 140, SUM = 7886, bChange = 0.0379564, totNum = 1
+ROUND = 141, SUM = 7886, bChange = 0.0379503, totNum = 1
+ROUND = 142, SUM = 7886, bChange = 0.0379444, totNum = 1
+ROUND = 143, SUM = 7886, bChange = 0.0379387, totNum = 1
+ROUND = 144, SUM = 7886, bChange = 0.0379332, totNum = 1
+ROUND = 145, SUM = 7886, bChange = 0.037928, totNum = 1
+ROUND = 146, SUM = 7886, bChange = 0.0379229, totNum = 1
+ROUND = 147, SUM = 7886, bChange = 0.0379181, totNum = 1
+ROUND = 148, SUM = 7886, bChange = 0.0379134, totNum = 1
+ROUND = 149, SUM = 7886, bChange = 0.0379089, totNum = 1
+ROUND = 150, SUM = 7886, bChange = 0.0379046, totNum = 1
+ROUND = 151, SUM = 7886, bChange = 0.0379004, totNum = 1
+ROUND = 152, SUM = 7886, bChange = 0.0378964, totNum = 1
+ROUND = 153, SUM = 7886, bChange = 0.0378925, totNum = 1
+ROUND = 154, SUM = 7886, bChange = 0.0378888, totNum = 1
+ROUND = 155, SUM = 7886, bChange = 0.0378853, totNum = 1
+ROUND = 156, SUM = 7886, bChange = 0.0378818, totNum = 1
+ROUND = 157, SUM = 7886, bChange = 0.0378785, totNum = 1
+ROUND = 158, SUM = 7886, bChange = 0.0378754, totNum = 1
+ROUND = 159, SUM = 7886, bChange = 0.0378723, totNum = 1
+ROUND = 160, SUM = 7886, bChange = 0.0378694, totNum = 1
+ROUND = 161, SUM = 7886, bChange = 0.0378666, totNum = 1
+ROUND = 162, SUM = 7886, bChange = 0.0378638, totNum = 1
+ROUND = 163, SUM = 7886, bChange = 0.0378612, totNum = 1
+ROUND = 164, SUM = 7886, bChange = 0.0378587, totNum = 1
+ROUND = 165, SUM = 7886, bChange = 0.0378563, totNum = 1
+ROUND = 166, SUM = 7886, bChange = 0.037854, totNum = 1
+ROUND = 167, SUM = 7886, bChange = 0.0378517, totNum = 1
+ROUND = 168, SUM = 7886, bChange = 0.0378496, totNum = 1
+ROUND = 169, SUM = 7886, bChange = 0.0378475, totNum = 1
+ROUND = 170, SUM = 7886, bChange = 0.0378455, totNum = 1
+ROUND = 171, SUM = 7886, bChange = 0.0378436, totNum = 1
+ROUND = 172, SUM = 7886, bChange = 0.0378417, totNum = 1
+ROUND = 173, SUM = 7886, bChange = 0.0378399, totNum = 1
+ROUND = 174, SUM = 7886, bChange = 0.0378382, totNum = 1
+ROUND = 175, SUM = 7886, bChange = 0.0378366, totNum = 1
+ROUND = 176, SUM = 7886, bChange = 0.037835, totNum = 1
+ROUND = 177, SUM = 7886, bChange = 0.0378335, totNum = 1
+ROUND = 178, SUM = 7886, bChange = 0.037832, totNum = 1
+ROUND = 179, SUM = 7886, bChange = 0.0378306, totNum = 1
+ROUND = 180, SUM = 7886, bChange = 0.0378293, totNum = 1
+ROUND = 181, SUM = 7886, bChange = 0.0378279, totNum = 1
+ROUND = 182, SUM = 7886, bChange = 0.0378267, totNum = 1
+ROUND = 183, SUM = 7886, bChange = 0.0378255, totNum = 1
+ROUND = 184, SUM = 7886, bChange = 0.0378243, totNum = 1
+ROUND = 185, SUM = 7886, bChange = 0.0378232, totNum = 1
+ROUND = 186, SUM = 7886, bChange = 0.0378221, totNum = 1
+ROUND = 187, SUM = 7886, bChange = 0.0378211, totNum = 1
+ROUND = 188, SUM = 7886, bChange = 0.0378201, totNum = 1
+ROUND = 189, SUM = 7886, bChange = 0.0378191, totNum = 1
+ROUND = 190, SUM = 7886, bChange = 1.06883e-06, totNum = 0
+Expression Results are written!
+ces is created.
+Calculating assembly priors.
+Assembly priors are calculated!
+Calculating maximum data likelihood in log space.
+Maximum data likelihood is calculated!
+Calculating data likelihood in log space.
+Data likelihood is calculated!
+Calculating correction score.
+Correction score is calculated!
+score is written.
+Time Used for EM.cpp : 0 h 00 m 01 s
+
+rm -rf rsem_eval.temp
+

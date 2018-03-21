@@ -1,0 +1,1 @@
+blastp -evalue 1e-6 -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore stitle' -db /users/aguang/miniconda3/envs/agalma/lib/python2.7/site-packages/agalma/blastdb/swissprot -query 1.fa

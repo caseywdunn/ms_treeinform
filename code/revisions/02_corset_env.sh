@@ -2,7 +2,6 @@
 #SBATCH -t 3-00:00:00
 #SBATCH --mem=24G
 
-module load conda
 conda create -n corset
 conda config --add channels conda-forge
 conda config --add channels bioconda
