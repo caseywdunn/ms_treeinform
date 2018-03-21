@@ -1,0 +1,1791 @@
+[biolite] timestamp=2018-03-21 12:47:57
+
+
+     ______  ____   ____  ____   ____  ______  __ __
+    |      ||    \ |    ||    \ |    ||      ||  |  |
+    |      ||  D  ) |  | |  _  | |  | |      ||  |  |
+    |_|  |_||    /  |  | |  |  | |  | |_|  |_||  ~  |
+      |  |  |    \  |  | |  |  | |  |   |  |  |___, |
+      |  |  |  .  \ |  | |  |  | |  |   |  |  |     |
+      |__|  |__|\_||____||__|__||____|  |__|  |____/
+
+
+Left read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+        ];
+Right read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+        ];
+Trinity version: Trinity-v2.5.1
+** NOTE: Latest version of Trinity is Trinity-v2.6.6, and can be obtained at:
+	https://github.com/trinityrnaseq/trinityrnaseq/releases
+
+Wednesday, March 21, 2018: 12:47:58	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 0
+Wednesday, March 21, 2018: 12:47:58	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 1
+Wednesday, March 21, 2018: 12:47:58	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000
+Wednesday, March 21, 2018: 12:47:58	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis
+
+
+----------------------------------------------------------------------------------
+-------------- Trinity Phase 1: Clustering of RNA-Seq Reads  ---------------------
+----------------------------------------------------------------------------------
+
+---------------------------------------------------------------
+------------ In silico Read Normalization ---------------------
+-- (Removing Excess Reads Beyond 50 Coverage --
+---------------------------------------------------------------
+
+# running normalization on reads: $VAR1 = [
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+          ],
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+          ]
+        ];
+
+
+Wednesday, March 21, 2018: 12:47:58	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/insilico_read_normalization.pl --seqType fq --JM 19G  --max_cov 50 --CPU 8 --output /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/insilico_read_normalization   --max_pct_stdev 10000  --left /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq --right /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq --pairs_together --PARALLEL_STATS  
+Converting input files. (both directions in parallel)CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq >> left.fa
+CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq >> right.fa
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.ok
+CMD finished (0 seconds)
+Done converting input files.CMD: cat left.fa right.fa > both.fa
+CMD finished (0 seconds)
+CMD: touch both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  both.fa
+CMD finished (1 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.K25.min2.kmers.fa.histo mer_counts.jf
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish dump -L 2 mer_counts.jf > jellyfish.K25.min2.kmers.fa
+CMD finished (0 seconds)
+CMD: touch jellyfish.K25.min2.kmers.fa.success
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads left.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > left.fa.K25.stats
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads right.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > right.fa.K25.stats
+-reading Kmer occurrences...-reading Kmer occurrences...
+
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.ok
+-sorting each stats file by read name.
+CMD finished (0 seconds)
+CMD: /bin/sort -k5,5 -T . -S 9G left.fa.K25.stats > left.fa.K25.stats.sort
+CMD: /bin/sort -k5,5 -T . -S 9G right.fa.K25.stats > right.fa.K25.stats.sort
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_merge_left_right_stats.pl --left left.fa.K25.stats.sort --right right.fa.K25.stats.sort --sorted > pairs.K25.stats
+-opening left.fa.K25.stats.sort
+-opening right.fa.K25.stats.sort
+-done opening files.
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_normalize.pl pairs.K25.stats 50 10000 > pairs.K25.stats.C50.pctSD10000.accs
+2395 / 2487 = 96.30% reads selected during normalization.
+0 / 2487 = 0.00% reads discarded as likely aberrant based on coverage profiles.
+0 / 2487 = 0.00% reads missing kmer coverage (N chars included?).
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.C50.pctSD10000.accs.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq left.norm.fq
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq right.norm.fq
+-removing tmp dir /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/insilico_read_normalization/tmp_normalized_reads
+CMD finished (0 seconds)
+
+
+Normalization complete. See outputs: 
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq
+Wednesday, March 21, 2018: 12:47:59	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/insilico_read_normalization/normalization.ok
+Converting input files. (in parallel)Wednesday, March 21, 2018: 12:47:59	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/insilico_read_normalization/left.norm.fq | seqtk-trinity seq -A - >> left.fa
+Wednesday, March 21, 2018: 12:47:59	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/insilico_read_normalization/right.norm.fq | seqtk-trinity seq -A - >> right.fa
+Wednesday, March 21, 2018: 12:47:59	CMD: touch left.fa.ok
+Wednesday, March 21, 2018: 12:47:59	CMD: touch right.fa.ok
+Wednesday, March 21, 2018: 12:47:59	CMD: touch left.fa.ok right.fa.ok
+Wednesday, March 21, 2018: 12:47:59	CMD: cat left.fa right.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/both.fa
+Wednesday, March 21, 2018: 12:47:59	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish dump -L 1 mer_counts.jf > jellyfish.kmers.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.kmers.fa.histo mer_counts.jf
+----------------------------------------------
+--------------- Inchworm ---------------------
+-- (Linear contig construction from k-mers) --
+----------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Inchworm/bin//inchworm --kmers jellyfish.kmers.fa --run_inchworm -K 25 -L 25 --monitor 1   --DS  --num_threads 6  --PARALLEL_IWORM  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/inchworm.K25.L25.DS.fa.tmp
+* Running CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/inchworm.K25.L25.DS.fa.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/inchworm.K25.L25.DS.fa
+Wednesday, March 21, 2018: 12:48:00	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/inchworm.K25.L25.DS.fa.finished
+--------------------------------------------------------
+-------------------- Chrysalis -------------------------
+-- (Contig Clustering & de Bruijn Graph Construction) --
+--------------------------------------------------------
+
+inchworm_target: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/both.fa
+bowite_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/both.fa
+chrysalis_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/filter_iworm_by_min_length_or_cov.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/inchworm.K25.L25.DS.fa 100 10 > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/inchworm.K25.L25.DS.fa.min100
+* Running CMD: bowtie2-build --threads 8 -o 3 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/inchworm.K25.L25.DS.fa.min100 1>/dev/null
+* Running CMD: bash -c " set -o pipefail;bowtie2 --local -k 2 --threads 8 -f --score-min G,46,0 -x /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/both.fa  | samtools view -@ 8 -F4 -Sb - | samtools sort -m 1275068416 -@ 8 -no - - > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/iworm.bowtie.nameSorted.bam" 
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/scaffold_iworm_contigs.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/iworm.bowtie.nameSorted.bam /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/inchworm.K25.L25.DS.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/iworm_scaffolds.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/GraphFromFasta -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/inchworm.K25.L25.DS.fa -r /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/both.fa -min_contig_length 300 -min_glue 2 -glue_factor 0.05 -min_iso_ratio 0.05 -t 8 -k 24 -kk 48  -scaffolding /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/iworm_scaffolds.txt  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/iworm_cluster_welds_graph.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/BubbleUpClustering -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/inchworm.K25.L25.DS.fa  -weld_graph /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/iworm_cluster_welds_graph.txt -min_contig_length 300  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/GraphFromIwormFasta.out
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/CreateIwormFastaBundle -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/GraphFromIwormFasta.out -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/bundled_iworm_contigs.fasta -min 300
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/ReadsToTranscripts -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/both.fa -f /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/bundled_iworm_contigs.fasta -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/readsToComponents.out -t 8 -max_mem_reads 50000000 
+* Running CMD: /bin/sort -T . -S 19G -k 1,1n /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/readsToComponents.out > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/chrysalis/readsToComponents.out.sort
+Wednesday, March 21, 2018: 12:48:03	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/read_partitions/Fb_0/CBin_0
+Wednesday, March 21, 2018: 12:48:03	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/partitioned_reads.files.list.ok
+Wednesday, March 21, 2018: 12:48:03	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/write_partitioned_trinity_cmds.pl --reads_list_file /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/partitioned_reads.files.list --CPU 1 --max_memory 1G  --run_as_paired  --seqType fa --trinity_complete --full_cleanup  --group_pairs_distance  1200  --min_contig_length  300  > recursive_trinity.cmds
+Wednesday, March 21, 2018: 12:48:03	CMD: touch recursive_trinity.cmds.ok
+Wednesday, March 21, 2018: 12:48:03	CMD: touch recursive_trinity.cmds.ok
+
+
+--------------------------------------------------------------------------------
+------------ Trinity Phase 2: Assembling Clusters of Reads ---------------------
+--------------------------------------------------------------------------------
+
+Wednesday, March 21, 2018: 12:48:03	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/BIN/ParaFly -c recursive_trinity.cmds -CPU 8 -v -shuffle 
+Number of Commands: 12
+succeeded(1)   8.33333% completed.    succeeded(2)   16.6667% completed.    succeeded(3)   25% completed.    succeeded(4)   33.3333% completed.    succeeded(5)   41.6667% completed.    succeeded(6)   50% completed.    succeeded(7)   58.3333% completed.    succeeded(8)   66.6667% completed.    succeeded(9)   75% completed.    succeeded(10)   83.3333% completed.    succeeded(11)   91.6667% completed.    succeeded(12)   100% completed.    
+
+All commands completed successfully. :-)
+
+
+
+** Harvesting all assembled transcripts into a single multi-fasta file...
+
+Wednesday, March 21, 2018: 12:48:11	CMD: find /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/read_partitions/ -name '*inity.fasta'  | /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/partitioned_trinity_aggregator.pl TRINITY_DN > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/Trinity.fasta.tmp
+Wednesday, March 21, 2018: 12:48:11	CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000/Trinity.fasta.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000.Trinity.fasta
+
+
+###################################################################
+Butterfly assemblies are written to /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000.Trinity.fasta
+###################################################################
+
+
+Wednesday, March 21, 2018: 12:48:11	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/get_Trinity_gene_to_trans_map.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000.Trinity.fasta > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_100000.Trinity.fasta.gene_trans_map
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+[biolite] timestamp=2018-03-21 12:48:12
+
+
+     ______  ____   ____  ____   ____  ______  __ __
+    |      ||    \ |    ||    \ |    ||      ||  |  |
+    |      ||  D  ) |  | |  _  | |  | |      ||  |  |
+    |_|  |_||    /  |  | |  |  | |  | |_|  |_||  ~  |
+      |  |  |    \  |  | |  |  | |  |   |  |  |___, |
+      |  |  |  .  \ |  | |  |  | |  |   |  |  |     |
+      |__|  |__|\_||____||__|__||____|  |__|  |____/
+
+
+Left read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+        ];
+Right read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+        ];
+Trinity version: Trinity-v2.5.1
+** NOTE: Latest version of Trinity is Trinity-v2.6.6, and can be obtained at:
+	https://github.com/trinityrnaseq/trinityrnaseq/releases
+
+Wednesday, March 21, 2018: 12:48:13	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 0
+Wednesday, March 21, 2018: 12:48:13	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 1
+Wednesday, March 21, 2018: 12:48:13	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000
+Wednesday, March 21, 2018: 12:48:13	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis
+
+
+----------------------------------------------------------------------------------
+-------------- Trinity Phase 1: Clustering of RNA-Seq Reads  ---------------------
+----------------------------------------------------------------------------------
+
+---------------------------------------------------------------
+------------ In silico Read Normalization ---------------------
+-- (Removing Excess Reads Beyond 50 Coverage --
+---------------------------------------------------------------
+
+# running normalization on reads: $VAR1 = [
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+          ],
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+          ]
+        ];
+
+
+Wednesday, March 21, 2018: 12:48:13	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/insilico_read_normalization.pl --seqType fq --JM 19G  --max_cov 50 --CPU 8 --output /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/insilico_read_normalization   --max_pct_stdev 10000  --left /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq --right /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq --pairs_together --PARALLEL_STATS  
+Converting input files. (both directions in parallel)CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq >> left.fa
+CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq >> right.fa
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.ok
+CMD finished (0 seconds)
+Done converting input files.CMD: cat left.fa right.fa > both.fa
+CMD finished (0 seconds)
+CMD: touch both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  both.fa
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.K25.min2.kmers.fa.histo mer_counts.jf
+CMD finished (1 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish dump -L 2 mer_counts.jf > jellyfish.K25.min2.kmers.fa
+CMD finished (0 seconds)
+CMD: touch jellyfish.K25.min2.kmers.fa.success
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads left.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > left.fa.K25.stats
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads right.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > right.fa.K25.stats
+-reading Kmer occurrences...
+-reading Kmer occurrences...
+
+ done parsing 19378 Kmers, 19378 added, taking 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+
+ done parsing 19378 Kmers, 19378 added, taking 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.ok
+-sorting each stats file by read name.
+CMD finished (0 seconds)
+CMD: /bin/sort -k5,5 -T . -S 9G left.fa.K25.stats > left.fa.K25.stats.sort
+CMD: /bin/sort -k5,5 -T . -S 9G right.fa.K25.stats > right.fa.K25.stats.sort
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_merge_left_right_stats.pl --left left.fa.K25.stats.sort --right right.fa.K25.stats.sort --sorted > pairs.K25.stats
+-opening left.fa.K25.stats.sort
+-opening right.fa.K25.stats.sort
+-done opening files.
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_normalize.pl pairs.K25.stats 50 10000 > pairs.K25.stats.C50.pctSD10000.accs
+999 / 1000 = 99.90% reads selected during normalization.
+0 / 1000 = 0.00% reads discarded as likely aberrant based on coverage profiles.
+0 / 1000 = 0.00% reads missing kmer coverage (N chars included?).
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.C50.pctSD10000.accs.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq left.norm.fq
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq right.norm.fq
+-removing tmp dir /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/insilico_read_normalization/tmp_normalized_reads
+CMD finished (0 seconds)
+
+
+Normalization complete. See outputs: 
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq
+Wednesday, March 21, 2018: 12:48:14	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/insilico_read_normalization/normalization.ok
+Converting input files. (in parallel)Wednesday, March 21, 2018: 12:48:14	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/insilico_read_normalization/left.norm.fq | seqtk-trinity seq -A - >> left.fa
+Wednesday, March 21, 2018: 12:48:14	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/insilico_read_normalization/right.norm.fq | seqtk-trinity seq -A - >> right.fa
+Wednesday, March 21, 2018: 12:48:14	CMD: touch left.fa.ok
+Wednesday, March 21, 2018: 12:48:14	CMD: touch right.fa.ok
+Wednesday, March 21, 2018: 12:48:14	CMD: touch left.fa.ok right.fa.ok
+Wednesday, March 21, 2018: 12:48:14	CMD: cat left.fa right.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/both.fa
+Wednesday, March 21, 2018: 12:48:14	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish dump -L 1 mer_counts.jf > jellyfish.kmers.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.kmers.fa.histo mer_counts.jf
+----------------------------------------------
+--------------- Inchworm ---------------------
+-- (Linear contig construction from k-mers) --
+----------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Inchworm/bin//inchworm --kmers jellyfish.kmers.fa --run_inchworm -K 25 -L 25 --monitor 1   --DS  --num_threads 6  --PARALLEL_IWORM  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/inchworm.K25.L25.DS.fa.tmp
+* Running CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/inchworm.K25.L25.DS.fa.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/inchworm.K25.L25.DS.fa
+Wednesday, March 21, 2018: 12:48:14	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/inchworm.K25.L25.DS.fa.finished
+--------------------------------------------------------
+-------------------- Chrysalis -------------------------
+-- (Contig Clustering & de Bruijn Graph Construction) --
+--------------------------------------------------------
+
+inchworm_target: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/both.fa
+bowite_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/both.fa
+chrysalis_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/filter_iworm_by_min_length_or_cov.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/inchworm.K25.L25.DS.fa 100 10 > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/inchworm.K25.L25.DS.fa.min100
+* Running CMD: bowtie2-build --threads 8 -o 3 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/inchworm.K25.L25.DS.fa.min100 1>/dev/null
+* Running CMD: bash -c " set -o pipefail;bowtie2 --local -k 2 --threads 8 -f --score-min G,46,0 -x /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/both.fa  | samtools view -@ 8 -F4 -Sb - | samtools sort -m 1275068416 -@ 8 -no - - > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/iworm.bowtie.nameSorted.bam" 
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/scaffold_iworm_contigs.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/iworm.bowtie.nameSorted.bam /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/inchworm.K25.L25.DS.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/iworm_scaffolds.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/GraphFromFasta -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/inchworm.K25.L25.DS.fa -r /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/both.fa -min_contig_length 500 -min_glue 2 -glue_factor 0.05 -min_iso_ratio 0.05 -t 8 -k 24 -kk 48  -scaffolding /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/iworm_scaffolds.txt  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/iworm_cluster_welds_graph.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/BubbleUpClustering -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/inchworm.K25.L25.DS.fa  -weld_graph /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/iworm_cluster_welds_graph.txt -min_contig_length 500  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/GraphFromIwormFasta.out
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/CreateIwormFastaBundle -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/GraphFromIwormFasta.out -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/bundled_iworm_contigs.fasta -min 500
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/ReadsToTranscripts -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/both.fa -f /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/bundled_iworm_contigs.fasta -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/readsToComponents.out -t 8 -max_mem_reads 50000000 
+* Running CMD: /bin/sort -T . -S 19G -k 1,1n /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/readsToComponents.out > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/chrysalis/readsToComponents.out.sort
+Wednesday, March 21, 2018: 12:48:17	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/read_partitions/Fb_0/CBin_0
+Wednesday, March 21, 2018: 12:48:17	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/partitioned_reads.files.list.ok
+Wednesday, March 21, 2018: 12:48:17	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/write_partitioned_trinity_cmds.pl --reads_list_file /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/partitioned_reads.files.list --CPU 1 --max_memory 1G  --run_as_paired  --seqType fa --trinity_complete --full_cleanup  --group_pairs_distance  360  --min_contig_length  500  > recursive_trinity.cmds
+Wednesday, March 21, 2018: 12:48:17	CMD: touch recursive_trinity.cmds.ok
+Wednesday, March 21, 2018: 12:48:17	CMD: touch recursive_trinity.cmds.ok
+
+
+--------------------------------------------------------------------------------
+------------ Trinity Phase 2: Assembling Clusters of Reads ---------------------
+--------------------------------------------------------------------------------
+
+Wednesday, March 21, 2018: 12:48:17	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/BIN/ParaFly -c recursive_trinity.cmds -CPU 8 -v -shuffle 
+Number of Commands: 14
+succeeded(1)   7.14286% completed.    succeeded(2)   14.2857% completed.    succeeded(3)   21.4286% completed.    succeeded(4)   28.5714% completed.    succeeded(5)   35.7143% completed.    succeeded(6)   42.8571% completed.    succeeded(7)   50% completed.    succeeded(8)   57.1429% completed.    succeeded(9)   64.2857% completed.    succeeded(10)   71.4286% completed.    succeeded(11)   78.5714% completed.    succeeded(12)   85.7143% completed.    succeeded(13)   92.8571% completed.    succeeded(14)   100% completed.    
+
+All commands completed successfully. :-)
+
+
+
+** Harvesting all assembled transcripts into a single multi-fasta file...
+
+Wednesday, March 21, 2018: 12:48:22	CMD: find /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/read_partitions/ -name '*inity.fasta'  | /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/partitioned_trinity_aggregator.pl TRINITY_DN > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/Trinity.fasta.tmp
+Wednesday, March 21, 2018: 12:48:23	CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000/Trinity.fasta.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000.Trinity.fasta
+
+
+###################################################################
+Butterfly assemblies are written to /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000.Trinity.fasta
+###################################################################
+
+
+Wednesday, March 21, 2018: 12:48:23	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/get_Trinity_gene_to_trans_map.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000.Trinity.fasta > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.1000.Trinity.fasta.gene_trans_map
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+[biolite] timestamp=2018-03-21 12:48:23
+
+
+     ______  ____   ____  ____   ____  ______  __ __
+    |      ||    \ |    ||    \ |    ||      ||  |  |
+    |      ||  D  ) |  | |  _  | |  | |      ||  |  |
+    |_|  |_||    /  |  | |  |  | |  | |_|  |_||  ~  |
+      |  |  |    \  |  | |  |  | |  |   |  |  |___, |
+      |  |  |  .  \ |  | |  |  | |  |   |  |  |     |
+      |__|  |__|\_||____||__|__||____|  |__|  |____/
+
+
+Left read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+        ];
+Right read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+        ];
+Trinity version: Trinity-v2.5.1
+** NOTE: Latest version of Trinity is Trinity-v2.6.6, and can be obtained at:
+	https://github.com/trinityrnaseq/trinityrnaseq/releases
+
+Wednesday, March 21, 2018: 12:48:23	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 0
+Wednesday, March 21, 2018: 12:48:23	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 1
+Wednesday, March 21, 2018: 12:48:24	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500
+Wednesday, March 21, 2018: 12:48:24	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis
+
+
+----------------------------------------------------------------------------------
+-------------- Trinity Phase 1: Clustering of RNA-Seq Reads  ---------------------
+----------------------------------------------------------------------------------
+
+---------------------------------------------------------------
+------------ In silico Read Normalization ---------------------
+-- (Removing Excess Reads Beyond 50 Coverage --
+---------------------------------------------------------------
+
+# running normalization on reads: $VAR1 = [
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+          ],
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+          ]
+        ];
+
+
+Wednesday, March 21, 2018: 12:48:24	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/insilico_read_normalization.pl --seqType fq --JM 19G  --max_cov 50 --CPU 8 --output /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/insilico_read_normalization   --max_pct_stdev 10000  --left /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq --right /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq --pairs_together --PARALLEL_STATS  
+Converting input files. (both directions in parallel)CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq >> left.fa
+CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq >> right.fa
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.ok
+CMD finished (0 seconds)
+Done converting input files.CMD: cat left.fa right.fa > both.fa
+CMD finished (0 seconds)
+CMD: touch both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  both.fa
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.K25.min2.kmers.fa.histo mer_counts.jf
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish dump -L 2 mer_counts.jf > jellyfish.K25.min2.kmers.fa
+CMD finished (0 seconds)
+CMD: touch jellyfish.K25.min2.kmers.fa.success
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads left.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > left.fa.K25.stats
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads right.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > right.fa.K25.stats
+-reading Kmer occurrences...
+-reading Kmer occurrences...
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.ok
+-sorting each stats file by read name.
+CMD finished (0 seconds)
+CMD: /bin/sort -k5,5 -T . -S 9G left.fa.K25.stats > left.fa.K25.stats.sort
+CMD: /bin/sort -k5,5 -T . -S 9G right.fa.K25.stats > right.fa.K25.stats.sort
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_merge_left_right_stats.pl --left left.fa.K25.stats.sort --right right.fa.K25.stats.sort --sorted > pairs.K25.stats
+-opening left.fa.K25.stats.sort
+-opening right.fa.K25.stats.sort
+-done opening files.
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_normalize.pl pairs.K25.stats 50 10000 > pairs.K25.stats.C50.pctSD10000.accs
+2391 / 2487 = 96.14% reads selected during normalization.
+0 / 2487 = 0.00% reads discarded as likely aberrant based on coverage profiles.
+0 / 2487 = 0.00% reads missing kmer coverage (N chars included?).
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.C50.pctSD10000.accs.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq left.norm.fq
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq right.norm.fq
+-removing tmp dir /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/insilico_read_normalization/tmp_normalized_reads
+CMD finished (0 seconds)
+
+
+Normalization complete. See outputs: 
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq
+Wednesday, March 21, 2018: 12:48:24	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/insilico_read_normalization/normalization.ok
+Converting input files. (in parallel)Wednesday, March 21, 2018: 12:48:24	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/insilico_read_normalization/left.norm.fq | seqtk-trinity seq -A - >> left.fa
+Wednesday, March 21, 2018: 12:48:24	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/insilico_read_normalization/right.norm.fq | seqtk-trinity seq -A - >> right.fa
+Wednesday, March 21, 2018: 12:48:24	CMD: touch left.fa.ok
+Wednesday, March 21, 2018: 12:48:24	CMD: touch right.fa.ok
+Wednesday, March 21, 2018: 12:48:24	CMD: touch left.fa.ok right.fa.ok
+Wednesday, March 21, 2018: 12:48:24	CMD: cat left.fa right.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/both.fa
+Wednesday, March 21, 2018: 12:48:24	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish dump -L 1 mer_counts.jf > jellyfish.kmers.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.kmers.fa.histo mer_counts.jf
+----------------------------------------------
+--------------- Inchworm ---------------------
+-- (Linear contig construction from k-mers) --
+----------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Inchworm/bin//inchworm --kmers jellyfish.kmers.fa --run_inchworm -K 25 -L 25 --monitor 1   --DS  --num_threads 6  --PARALLEL_IWORM  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/inchworm.K25.L25.DS.fa.tmp
+* Running CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/inchworm.K25.L25.DS.fa.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/inchworm.K25.L25.DS.fa
+Wednesday, March 21, 2018: 12:48:25	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/inchworm.K25.L25.DS.fa.finished
+--------------------------------------------------------
+-------------------- Chrysalis -------------------------
+-- (Contig Clustering & de Bruijn Graph Construction) --
+--------------------------------------------------------
+
+inchworm_target: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/both.fa
+bowite_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/both.fa
+chrysalis_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/filter_iworm_by_min_length_or_cov.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/inchworm.K25.L25.DS.fa 100 10 > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/inchworm.K25.L25.DS.fa.min100
+* Running CMD: bowtie2-build --threads 8 -o 3 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/inchworm.K25.L25.DS.fa.min100 1>/dev/null
+* Running CMD: bash -c " set -o pipefail;bowtie2 --local -k 2 --threads 8 -f --score-min G,46,0 -x /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/both.fa  | samtools view -@ 8 -F4 -Sb - | samtools sort -m 1275068416 -@ 8 -no - - > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/iworm.bowtie.nameSorted.bam" 
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/scaffold_iworm_contigs.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/iworm.bowtie.nameSorted.bam /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/inchworm.K25.L25.DS.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/iworm_scaffolds.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/GraphFromFasta -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/inchworm.K25.L25.DS.fa -r /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/both.fa -min_contig_length 500 -min_glue 2 -glue_factor 0.05 -min_iso_ratio 0.05 -t 8 -k 24 -kk 48  -scaffolding /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/iworm_scaffolds.txt  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/iworm_cluster_welds_graph.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/BubbleUpClustering -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/inchworm.K25.L25.DS.fa  -weld_graph /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/iworm_cluster_welds_graph.txt -min_contig_length 500  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/GraphFromIwormFasta.out
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/CreateIwormFastaBundle -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/GraphFromIwormFasta.out -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/bundled_iworm_contigs.fasta -min 500
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/ReadsToTranscripts -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/both.fa -f /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/bundled_iworm_contigs.fasta -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/readsToComponents.out -t 8 -max_mem_reads 50000000 
+* Running CMD: /bin/sort -T . -S 19G -k 1,1n /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/readsToComponents.out > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/chrysalis/readsToComponents.out.sort
+Wednesday, March 21, 2018: 12:48:28	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/read_partitions/Fb_0/CBin_0
+Wednesday, March 21, 2018: 12:48:28	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/partitioned_reads.files.list.ok
+Wednesday, March 21, 2018: 12:48:29	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/write_partitioned_trinity_cmds.pl --reads_list_file /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/partitioned_reads.files.list --CPU 1 --max_memory 1G  --run_as_paired  --seqType fa --trinity_complete --full_cleanup  --group_pairs_distance  360  --min_contig_length  500  > recursive_trinity.cmds
+Wednesday, March 21, 2018: 12:48:29	CMD: touch recursive_trinity.cmds.ok
+Wednesday, March 21, 2018: 12:48:29	CMD: touch recursive_trinity.cmds.ok
+
+
+--------------------------------------------------------------------------------
+------------ Trinity Phase 2: Assembling Clusters of Reads ---------------------
+--------------------------------------------------------------------------------
+
+Wednesday, March 21, 2018: 12:48:29	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/BIN/ParaFly -c recursive_trinity.cmds -CPU 8 -v -shuffle 
+Number of Commands: 9
+succeeded(1)   11.1111% completed.    succeeded(2)   22.2222% completed.    succeeded(3)   33.3333% completed.    succeeded(4)   44.4444% completed.    succeeded(5)   55.5556% completed.    succeeded(6)   66.6667% completed.    succeeded(7)   77.7778% completed.    succeeded(8)   88.8889% completed.    succeeded(9)   100% completed.    
+
+All commands completed successfully. :-)
+
+
+
+** Harvesting all assembled transcripts into a single multi-fasta file...
+
+Wednesday, March 21, 2018: 12:48:37	CMD: find /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/read_partitions/ -name '*inity.fasta'  | /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/partitioned_trinity_aggregator.pl TRINITY_DN > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/Trinity.fasta.tmp
+Wednesday, March 21, 2018: 12:48:37	CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500/Trinity.fasta.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500.Trinity.fasta
+
+
+###################################################################
+Butterfly assemblies are written to /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500.Trinity.fasta
+###################################################################
+
+
+Wednesday, March 21, 2018: 12:48:37	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/get_Trinity_gene_to_trans_map.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500.Trinity.fasta > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.2500.Trinity.fasta.gene_trans_map
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+[biolite] timestamp=2018-03-21 12:48:38
+
+
+     ______  ____   ____  ____   ____  ______  __ __
+    |      ||    \ |    ||    \ |    ||      ||  |  |
+    |      ||  D  ) |  | |  _  | |  | |      ||  |  |
+    |_|  |_||    /  |  | |  |  | |  | |_|  |_||  ~  |
+      |  |  |    \  |  | |  |  | |  |   |  |  |___, |
+      |  |  |  .  \ |  | |  |  | |  |   |  |  |     |
+      |__|  |__|\_||____||__|__||____|  |__|  |____/
+
+
+Left read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+        ];
+Right read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+        ];
+Trinity version: Trinity-v2.5.1
+** NOTE: Latest version of Trinity is Trinity-v2.6.6, and can be obtained at:
+	https://github.com/trinityrnaseq/trinityrnaseq/releases
+
+Wednesday, March 21, 2018: 12:48:38	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 0
+Wednesday, March 21, 2018: 12:48:38	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 1
+Wednesday, March 21, 2018: 12:48:38	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000
+Wednesday, March 21, 2018: 12:48:38	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis
+
+
+----------------------------------------------------------------------------------
+-------------- Trinity Phase 1: Clustering of RNA-Seq Reads  ---------------------
+----------------------------------------------------------------------------------
+
+---------------------------------------------------------------
+------------ In silico Read Normalization ---------------------
+-- (Removing Excess Reads Beyond 50 Coverage --
+---------------------------------------------------------------
+
+# running normalization on reads: $VAR1 = [
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+          ],
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+          ]
+        ];
+
+
+Wednesday, March 21, 2018: 12:48:38	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/insilico_read_normalization.pl --seqType fq --JM 19G  --max_cov 50 --CPU 8 --output /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/insilico_read_normalization   --max_pct_stdev 10000  --left /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq --right /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq --pairs_together --PARALLEL_STATS  
+Converting input files. (both directions in parallel)CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq >> left.fa
+CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq >> right.fa
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.ok
+CMD finished (0 seconds)
+Done converting input files.CMD: cat left.fa right.fa > both.fa
+CMD finished (0 seconds)
+CMD: touch both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  both.fa
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.K25.min2.kmers.fa.histo mer_counts.jf
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish dump -L 2 mer_counts.jf > jellyfish.K25.min2.kmers.fa
+CMD finished (0 seconds)
+CMD: touch jellyfish.K25.min2.kmers.fa.success
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads left.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > left.fa.K25.stats
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads right.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > right.fa.K25.stats
+-reading Kmer occurrences...
+-reading Kmer occurrences...
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.ok
+-sorting each stats file by read name.
+CMD finished (0 seconds)
+CMD: /bin/sort -k5,5 -T . -S 9G left.fa.K25.stats > left.fa.K25.stats.sort
+CMD: /bin/sort -k5,5 -T . -S 9G right.fa.K25.stats > right.fa.K25.stats.sort
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_merge_left_right_stats.pl --left left.fa.K25.stats.sort --right right.fa.K25.stats.sort --sorted > pairs.K25.stats
+-opening left.fa.K25.stats.sort
+-opening right.fa.K25.stats.sort
+-done opening files.
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_normalize.pl pairs.K25.stats 50 10000 > pairs.K25.stats.C50.pctSD10000.accs
+2381 / 2487 = 95.74% reads selected during normalization.
+0 / 2487 = 0.00% reads discarded as likely aberrant based on coverage profiles.
+0 / 2487 = 0.00% reads missing kmer coverage (N chars included?).
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.C50.pctSD10000.accs.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq left.norm.fq
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq right.norm.fq
+-removing tmp dir /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/insilico_read_normalization/tmp_normalized_reads
+CMD finished (0 seconds)
+
+
+Normalization complete. See outputs: 
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq
+Wednesday, March 21, 2018: 12:48:39	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/insilico_read_normalization/normalization.ok
+Converting input files. (in parallel)Wednesday, March 21, 2018: 12:48:39	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/insilico_read_normalization/left.norm.fq | seqtk-trinity seq -A - >> left.fa
+Wednesday, March 21, 2018: 12:48:39	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/insilico_read_normalization/right.norm.fq | seqtk-trinity seq -A - >> right.fa
+Wednesday, March 21, 2018: 12:48:39	CMD: touch left.fa.ok
+Wednesday, March 21, 2018: 12:48:39	CMD: touch right.fa.ok
+Wednesday, March 21, 2018: 12:48:39	CMD: touch left.fa.ok right.fa.ok
+Wednesday, March 21, 2018: 12:48:39	CMD: cat left.fa right.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/both.fa
+Wednesday, March 21, 2018: 12:48:39	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish dump -L 1 mer_counts.jf > jellyfish.kmers.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.kmers.fa.histo mer_counts.jf
+----------------------------------------------
+--------------- Inchworm ---------------------
+-- (Linear contig construction from k-mers) --
+----------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Inchworm/bin//inchworm --kmers jellyfish.kmers.fa --run_inchworm -K 25 -L 25 --monitor 1   --DS  --num_threads 6  --PARALLEL_IWORM  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/inchworm.K25.L25.DS.fa.tmp
+* Running CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/inchworm.K25.L25.DS.fa.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/inchworm.K25.L25.DS.fa
+Wednesday, March 21, 2018: 12:48:40	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/inchworm.K25.L25.DS.fa.finished
+--------------------------------------------------------
+-------------------- Chrysalis -------------------------
+-- (Contig Clustering & de Bruijn Graph Construction) --
+--------------------------------------------------------
+
+inchworm_target: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/both.fa
+bowite_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/both.fa
+chrysalis_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/filter_iworm_by_min_length_or_cov.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/inchworm.K25.L25.DS.fa 100 10 > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/inchworm.K25.L25.DS.fa.min100
+* Running CMD: bowtie2-build --threads 8 -o 3 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/inchworm.K25.L25.DS.fa.min100 1>/dev/null
+* Running CMD: bash -c " set -o pipefail;bowtie2 --local -k 2 --threads 8 -f --score-min G,46,0 -x /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/both.fa  | samtools view -@ 8 -F4 -Sb - | samtools sort -m 1275068416 -@ 8 -no - - > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/iworm.bowtie.nameSorted.bam" 
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/scaffold_iworm_contigs.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/iworm.bowtie.nameSorted.bam /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/inchworm.K25.L25.DS.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/iworm_scaffolds.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/GraphFromFasta -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/inchworm.K25.L25.DS.fa -r /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/both.fa -min_contig_length 500 -min_glue 2 -glue_factor 0.05 -min_iso_ratio 0.05 -t 8 -k 24 -kk 48  -scaffolding /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/iworm_scaffolds.txt  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/iworm_cluster_welds_graph.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/BubbleUpClustering -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/inchworm.K25.L25.DS.fa  -weld_graph /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/iworm_cluster_welds_graph.txt -min_contig_length 500  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/GraphFromIwormFasta.out
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/CreateIwormFastaBundle -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/GraphFromIwormFasta.out -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/bundled_iworm_contigs.fasta -min 500
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/ReadsToTranscripts -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/both.fa -f /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/bundled_iworm_contigs.fasta -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/readsToComponents.out -t 8 -max_mem_reads 50000000 
+* Running CMD: /bin/sort -T . -S 19G -k 1,1n /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/readsToComponents.out > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/chrysalis/readsToComponents.out.sort
+Wednesday, March 21, 2018: 12:48:45	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/read_partitions/Fb_0/CBin_0
+Wednesday, March 21, 2018: 12:48:45	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/partitioned_reads.files.list.ok
+Wednesday, March 21, 2018: 12:48:45	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/write_partitioned_trinity_cmds.pl --reads_list_file /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/partitioned_reads.files.list --CPU 1 --max_memory 1G  --run_as_paired  --seqType fa --trinity_complete --full_cleanup  --group_pairs_distance  360  --min_contig_length  500  > recursive_trinity.cmds
+Wednesday, March 21, 2018: 12:48:45	CMD: touch recursive_trinity.cmds.ok
+Wednesday, March 21, 2018: 12:48:45	CMD: touch recursive_trinity.cmds.ok
+
+
+--------------------------------------------------------------------------------
+------------ Trinity Phase 2: Assembling Clusters of Reads ---------------------
+--------------------------------------------------------------------------------
+
+Wednesday, March 21, 2018: 12:48:45	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/BIN/ParaFly -c recursive_trinity.cmds -CPU 8 -v -shuffle 
+Number of Commands: 8
+succeeded(1)   12.5% completed.    succeeded(2)   25% completed.    succeeded(3)   37.5% completed.    succeeded(4)   50% completed.    succeeded(5)   62.5% completed.    succeeded(6)   75% completed.    succeeded(7)   87.5% completed.    succeeded(8)   100% completed.    
+
+All commands completed successfully. :-)
+
+
+
+** Harvesting all assembled transcripts into a single multi-fasta file...
+
+Wednesday, March 21, 2018: 12:48:53	CMD: find /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/read_partitions/ -name '*inity.fasta'  | /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/partitioned_trinity_aggregator.pl TRINITY_DN > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/Trinity.fasta.tmp
+Wednesday, March 21, 2018: 12:48:53	CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000/Trinity.fasta.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000.Trinity.fasta
+
+
+###################################################################
+Butterfly assemblies are written to /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000.Trinity.fasta
+###################################################################
+
+
+Wednesday, March 21, 2018: 12:48:53	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/get_Trinity_gene_to_trans_map.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000.Trinity.fasta > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.5000.Trinity.fasta.gene_trans_map
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+[biolite] timestamp=2018-03-21 12:48:53
+
+
+     ______  ____   ____  ____   ____  ______  __ __
+    |      ||    \ |    ||    \ |    ||      ||  |  |
+    |      ||  D  ) |  | |  _  | |  | |      ||  |  |
+    |_|  |_||    /  |  | |  |  | |  | |_|  |_||  ~  |
+      |  |  |    \  |  | |  |  | |  |   |  |  |___, |
+      |  |  |  .  \ |  | |  |  | |  |   |  |  |     |
+      |__|  |__|\_||____||__|__||____|  |__|  |____/
+
+
+Left read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+        ];
+Right read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+        ];
+Trinity version: Trinity-v2.5.1
+** NOTE: Latest version of Trinity is Trinity-v2.6.6, and can be obtained at:
+	https://github.com/trinityrnaseq/trinityrnaseq/releases
+
+Wednesday, March 21, 2018: 12:48:54	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 0
+Wednesday, March 21, 2018: 12:48:54	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 1
+Wednesday, March 21, 2018: 12:48:54	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000
+Wednesday, March 21, 2018: 12:48:54	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis
+
+
+----------------------------------------------------------------------------------
+-------------- Trinity Phase 1: Clustering of RNA-Seq Reads  ---------------------
+----------------------------------------------------------------------------------
+
+---------------------------------------------------------------
+------------ In silico Read Normalization ---------------------
+-- (Removing Excess Reads Beyond 50 Coverage --
+---------------------------------------------------------------
+
+# running normalization on reads: $VAR1 = [
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+          ],
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+          ]
+        ];
+
+
+Wednesday, March 21, 2018: 12:48:54	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/insilico_read_normalization.pl --seqType fq --JM 19G  --max_cov 50 --CPU 8 --output /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/insilico_read_normalization   --max_pct_stdev 10000  --left /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq --right /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq --pairs_together --PARALLEL_STATS  
+Converting input files. (both directions in parallel)CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq >> left.fa
+CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq >> right.fa
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.ok
+CMD finished (0 seconds)
+Done converting input files.CMD: cat left.fa right.fa > both.fa
+CMD finished (0 seconds)
+CMD: touch both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  both.fa
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.K25.min2.kmers.fa.histo mer_counts.jf
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish dump -L 2 mer_counts.jf > jellyfish.K25.min2.kmers.fa
+CMD finished (0 seconds)
+CMD: touch jellyfish.K25.min2.kmers.fa.success
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads left.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > left.fa.K25.stats
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads right.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > right.fa.K25.stats
+-reading Kmer occurrences...
+-reading Kmer occurrences...
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+CMD finished (0 seconds)
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.ok
+-sorting each stats file by read name.
+CMD finished (0 seconds)
+CMD: /bin/sort -k5,5 -T . -S 9G left.fa.K25.stats > left.fa.K25.stats.sort
+CMD: /bin/sort -k5,5 -T . -S 9G right.fa.K25.stats > right.fa.K25.stats.sort
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_merge_left_right_stats.pl --left left.fa.K25.stats.sort --right right.fa.K25.stats.sort --sorted > pairs.K25.stats
+-opening left.fa.K25.stats.sort
+-opening right.fa.K25.stats.sort
+-done opening files.
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_normalize.pl pairs.K25.stats 50 10000 > pairs.K25.stats.C50.pctSD10000.accs
+2370 / 2487 = 95.30% reads selected during normalization.
+0 / 2487 = 0.00% reads discarded as likely aberrant based on coverage profiles.
+0 / 2487 = 0.00% reads missing kmer coverage (N chars included?).
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.C50.pctSD10000.accs.ok
+CMD finished (1 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq left.norm.fq
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq right.norm.fq
+-removing tmp dir /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/insilico_read_normalization/tmp_normalized_reads
+CMD finished (0 seconds)
+
+
+Normalization complete. See outputs: 
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq
+Wednesday, March 21, 2018: 12:48:55	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/insilico_read_normalization/normalization.ok
+Converting input files. (in parallel)Wednesday, March 21, 2018: 12:48:55	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/insilico_read_normalization/left.norm.fq | seqtk-trinity seq -A - >> left.fa
+Wednesday, March 21, 2018: 12:48:55	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/insilico_read_normalization/right.norm.fq | seqtk-trinity seq -A - >> right.fa
+Wednesday, March 21, 2018: 12:48:55	CMD: touch left.fa.ok
+Wednesday, March 21, 2018: 12:48:55	CMD: touch right.fa.ok
+Wednesday, March 21, 2018: 12:48:55	CMD: touch left.fa.ok right.fa.ok
+Wednesday, March 21, 2018: 12:48:55	CMD: cat left.fa right.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/both.fa
+Wednesday, March 21, 2018: 12:48:55	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish dump -L 1 mer_counts.jf > jellyfish.kmers.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.kmers.fa.histo mer_counts.jf
+----------------------------------------------
+--------------- Inchworm ---------------------
+-- (Linear contig construction from k-mers) --
+----------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Inchworm/bin//inchworm --kmers jellyfish.kmers.fa --run_inchworm -K 25 -L 25 --monitor 1   --DS  --num_threads 6  --PARALLEL_IWORM  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/inchworm.K25.L25.DS.fa.tmp
+* Running CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/inchworm.K25.L25.DS.fa.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/inchworm.K25.L25.DS.fa
+Wednesday, March 21, 2018: 12:48:55	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/inchworm.K25.L25.DS.fa.finished
+--------------------------------------------------------
+-------------------- Chrysalis -------------------------
+-- (Contig Clustering & de Bruijn Graph Construction) --
+--------------------------------------------------------
+
+inchworm_target: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/both.fa
+bowite_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/both.fa
+chrysalis_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/filter_iworm_by_min_length_or_cov.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/inchworm.K25.L25.DS.fa 100 10 > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/inchworm.K25.L25.DS.fa.min100
+* Running CMD: bowtie2-build --threads 8 -o 3 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/inchworm.K25.L25.DS.fa.min100 1>/dev/null
+* Running CMD: bash -c " set -o pipefail;bowtie2 --local -k 2 --threads 8 -f --score-min G,46,0 -x /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/both.fa  | samtools view -@ 8 -F4 -Sb - | samtools sort -m 1275068416 -@ 8 -no - - > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/iworm.bowtie.nameSorted.bam" 
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/scaffold_iworm_contigs.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/iworm.bowtie.nameSorted.bam /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/inchworm.K25.L25.DS.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/iworm_scaffolds.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/GraphFromFasta -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/inchworm.K25.L25.DS.fa -r /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/both.fa -min_contig_length 500 -min_glue 2 -glue_factor 0.05 -min_iso_ratio 0.05 -t 8 -k 24 -kk 48  -scaffolding /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/iworm_scaffolds.txt  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/iworm_cluster_welds_graph.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/BubbleUpClustering -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/inchworm.K25.L25.DS.fa  -weld_graph /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/iworm_cluster_welds_graph.txt -min_contig_length 500  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/GraphFromIwormFasta.out
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/CreateIwormFastaBundle -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/GraphFromIwormFasta.out -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/bundled_iworm_contigs.fasta -min 500
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/ReadsToTranscripts -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/both.fa -f /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/bundled_iworm_contigs.fasta -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/readsToComponents.out -t 8 -max_mem_reads 50000000 
+* Running CMD: /bin/sort -T . -S 19G -k 1,1n /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/readsToComponents.out > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/chrysalis/readsToComponents.out.sort
+Wednesday, March 21, 2018: 12:48:58	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/read_partitions/Fb_0/CBin_0
+Wednesday, March 21, 2018: 12:48:58	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/partitioned_reads.files.list.ok
+Wednesday, March 21, 2018: 12:48:58	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/write_partitioned_trinity_cmds.pl --reads_list_file /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/partitioned_reads.files.list --CPU 1 --max_memory 1G  --run_as_paired  --seqType fa --trinity_complete --full_cleanup  --group_pairs_distance  360  --min_contig_length  500  > recursive_trinity.cmds
+Wednesday, March 21, 2018: 12:48:58	CMD: touch recursive_trinity.cmds.ok
+Wednesday, March 21, 2018: 12:48:58	CMD: touch recursive_trinity.cmds.ok
+
+
+--------------------------------------------------------------------------------
+------------ Trinity Phase 2: Assembling Clusters of Reads ---------------------
+--------------------------------------------------------------------------------
+
+Wednesday, March 21, 2018: 12:48:58	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/BIN/ParaFly -c recursive_trinity.cmds -CPU 8 -v -shuffle 
+Number of Commands: 10
+succeeded(1)   10% completed.    succeeded(2)   20% completed.    succeeded(3)   30% completed.    succeeded(4)   40% completed.    succeeded(5)   50% completed.    succeeded(6)   60% completed.    succeeded(7)   70% completed.    succeeded(8)   80% completed.    succeeded(9)   90% completed.    succeeded(10)   100% completed.    
+
+All commands completed successfully. :-)
+
+
+
+** Harvesting all assembled transcripts into a single multi-fasta file...
+
+Wednesday, March 21, 2018: 12:49:09	CMD: find /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/read_partitions/ -name '*inity.fasta'  | /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/partitioned_trinity_aggregator.pl TRINITY_DN > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/Trinity.fasta.tmp
+Wednesday, March 21, 2018: 12:49:09	CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000/Trinity.fasta.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000.Trinity.fasta
+
+
+###################################################################
+Butterfly assemblies are written to /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000.Trinity.fasta
+###################################################################
+
+
+Wednesday, March 21, 2018: 12:49:09	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/get_Trinity_gene_to_trans_map.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000.Trinity.fasta > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.10000.Trinity.fasta.gene_trans_map
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+[biolite] timestamp=2018-03-21 12:49:10
+
+
+     ______  ____   ____  ____   ____  ______  __ __
+    |      ||    \ |    ||    \ |    ||      ||  |  |
+    |      ||  D  ) |  | |  _  | |  | |      ||  |  |
+    |_|  |_||    /  |  | |  |  | |  | |_|  |_||  ~  |
+      |  |  |    \  |  | |  |  | |  |   |  |  |___, |
+      |  |  |  .  \ |  | |  |  | |  |   |  |  |     |
+      |__|  |__|\_||____||__|__||____|  |__|  |____/
+
+
+Left read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+        ];
+Right read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+        ];
+Trinity version: Trinity-v2.5.1
+** NOTE: Latest version of Trinity is Trinity-v2.6.6, and can be obtained at:
+	https://github.com/trinityrnaseq/trinityrnaseq/releases
+
+Wednesday, March 21, 2018: 12:49:11	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 0
+Wednesday, March 21, 2018: 12:49:11	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 1
+Wednesday, March 21, 2018: 12:49:11	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000
+Wednesday, March 21, 2018: 12:49:11	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis
+
+
+----------------------------------------------------------------------------------
+-------------- Trinity Phase 1: Clustering of RNA-Seq Reads  ---------------------
+----------------------------------------------------------------------------------
+
+---------------------------------------------------------------
+------------ In silico Read Normalization ---------------------
+-- (Removing Excess Reads Beyond 50 Coverage --
+---------------------------------------------------------------
+
+# running normalization on reads: $VAR1 = [
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+          ],
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+          ]
+        ];
+
+
+Wednesday, March 21, 2018: 12:49:11	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/insilico_read_normalization.pl --seqType fq --JM 19G  --max_cov 50 --CPU 8 --output /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/insilico_read_normalization   --max_pct_stdev 10000  --left /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq --right /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq --pairs_together --PARALLEL_STATS  
+Converting input files. (both directions in parallel)CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq >> left.fa
+CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq >> right.fa
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.ok
+CMD finished (0 seconds)
+Done converting input files.CMD: cat left.fa right.fa > both.fa
+CMD finished (0 seconds)
+CMD: touch both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  both.fa
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.K25.min2.kmers.fa.histo mer_counts.jf
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish dump -L 2 mer_counts.jf > jellyfish.K25.min2.kmers.fa
+CMD finished (0 seconds)
+CMD: touch jellyfish.K25.min2.kmers.fa.success
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads left.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > left.fa.K25.stats
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads right.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > right.fa.K25.stats
+-reading Kmer occurrences...
+-reading Kmer occurrences...
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+CMD finished (0 seconds)
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.ok
+-sorting each stats file by read name.
+CMD finished (0 seconds)
+CMD: /bin/sort -k5,5 -T . -S 9G left.fa.K25.stats > left.fa.K25.stats.sort
+CMD: /bin/sort -k5,5 -T . -S 9G right.fa.K25.stats > right.fa.K25.stats.sort
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_merge_left_right_stats.pl --left left.fa.K25.stats.sort --right right.fa.K25.stats.sort --sorted > pairs.K25.stats
+-opening left.fa.K25.stats.sort
+-opening right.fa.K25.stats.sort
+-done opening files.
+CMD finished (1 seconds)
+CMD: touch pairs.K25.stats.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_normalize.pl pairs.K25.stats 50 10000 > pairs.K25.stats.C50.pctSD10000.accs
+2382 / 2487 = 95.78% reads selected during normalization.
+0 / 2487 = 0.00% reads discarded as likely aberrant based on coverage profiles.
+0 / 2487 = 0.00% reads missing kmer coverage (N chars included?).
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.C50.pctSD10000.accs.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq left.norm.fq
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq right.norm.fq
+-removing tmp dir /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/insilico_read_normalization/tmp_normalized_reads
+CMD finished (0 seconds)
+
+
+Normalization complete. See outputs: 
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq
+Wednesday, March 21, 2018: 12:49:12	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/insilico_read_normalization/normalization.ok
+Converting input files. (in parallel)Wednesday, March 21, 2018: 12:49:12	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/insilico_read_normalization/left.norm.fq | seqtk-trinity seq -A - >> left.fa
+Wednesday, March 21, 2018: 12:49:12	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/insilico_read_normalization/right.norm.fq | seqtk-trinity seq -A - >> right.fa
+Wednesday, March 21, 2018: 12:49:12	CMD: touch left.fa.ok
+Wednesday, March 21, 2018: 12:49:12	CMD: touch right.fa.ok
+Wednesday, March 21, 2018: 12:49:12	CMD: touch left.fa.ok right.fa.ok
+Wednesday, March 21, 2018: 12:49:12	CMD: cat left.fa right.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/both.fa
+Wednesday, March 21, 2018: 12:49:12	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish dump -L 1 mer_counts.jf > jellyfish.kmers.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.kmers.fa.histo mer_counts.jf
+----------------------------------------------
+--------------- Inchworm ---------------------
+-- (Linear contig construction from k-mers) --
+----------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Inchworm/bin//inchworm --kmers jellyfish.kmers.fa --run_inchworm -K 25 -L 25 --monitor 1   --DS  --num_threads 6  --PARALLEL_IWORM  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/inchworm.K25.L25.DS.fa.tmp
+* Running CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/inchworm.K25.L25.DS.fa.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/inchworm.K25.L25.DS.fa
+Wednesday, March 21, 2018: 12:49:12	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/inchworm.K25.L25.DS.fa.finished
+--------------------------------------------------------
+-------------------- Chrysalis -------------------------
+-- (Contig Clustering & de Bruijn Graph Construction) --
+--------------------------------------------------------
+
+inchworm_target: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/both.fa
+bowite_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/both.fa
+chrysalis_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/filter_iworm_by_min_length_or_cov.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/inchworm.K25.L25.DS.fa 100 10 > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/inchworm.K25.L25.DS.fa.min100
+* Running CMD: bowtie2-build --threads 8 -o 3 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/inchworm.K25.L25.DS.fa.min100 1>/dev/null
+* Running CMD: bash -c " set -o pipefail;bowtie2 --local -k 2 --threads 8 -f --score-min G,46,0 -x /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/both.fa  | samtools view -@ 8 -F4 -Sb - | samtools sort -m 1275068416 -@ 8 -no - - > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/iworm.bowtie.nameSorted.bam" 
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/scaffold_iworm_contigs.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/iworm.bowtie.nameSorted.bam /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/inchworm.K25.L25.DS.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/iworm_scaffolds.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/GraphFromFasta -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/inchworm.K25.L25.DS.fa -r /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/both.fa -min_contig_length 500 -min_glue 2 -glue_factor 0.05 -min_iso_ratio 0.05 -t 8 -k 24 -kk 48  -scaffolding /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/iworm_scaffolds.txt  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/iworm_cluster_welds_graph.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/BubbleUpClustering -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/inchworm.K25.L25.DS.fa  -weld_graph /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/iworm_cluster_welds_graph.txt -min_contig_length 500  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/GraphFromIwormFasta.out
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/CreateIwormFastaBundle -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/GraphFromIwormFasta.out -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/bundled_iworm_contigs.fasta -min 500
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/ReadsToTranscripts -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/both.fa -f /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/bundled_iworm_contigs.fasta -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/readsToComponents.out -t 8 -max_mem_reads 50000000 
+* Running CMD: /bin/sort -T . -S 19G -k 1,1n /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/readsToComponents.out > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/chrysalis/readsToComponents.out.sort
+Wednesday, March 21, 2018: 12:49:17	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/read_partitions/Fb_0/CBin_0
+Wednesday, March 21, 2018: 12:49:17	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/partitioned_reads.files.list.ok
+Wednesday, March 21, 2018: 12:49:17	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/write_partitioned_trinity_cmds.pl --reads_list_file /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/partitioned_reads.files.list --CPU 1 --max_memory 1G  --run_as_paired  --seqType fa --trinity_complete --full_cleanup  --group_pairs_distance  360  --min_contig_length  500  > recursive_trinity.cmds
+Wednesday, March 21, 2018: 12:49:17	CMD: touch recursive_trinity.cmds.ok
+Wednesday, March 21, 2018: 12:49:17	CMD: touch recursive_trinity.cmds.ok
+
+
+--------------------------------------------------------------------------------
+------------ Trinity Phase 2: Assembling Clusters of Reads ---------------------
+--------------------------------------------------------------------------------
+
+Wednesday, March 21, 2018: 12:49:17	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/BIN/ParaFly -c recursive_trinity.cmds -CPU 8 -v -shuffle 
+Number of Commands: 9
+succeeded(1)   11.1111% completed.    succeeded(2)   22.2222% completed.    succeeded(3)   33.3333% completed.    succeeded(4)   44.4444% completed.    succeeded(5)   55.5556% completed.    succeeded(6)   66.6667% completed.    succeeded(7)   77.7778% completed.    succeeded(8)   88.8889% completed.    succeeded(9)   100% completed.    
+
+All commands completed successfully. :-)
+
+
+
+** Harvesting all assembled transcripts into a single multi-fasta file...
+
+Wednesday, March 21, 2018: 12:49:26	CMD: find /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/read_partitions/ -name '*inity.fasta'  | /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/partitioned_trinity_aggregator.pl TRINITY_DN > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/Trinity.fasta.tmp
+Wednesday, March 21, 2018: 12:49:26	CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000/Trinity.fasta.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000.Trinity.fasta
+
+
+###################################################################
+Butterfly assemblies are written to /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000.Trinity.fasta
+###################################################################
+
+
+Wednesday, March 21, 2018: 12:49:26	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/get_Trinity_gene_to_trans_map.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000.Trinity.fasta > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.25000.Trinity.fasta.gene_trans_map
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+[biolite] timestamp=2018-03-21 12:49:27
+
+
+     ______  ____   ____  ____   ____  ______  __ __
+    |      ||    \ |    ||    \ |    ||      ||  |  |
+    |      ||  D  ) |  | |  _  | |  | |      ||  |  |
+    |_|  |_||    /  |  | |  |  | |  | |_|  |_||  ~  |
+      |  |  |    \  |  | |  |  | |  |   |  |  |___, |
+      |  |  |  .  \ |  | |  |  | |  |   |  |  |     |
+      |__|  |__|\_||____||__|__||____|  |__|  |____/
+
+
+Left read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+        ];
+Right read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+        ];
+Trinity version: Trinity-v2.5.1
+** NOTE: Latest version of Trinity is Trinity-v2.6.6, and can be obtained at:
+	https://github.com/trinityrnaseq/trinityrnaseq/releases
+
+Wednesday, March 21, 2018: 12:49:27	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 0
+Wednesday, March 21, 2018: 12:49:28	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 1
+Wednesday, March 21, 2018: 12:49:28	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000
+Wednesday, March 21, 2018: 12:49:28	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis
+
+
+----------------------------------------------------------------------------------
+-------------- Trinity Phase 1: Clustering of RNA-Seq Reads  ---------------------
+----------------------------------------------------------------------------------
+
+---------------------------------------------------------------
+------------ In silico Read Normalization ---------------------
+-- (Removing Excess Reads Beyond 50 Coverage --
+---------------------------------------------------------------
+
+# running normalization on reads: $VAR1 = [
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+          ],
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+          ]
+        ];
+
+
+Wednesday, March 21, 2018: 12:49:28	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/insilico_read_normalization.pl --seqType fq --JM 19G  --max_cov 50 --CPU 8 --output /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/insilico_read_normalization   --max_pct_stdev 10000  --left /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq --right /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq --pairs_together --PARALLEL_STATS  
+Converting input files. (both directions in parallel)CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq >> left.fa
+CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq >> right.fa
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.ok
+CMD finished (0 seconds)
+Done converting input files.CMD: cat left.fa right.fa > both.fa
+CMD finished (0 seconds)
+CMD: touch both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  both.fa
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.K25.min2.kmers.fa.histo mer_counts.jf
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish dump -L 2 mer_counts.jf > jellyfish.K25.min2.kmers.fa
+CMD finished (0 seconds)
+CMD: touch jellyfish.K25.min2.kmers.fa.success
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads left.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > left.fa.K25.stats
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads right.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > right.fa.K25.stats
+-reading Kmer occurrences...
+-reading Kmer occurrences...
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.ok
+-sorting each stats file by read name.
+CMD finished (0 seconds)
+CMD: /bin/sort -k5,5 -T . -S 9G left.fa.K25.stats > left.fa.K25.stats.sort
+CMD: /bin/sort -k5,5 -T . -S 9G right.fa.K25.stats > right.fa.K25.stats.sort
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_merge_left_right_stats.pl --left left.fa.K25.stats.sort --right right.fa.K25.stats.sort --sorted > pairs.K25.stats
+-opening left.fa.K25.stats.sort
+-opening right.fa.K25.stats.sort
+-done opening files.
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_normalize.pl pairs.K25.stats 50 10000 > pairs.K25.stats.C50.pctSD10000.accs
+2386 / 2487 = 95.94% reads selected during normalization.
+0 / 2487 = 0.00% reads discarded as likely aberrant based on coverage profiles.
+0 / 2487 = 0.00% reads missing kmer coverage (N chars included?).
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.C50.pctSD10000.accs.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq left.norm.fq
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq right.norm.fq
+-removing tmp dir /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/insilico_read_normalization/tmp_normalized_reads
+CMD finished (0 seconds)
+
+
+Normalization complete. See outputs: 
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq
+Wednesday, March 21, 2018: 12:49:28	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/insilico_read_normalization/normalization.ok
+Converting input files. (in parallel)Wednesday, March 21, 2018: 12:49:28	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/insilico_read_normalization/left.norm.fq | seqtk-trinity seq -A - >> left.fa
+Wednesday, March 21, 2018: 12:49:28	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/insilico_read_normalization/right.norm.fq | seqtk-trinity seq -A - >> right.fa
+Wednesday, March 21, 2018: 12:49:28	CMD: touch left.fa.ok
+Wednesday, March 21, 2018: 12:49:28	CMD: touch right.fa.ok
+Wednesday, March 21, 2018: 12:49:28	CMD: touch left.fa.ok right.fa.ok
+Wednesday, March 21, 2018: 12:49:28	CMD: cat left.fa right.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/both.fa
+Wednesday, March 21, 2018: 12:49:28	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish dump -L 1 mer_counts.jf > jellyfish.kmers.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.kmers.fa.histo mer_counts.jf
+----------------------------------------------
+--------------- Inchworm ---------------------
+-- (Linear contig construction from k-mers) --
+----------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Inchworm/bin//inchworm --kmers jellyfish.kmers.fa --run_inchworm -K 25 -L 25 --monitor 1   --DS  --num_threads 6  --PARALLEL_IWORM  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/inchworm.K25.L25.DS.fa.tmp
+* Running CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/inchworm.K25.L25.DS.fa.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/inchworm.K25.L25.DS.fa
+Wednesday, March 21, 2018: 12:49:29	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/inchworm.K25.L25.DS.fa.finished
+--------------------------------------------------------
+-------------------- Chrysalis -------------------------
+-- (Contig Clustering & de Bruijn Graph Construction) --
+--------------------------------------------------------
+
+inchworm_target: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/both.fa
+bowite_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/both.fa
+chrysalis_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/filter_iworm_by_min_length_or_cov.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/inchworm.K25.L25.DS.fa 100 10 > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/inchworm.K25.L25.DS.fa.min100
+* Running CMD: bowtie2-build --threads 8 -o 3 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/inchworm.K25.L25.DS.fa.min100 1>/dev/null
+* Running CMD: bash -c " set -o pipefail;bowtie2 --local -k 2 --threads 8 -f --score-min G,46,0 -x /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/both.fa  | samtools view -@ 8 -F4 -Sb - | samtools sort -m 1275068416 -@ 8 -no - - > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/iworm.bowtie.nameSorted.bam" 
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/scaffold_iworm_contigs.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/iworm.bowtie.nameSorted.bam /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/inchworm.K25.L25.DS.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/iworm_scaffolds.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/GraphFromFasta -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/inchworm.K25.L25.DS.fa -r /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/both.fa -min_contig_length 500 -min_glue 2 -glue_factor 0.05 -min_iso_ratio 0.05 -t 8 -k 24 -kk 48  -scaffolding /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/iworm_scaffolds.txt  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/iworm_cluster_welds_graph.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/BubbleUpClustering -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/inchworm.K25.L25.DS.fa  -weld_graph /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/iworm_cluster_welds_graph.txt -min_contig_length 500  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/GraphFromIwormFasta.out
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/CreateIwormFastaBundle -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/GraphFromIwormFasta.out -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/bundled_iworm_contigs.fasta -min 500
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/ReadsToTranscripts -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/both.fa -f /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/bundled_iworm_contigs.fasta -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/readsToComponents.out -t 8 -max_mem_reads 50000000 
+* Running CMD: /bin/sort -T . -S 19G -k 1,1n /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/readsToComponents.out > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/chrysalis/readsToComponents.out.sort
+Wednesday, March 21, 2018: 12:49:34	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/read_partitions/Fb_0/CBin_0
+Wednesday, March 21, 2018: 12:49:34	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/partitioned_reads.files.list.ok
+Wednesday, March 21, 2018: 12:49:34	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/write_partitioned_trinity_cmds.pl --reads_list_file /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/partitioned_reads.files.list --CPU 1 --max_memory 1G  --run_as_paired  --seqType fa --trinity_complete --full_cleanup  --group_pairs_distance  360  --min_contig_length  500  > recursive_trinity.cmds
+Wednesday, March 21, 2018: 12:49:34	CMD: touch recursive_trinity.cmds.ok
+Wednesday, March 21, 2018: 12:49:34	CMD: touch recursive_trinity.cmds.ok
+
+
+--------------------------------------------------------------------------------
+------------ Trinity Phase 2: Assembling Clusters of Reads ---------------------
+--------------------------------------------------------------------------------
+
+Wednesday, March 21, 2018: 12:49:34	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/BIN/ParaFly -c recursive_trinity.cmds -CPU 8 -v -shuffle 
+Number of Commands: 11
+succeeded(1)   9.09091% completed.    succeeded(2)   18.1818% completed.    succeeded(3)   27.2727% completed.    succeeded(4)   36.3636% completed.    succeeded(5)   45.4545% completed.    succeeded(6)   54.5455% completed.    succeeded(7)   63.6364% completed.    succeeded(8)   72.7273% completed.    succeeded(9)   81.8182% completed.    succeeded(10)   90.9091% completed.    succeeded(11)   100% completed.    
+
+All commands completed successfully. :-)
+
+
+
+** Harvesting all assembled transcripts into a single multi-fasta file...
+
+Wednesday, March 21, 2018: 12:49:42	CMD: find /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/read_partitions/ -name '*inity.fasta'  | /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/partitioned_trinity_aggregator.pl TRINITY_DN > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/Trinity.fasta.tmp
+Wednesday, March 21, 2018: 12:49:42	CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000/Trinity.fasta.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000.Trinity.fasta
+
+
+###################################################################
+Butterfly assemblies are written to /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000.Trinity.fasta
+###################################################################
+
+
+Wednesday, March 21, 2018: 12:49:42	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/get_Trinity_gene_to_trans_map.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000.Trinity.fasta > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.50000.Trinity.fasta.gene_trans_map
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+[biolite] timestamp=2018-03-21 12:49:43
+
+
+     ______  ____   ____  ____   ____  ______  __ __
+    |      ||    \ |    ||    \ |    ||      ||  |  |
+    |      ||  D  ) |  | |  _  | |  | |      ||  |  |
+    |_|  |_||    /  |  | |  |  | |  | |_|  |_||  ~  |
+      |  |  |    \  |  | |  |  | |  |   |  |  |___, |
+      |  |  |  .  \ |  | |  |  | |  |   |  |  |     |
+      |__|  |__|\_||____||__|__||____|  |__|  |____/
+
+
+Left read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+        ];
+Right read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+        ];
+Trinity version: Trinity-v2.5.1
+** NOTE: Latest version of Trinity is Trinity-v2.6.6, and can be obtained at:
+	https://github.com/trinityrnaseq/trinityrnaseq/releases
+
+Wednesday, March 21, 2018: 12:49:43	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 0
+Wednesday, March 21, 2018: 12:49:43	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 1
+Wednesday, March 21, 2018: 12:49:43	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000
+Wednesday, March 21, 2018: 12:49:43	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis
+
+
+----------------------------------------------------------------------------------
+-------------- Trinity Phase 1: Clustering of RNA-Seq Reads  ---------------------
+----------------------------------------------------------------------------------
+
+---------------------------------------------------------------
+------------ In silico Read Normalization ---------------------
+-- (Removing Excess Reads Beyond 50 Coverage --
+---------------------------------------------------------------
+
+# running normalization on reads: $VAR1 = [
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq'
+          ],
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq'
+          ]
+        ];
+
+
+Wednesday, March 21, 2018: 12:49:43	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/insilico_read_normalization.pl --seqType fq --JM 19G  --max_cov 50 --CPU 8 --output /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/insilico_read_normalization   --max_pct_stdev 10000  --left /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq --right /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq --pairs_together --PARALLEL_STATS  
+Converting input files. (both directions in parallel)CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.0.fq >> left.fa
+CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/subset.1.fq >> right.fa
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.ok
+CMD finished (0 seconds)
+Done converting input files.CMD: cat left.fa right.fa > both.fa
+CMD finished (0 seconds)
+CMD: touch both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  both.fa
+CMD finished (1 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.K25.min2.kmers.fa.histo mer_counts.jf
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish dump -L 2 mer_counts.jf > jellyfish.K25.min2.kmers.fa
+CMD finished (0 seconds)
+CMD: touch jellyfish.K25.min2.kmers.fa.success
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads left.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > left.fa.K25.stats
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads right.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > right.fa.K25.stats
+-reading Kmer occurrences...
+-reading Kmer occurrences...
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+
+ done parsing 24977 Kmers, 24977 added, taking 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.ok
+-sorting each stats file by read name.
+CMD finished (0 seconds)
+CMD: /bin/sort -k5,5 -T . -S 9G left.fa.K25.stats > left.fa.K25.stats.sort
+CMD: /bin/sort -k5,5 -T . -S 9G right.fa.K25.stats > right.fa.K25.stats.sort
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_merge_left_right_stats.pl --left left.fa.K25.stats.sort --right right.fa.K25.stats.sort --sorted > pairs.K25.stats
+-opening left.fa.K25.stats.sort
+-opening right.fa.K25.stats.sort
+-done opening files.
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_normalize.pl pairs.K25.stats 50 10000 > pairs.K25.stats.C50.pctSD10000.accs
+2390 / 2487 = 96.10% reads selected during normalization.
+0 / 2487 = 0.00% reads discarded as likely aberrant based on coverage profiles.
+0 / 2487 = 0.00% reads missing kmer coverage (N chars included?).
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.C50.pctSD10000.accs.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq left.norm.fq
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq right.norm.fq
+-removing tmp dir /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/insilico_read_normalization/tmp_normalized_reads
+CMD finished (0 seconds)
+
+
+Normalization complete. See outputs: 
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/insilico_read_normalization/subset.0.fq.normalized_K25_C50_pctSD10000.fq
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/insilico_read_normalization/subset.1.fq.normalized_K25_C50_pctSD10000.fq
+Wednesday, March 21, 2018: 12:49:44	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/insilico_read_normalization/normalization.ok
+Converting input files. (in parallel)Wednesday, March 21, 2018: 12:49:44	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/insilico_read_normalization/left.norm.fq | seqtk-trinity seq -A - >> left.fa
+Wednesday, March 21, 2018: 12:49:44	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/insilico_read_normalization/right.norm.fq | seqtk-trinity seq -A - >> right.fa
+Wednesday, March 21, 2018: 12:49:44	CMD: touch left.fa.ok
+Wednesday, March 21, 2018: 12:49:44	CMD: touch right.fa.ok
+Wednesday, March 21, 2018: 12:49:44	CMD: touch left.fa.ok right.fa.ok
+Wednesday, March 21, 2018: 12:49:44	CMD: cat left.fa right.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/both.fa
+Wednesday, March 21, 2018: 12:49:44	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish dump -L 1 mer_counts.jf > jellyfish.kmers.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.kmers.fa.histo mer_counts.jf
+----------------------------------------------
+--------------- Inchworm ---------------------
+-- (Linear contig construction from k-mers) --
+----------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Inchworm/bin//inchworm --kmers jellyfish.kmers.fa --run_inchworm -K 25 -L 25 --monitor 1   --DS  --num_threads 6  --PARALLEL_IWORM  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/inchworm.K25.L25.DS.fa.tmp
+* Running CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/inchworm.K25.L25.DS.fa.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/inchworm.K25.L25.DS.fa
+Wednesday, March 21, 2018: 12:49:45	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/inchworm.K25.L25.DS.fa.finished
+--------------------------------------------------------
+-------------------- Chrysalis -------------------------
+-- (Contig Clustering & de Bruijn Graph Construction) --
+--------------------------------------------------------
+
+inchworm_target: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/both.fa
+bowite_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/both.fa
+chrysalis_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/filter_iworm_by_min_length_or_cov.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/inchworm.K25.L25.DS.fa 100 10 > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/inchworm.K25.L25.DS.fa.min100
+* Running CMD: bowtie2-build --threads 8 -o 3 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/inchworm.K25.L25.DS.fa.min100 1>/dev/null
+* Running CMD: bash -c " set -o pipefail;bowtie2 --local -k 2 --threads 8 -f --score-min G,46,0 -x /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/both.fa  | samtools view -@ 8 -F4 -Sb - | samtools sort -m 1275068416 -@ 8 -no - - > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/iworm.bowtie.nameSorted.bam" 
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/scaffold_iworm_contigs.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/iworm.bowtie.nameSorted.bam /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/inchworm.K25.L25.DS.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/iworm_scaffolds.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/GraphFromFasta -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/inchworm.K25.L25.DS.fa -r /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/both.fa -min_contig_length 500 -min_glue 2 -glue_factor 0.05 -min_iso_ratio 0.05 -t 8 -k 24 -kk 48  -scaffolding /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/iworm_scaffolds.txt  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/iworm_cluster_welds_graph.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/BubbleUpClustering -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/inchworm.K25.L25.DS.fa  -weld_graph /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/iworm_cluster_welds_graph.txt -min_contig_length 500  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/GraphFromIwormFasta.out
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/CreateIwormFastaBundle -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/GraphFromIwormFasta.out -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/bundled_iworm_contigs.fasta -min 500
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/ReadsToTranscripts -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/both.fa -f /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/bundled_iworm_contigs.fasta -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/readsToComponents.out -t 8 -max_mem_reads 50000000 
+* Running CMD: /bin/sort -T . -S 19G -k 1,1n /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/readsToComponents.out > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/chrysalis/readsToComponents.out.sort
+Wednesday, March 21, 2018: 12:49:48	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/read_partitions/Fb_0/CBin_0
+Wednesday, March 21, 2018: 12:49:48	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/partitioned_reads.files.list.ok
+Wednesday, March 21, 2018: 12:49:48	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/write_partitioned_trinity_cmds.pl --reads_list_file /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/partitioned_reads.files.list --CPU 1 --max_memory 1G  --run_as_paired  --seqType fa --trinity_complete --full_cleanup  --group_pairs_distance  360  --min_contig_length  500  > recursive_trinity.cmds
+Wednesday, March 21, 2018: 12:49:48	CMD: touch recursive_trinity.cmds.ok
+Wednesday, March 21, 2018: 12:49:48	CMD: touch recursive_trinity.cmds.ok
+
+
+--------------------------------------------------------------------------------
+------------ Trinity Phase 2: Assembling Clusters of Reads ---------------------
+--------------------------------------------------------------------------------
+
+Wednesday, March 21, 2018: 12:49:48	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/BIN/ParaFly -c recursive_trinity.cmds -CPU 8 -v -shuffle 
+Number of Commands: 9
+succeeded(1)   11.1111% completed.    succeeded(2)   22.2222% completed.    succeeded(3)   33.3333% completed.    succeeded(4)   44.4444% completed.    succeeded(5)   55.5556% completed.    succeeded(6)   66.6667% completed.    succeeded(7)   77.7778% completed.    succeeded(8)   88.8889% completed.    succeeded(9)   100% completed.    
+
+All commands completed successfully. :-)
+
+
+
+** Harvesting all assembled transcripts into a single multi-fasta file...
+
+Wednesday, March 21, 2018: 12:50:00	CMD: find /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/read_partitions/ -name '*inity.fasta'  | /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/partitioned_trinity_aggregator.pl TRINITY_DN > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/Trinity.fasta.tmp
+Wednesday, March 21, 2018: 12:50:00	CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000/Trinity.fasta.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000.Trinity.fasta
+
+
+###################################################################
+Butterfly assemblies are written to /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000.Trinity.fasta
+###################################################################
+
+
+Wednesday, March 21, 2018: 12:50:00	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/get_Trinity_gene_to_trans_map.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000.Trinity.fasta > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity.100000.Trinity.fasta.gene_trans_map
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+[biolite] timestamp=2018-03-21 12:50:01
+
+
+     ______  ____   ____  ____   ____  ______  __ __
+    |      ||    \ |    ||    \ |    ||      ||  |  |
+    |      ||  D  ) |  | |  _  | |  | |      ||  |  |
+    |_|  |_||    /  |  | |  |  | |  | |_|  |_||  ~  |
+      |  |  |    \  |  | |  |  | |  |   |  |  |___, |
+      |  |  |  .  \ |  | |  |  | |  |   |  |  |     |
+      |__|  |__|\_||____||__|__||____|  |__|  |____/
+
+
+Left read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/filtered.0.fq'
+        ];
+Right read files: $VAR1 = [
+          '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/filtered.1.fq'
+        ];
+Trinity version: Trinity-v2.5.1
+** NOTE: Latest version of Trinity is Trinity-v2.6.6, and can be obtained at:
+	https://github.com/trinityrnaseq/trinityrnaseq/releases
+
+Wednesday, March 21, 2018: 12:50:01	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 0
+Wednesday, March 21, 2018: 12:50:01	CMD: java -Xmx64m -XX:ParallelGCThreads=2  -jar /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/ExitTester.jar 1
+Wednesday, March 21, 2018: 12:50:01	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir
+Wednesday, March 21, 2018: 12:50:01	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis
+
+
+----------------------------------------------------------------------------------
+-------------- Trinity Phase 1: Clustering of RNA-Seq Reads  ---------------------
+----------------------------------------------------------------------------------
+
+---------------------------------------------------------------
+------------ In silico Read Normalization ---------------------
+-- (Removing Excess Reads Beyond 50 Coverage --
+---------------------------------------------------------------
+
+# running normalization on reads: $VAR1 = [
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/filtered.0.fq'
+          ],
+          [
+            '/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/filtered.1.fq'
+          ]
+        ];
+
+
+Wednesday, March 21, 2018: 12:50:02	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/insilico_read_normalization.pl --seqType fq --JM 19G  --max_cov 50 --CPU 8 --output /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/insilico_read_normalization   --max_pct_stdev 10000  --left /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/filtered.0.fq --right /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/filtered.1.fq --pairs_together --PARALLEL_STATS  
+Converting input files. (both directions in parallel)CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/filtered.0.fq >> left.fa
+CMD: seqtk-trinity seq -A /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/filtered.1.fq >> right.fa
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.ok
+CMD finished (0 seconds)
+Done converting input files.CMD: cat left.fa right.fa > both.fa
+CMD finished (0 seconds)
+CMD: touch both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  both.fa
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.K25.min2.kmers.fa.histo mer_counts.jf
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//trinity-plugins/jellyfish/bin/jellyfish dump -L 2 mer_counts.jf > jellyfish.K25.min2.kmers.fa
+CMD finished (0 seconds)
+CMD: touch jellyfish.K25.min2.kmers.fa.success
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads left.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > left.fa.K25.stats
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//Inchworm/bin/fastaToKmerCoverageStats --reads right.fa --kmers jellyfish.K25.min2.kmers.fa --kmer_size 25  --num_threads 8  --DS  > right.fa.K25.stats
+-reading Kmer occurrences...
+-reading Kmer occurrences...
+
+ done parsing 24750 Kmers, 24750 added, taking 0 seconds.
+
+ done parsing 24750 Kmers, 24750 added, taking 0 seconds.
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+STATS_GENERATION_TIME: 0 seconds.
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.ok
+-sorting each stats file by read name.
+CMD finished (0 seconds)
+CMD: /bin/sort -k5,5 -T . -S 9G left.fa.K25.stats > left.fa.K25.stats.sort
+CMD: /bin/sort -k5,5 -T . -S 9G right.fa.K25.stats > right.fa.K25.stats.sort
+CMD finished (0 seconds)
+CMD finished (0 seconds)
+CMD: touch left.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: touch right.fa.K25.stats.sort.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_merge_left_right_stats.pl --left left.fa.K25.stats.sort --right right.fa.K25.stats.sort --sorted > pairs.K25.stats
+-opening left.fa.K25.stats.sort
+-opening right.fa.K25.stats.sort
+-done opening files.
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.ok
+CMD finished (0 seconds)
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/..//util/support_scripts//nbkc_normalize.pl pairs.K25.stats 50 10000 > pairs.K25.stats.C50.pctSD10000.accs
+2368 / 2454 = 96.50% reads selected during normalization.
+0 / 2454 = 0.00% reads discarded as likely aberrant based on coverage profiles.
+0 / 2454 = 0.00% reads missing kmer coverage (N chars included?).
+CMD finished (0 seconds)
+CMD: touch pairs.K25.stats.C50.pctSD10000.accs.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/insilico_read_normalization/filtered.0.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/insilico_read_normalization/filtered.1.fq.normalized_K25_C50_pctSD10000.fq.ok
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/insilico_read_normalization/filtered.0.fq.normalized_K25_C50_pctSD10000.fq left.norm.fq
+CMD finished (0 seconds)
+CMD: ln -sf /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/insilico_read_normalization/filtered.1.fq.normalized_K25_C50_pctSD10000.fq right.norm.fq
+-removing tmp dir /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/insilico_read_normalization/tmp_normalized_reads
+CMD finished (0 seconds)
+
+
+Normalization complete. See outputs: 
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/insilico_read_normalization/filtered.0.fq.normalized_K25_C50_pctSD10000.fq
+	/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/insilico_read_normalization/filtered.1.fq.normalized_K25_C50_pctSD10000.fq
+Wednesday, March 21, 2018: 12:50:02	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/insilico_read_normalization/normalization.ok
+Converting input files. (in parallel)Wednesday, March 21, 2018: 12:50:02	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/insilico_read_normalization/left.norm.fq | seqtk-trinity seq -A - >> left.fa
+Wednesday, March 21, 2018: 12:50:02	CMD: cat /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/insilico_read_normalization/right.norm.fq | seqtk-trinity seq -A - >> right.fa
+Wednesday, March 21, 2018: 12:50:02	CMD: touch left.fa.ok
+Wednesday, March 21, 2018: 12:50:02	CMD: touch right.fa.ok
+Wednesday, March 21, 2018: 12:50:02	CMD: touch left.fa.ok right.fa.ok
+Wednesday, March 21, 2018: 12:50:02	CMD: cat left.fa right.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/both.fa
+Wednesday, March 21, 2018: 12:50:02	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/both.fa.ok
+-------------------------------------------
+----------- Jellyfish  --------------------
+-- (building a k-mer catalog from reads) --
+-------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish count -t 8 -m 25 -s 100000000  --canonical  /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish dump -L 1 mer_counts.jf > jellyfish.kmers.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/jellyfish/bin/jellyfish histo -t 8 -o jellyfish.kmers.fa.histo mer_counts.jf
+----------------------------------------------
+--------------- Inchworm ---------------------
+-- (Linear contig construction from k-mers) --
+----------------------------------------------
+
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Inchworm/bin//inchworm --kmers jellyfish.kmers.fa --run_inchworm -K 25 -L 25 --monitor 1   --DS  --num_threads 6  --PARALLEL_IWORM  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/inchworm.K25.L25.DS.fa.tmp
+* Running CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/inchworm.K25.L25.DS.fa.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/inchworm.K25.L25.DS.fa
+Wednesday, March 21, 2018: 12:50:03	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/inchworm.K25.L25.DS.fa.finished
+--------------------------------------------------------
+-------------------- Chrysalis -------------------------
+-- (Contig Clustering & de Bruijn Graph Construction) --
+--------------------------------------------------------
+
+inchworm_target: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/both.fa
+bowite_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/both.fa
+chrysalis_reads_fa: /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/both.fa
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/filter_iworm_by_min_length_or_cov.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/inchworm.K25.L25.DS.fa 100 10 > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/inchworm.K25.L25.DS.fa.min100
+* Running CMD: bowtie2-build --threads 8 -o 3 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/inchworm.K25.L25.DS.fa.min100 1>/dev/null
+* Running CMD: bash -c " set -o pipefail;bowtie2 --local -k 2 --threads 8 -f --score-min G,46,0 -x /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/inchworm.K25.L25.DS.fa.min100 /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/both.fa  | samtools view -@ 8 -F4 -Sb - | samtools sort -m 1275068416 -@ 8 -no - - > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/iworm.bowtie.nameSorted.bam" 
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/scaffold_iworm_contigs.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/iworm.bowtie.nameSorted.bam /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/inchworm.K25.L25.DS.fa > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/iworm_scaffolds.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/GraphFromFasta -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/inchworm.K25.L25.DS.fa -r /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/both.fa -min_contig_length 300 -min_glue 2 -glue_factor 0.05 -min_iso_ratio 0.05 -t 8 -k 24 -kk 48  -scaffolding /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/iworm_scaffolds.txt  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/iworm_cluster_welds_graph.txt
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/BubbleUpClustering -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/inchworm.K25.L25.DS.fa  -weld_graph /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/iworm_cluster_welds_graph.txt -min_contig_length 300  > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/GraphFromIwormFasta.out
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/CreateIwormFastaBundle -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/GraphFromIwormFasta.out -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/bundled_iworm_contigs.fasta -min 300
+* Running CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/Chrysalis/ReadsToTranscripts -i /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/both.fa -f /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/bundled_iworm_contigs.fasta -o /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/readsToComponents.out -t 8 -max_mem_reads 50000000 
+* Running CMD: /bin/sort -T . -S 19G -k 1,1n /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/readsToComponents.out > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/chrysalis/readsToComponents.out.sort
+Wednesday, March 21, 2018: 12:50:07	CMD: mkdir -p /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/read_partitions/Fb_0/CBin_0
+Wednesday, March 21, 2018: 12:50:07	CMD: touch /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/partitioned_reads.files.list.ok
+Wednesday, March 21, 2018: 12:50:07	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/write_partitioned_trinity_cmds.pl --reads_list_file /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/partitioned_reads.files.list --CPU 1 --max_memory 1G  --run_as_paired  --seqType fa --trinity_complete --full_cleanup  --group_pairs_distance  360  --min_contig_length  300  > recursive_trinity.cmds
+Wednesday, March 21, 2018: 12:50:07	CMD: touch recursive_trinity.cmds.ok
+Wednesday, March 21, 2018: 12:50:07	CMD: touch recursive_trinity.cmds.ok
+
+
+--------------------------------------------------------------------------------
+------------ Trinity Phase 2: Assembling Clusters of Reads ---------------------
+--------------------------------------------------------------------------------
+
+Wednesday, March 21, 2018: 12:50:07	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/trinity-plugins/BIN/ParaFly -c recursive_trinity.cmds -CPU 8 -v -shuffle 
+Number of Commands: 10
+succeeded(1)   10% completed.    succeeded(2)   20% completed.    succeeded(3)   30% completed.    succeeded(4)   40% completed.    succeeded(5)   50% completed.    succeeded(6)   60% completed.    succeeded(7)   70% completed.    succeeded(8)   80% completed.    succeeded(9)   90% completed.    succeeded(10)   100% completed.    
+
+All commands completed successfully. :-)
+
+
+
+** Harvesting all assembled transcripts into a single multi-fasta file...
+
+Wednesday, March 21, 2018: 12:50:14	CMD: find /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/read_partitions/ -name '*inity.fasta'  | /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/partitioned_trinity_aggregator.pl TRINITY_DN > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/Trinity.fasta.tmp
+-relocating /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/Trinity.fasta.tmp to /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/Trinity.fasta
+Wednesday, March 21, 2018: 12:50:14	CMD: mv /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/Trinity.fasta.tmp /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/Trinity.fasta
+Wednesday, March 21, 2018: 12:50:14	CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/trinity-2.5.1/util/support_scripts/get_Trinity_gene_to_trans_map.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/Trinity.fasta > /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/Trinity.fasta.gene_trans_map
+
+
+###################################################################
+Trinity assemblies are written to /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/trinity_out_dir/Trinity.fasta
+###################################################################
+
+

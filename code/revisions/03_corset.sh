@@ -2,10 +2,9 @@
 #SBATCH -t 3-00:00:00
 #SBATCH --mem=24G
 
-module load conda
 source activate corset
 
-DATADIR=/gpfs/scratch/aguang/treeinform/revisions/trinity
+DATADIR=/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity
 mkdir -p /users/aguang/scratch/treeinform/ms_treeinform/data/revisions/corset
 CORSETDIR=/users/aguang/scratch/treeinform/ms_treeinform/data/revisions/corset
 cd $CORSETDIR
@@ -13,7 +12,7 @@ cd $CORSETDIR
 # transcriptome SRX IDs
 fastq=( SRX288276 SRX288285 SRX288430 SRX288431 SRX288432 )
 
-#bowtie
+bowtie
 for i in {0..4}
 do
     bowtie2-build $DATADIR/scratch/transcriptome-$((i+1))/trinity_out_dir/Trinity.fasta $CORSETDIR/transcriptome-$((i+1))
@@ -27,4 +26,4 @@ do
 done
 
 #corset
-corset $CORSETDIR/*.bam
+corset $DATADIR/data/*.bam

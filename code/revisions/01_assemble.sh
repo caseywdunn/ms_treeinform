@@ -1,12 +1,11 @@
 #!/bin/bash
 #SBATCH -t 3-00:00:00
-#SBATCH -n 16
-#SBATCH --mem=120G
+#SBATCH -n 8
+#SBATCH --mem=24G
 
-module load conda
 source activate agalma
 
-DATADIR=/gpfs/scratch/bguang/treeinform/revisions
+DATADIR=/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions
 
 # make a new database & new folders for each threshold
 mkdir -p $DATADIR/trinity/data
@@ -14,7 +13,6 @@ mkdir -p $DATADIR/trinity/scratch
 mkdir -p $DATADIR/trinity/reports
 
 export AGALMA_DB=$DATADIR/trinity/agalma_trinity.sqlite
-agalma -t 16 -m 120G
 
 cd $DATADIR/trinity/data
 agalma testdata
@@ -27,11 +25,11 @@ agalma catalog insert --id JGI_NEMVEC --paths JGI_NEMVEC.fa --species "Nematoste
 agalma catalog insert --id NCBI_HYDMAG --paths NCBI_HYDMAG.pfa --species "Hydra magnipapillata" --ncbi_id 6085
 
 cd $DATADIR/trinity/scratch
-agalma transcriptome --id SRX288276
-agalma transcriptome --id SRX288285
-agalma transcriptome --id SRX288430
-agalma transcriptome --id SRX288431
-agalma transcriptome --id SRX288432
+agalma -t 8 -m 24G transcriptome --id SRX288276
+agalma -t 8 -m 24G transcriptome --id SRX288285
+agalma -t 8 -m 24G transcriptome --id SRX288430
+agalma -t 8 -m 24G transcriptome --id SRX288431
+agalma -t 8 -m 24G transcriptome --id SRX288432
 
 agalma import --id JGI_NEMVEC
 agalma translate --id JGI_NEMVEC

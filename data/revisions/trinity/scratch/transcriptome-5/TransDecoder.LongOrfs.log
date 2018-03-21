@@ -1,0 +1,21 @@
+[biolite] timestamp=2018-03-21 13:02:22
+
+
+-first extracting base frequencies, we'll need them later.
+CMD: /gpfs_home/aguang/miniconda3/envs/agalma/opt/transdecoder/util/compute_base_probs.pl /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-5/SRX288432.fa 0 > SRX288432.fa.transdecoder_dir/base_freqs.dat
+CMD: touch SRX288432.fa.transdecoder_dir/base_freqs.dat.ok
+
+
+- extracting ORFs from transcripts.
+-total transcripts to examine: 28
+
+
+#################################
+### Done preparing long ORFs.  ###
+##################################
+
+	Use file: SRX288432.fa.transdecoder_dir/longest_orfs.pep  for Pfam and/or BlastP searches to enable homology-based coding region identification.
+
+	Then, run TransDecoder.Predict for your final coding region predictions.
+
+

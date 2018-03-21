@@ -1,0 +1,60 @@
+55	transdecoder	gene	1	479	.	+	.	ID=55|g.1;Name=ORF%2055%7Cg.1%2055%7Cm.1%20type%3Ainternal%20len%3A160%20%28%2B%29
+55	transdecoder	mRNA	1	479	.	+	.	ID=55|m.1;Parent=55|g.1;Name=ORF%2055%7Cg.1%2055%7Cm.1%20type%3Ainternal%20len%3A160%20%28%2B%29
+55	transdecoder	five_prime_UTR	1	1	.	+	.	ID=55|m.1.utr5p1;Parent=55|m.1
+55	transdecoder	exon	1	479	.	+	.	ID=55|m.1.exon1;Parent=55|m.1
+55	transdecoder	CDS	2	478	.	+	.	ID=cds.55|m.1;Parent=55|m.1
+55	transdecoder	three_prime_UTR	479	479	.	+	.	ID=55|m.1.utr3p1;Parent=55|m.1
+
+56	transdecoder	gene	1	743	.	-	.	ID=56|g.2;Name=ORF%2056%7Cg.2%2056%7Cm.2%20type%3Acomplete%20len%3A197%20%28-%29
+56	transdecoder	mRNA	1	743	.	-	.	ID=56|m.2;Parent=56|g.2;Name=ORF%2056%7Cg.2%2056%7Cm.2%20type%3Acomplete%20len%3A197%20%28-%29
+56	transdecoder	five_prime_UTR	694	743	.	-	.	ID=56|m.2.utr5p1;Parent=56|m.2
+56	transdecoder	exon	1	743	.	-	.	ID=56|m.2.exon1;Parent=56|m.2
+56	transdecoder	CDS	103	693	.	-	.	ID=cds.56|m.2;Parent=56|m.2
+56	transdecoder	three_prime_UTR	1	102	.	-	.	ID=56|m.2.utr3p1;Parent=56|m.2
+
+57	transdecoder	gene	1	1063	.	-	.	ID=57|g.3;Name=ORF%2057%7Cg.3%2057%7Cm.3%20type%3Acomplete%20len%3A318%20%28-%29
+57	transdecoder	mRNA	1	1063	.	-	.	ID=57|m.3;Parent=57|g.3;Name=ORF%2057%7Cg.3%2057%7Cm.3%20type%3Acomplete%20len%3A318%20%28-%29
+57	transdecoder	exon	1	1063	.	-	.	ID=57|m.3.exon1;Parent=57|m.3
+57	transdecoder	CDS	110	1063	.	-	.	ID=cds.57|m.3;Parent=57|m.3
+57	transdecoder	three_prime_UTR	1	109	.	-	.	ID=57|m.3.utr3p1;Parent=57|m.3
+
+58	transdecoder	gene	1	1691	.	-	.	ID=58|g.4;Name=ORF%2058%7Cg.4%2058%7Cm.4%20type%3Acomplete%20len%3A340%20%28-%29
+58	transdecoder	mRNA	1	1691	.	-	.	ID=58|m.4;Parent=58|g.4;Name=ORF%2058%7Cg.4%2058%7Cm.4%20type%3Acomplete%20len%3A340%20%28-%29
+58	transdecoder	five_prime_UTR	1594	1691	.	-	.	ID=58|m.4.utr5p1;Parent=58|m.4
+58	transdecoder	exon	1	1691	.	-	.	ID=58|m.4.exon1;Parent=58|m.4
+58	transdecoder	CDS	574	1593	.	-	.	ID=cds.58|m.4;Parent=58|m.4
+58	transdecoder	three_prime_UTR	1	573	.	-	.	ID=58|m.4.utr3p1;Parent=58|m.4
+
+59	transdecoder	gene	1	348	.	+	.	ID=59|g.5;Name=ORF%2059%7Cg.5%2059%7Cm.5%20type%3Ainternal%20len%3A116%20%28%2B%29
+59	transdecoder	mRNA	1	348	.	+	.	ID=59|m.5;Parent=59|g.5;Name=ORF%2059%7Cg.5%2059%7Cm.5%20type%3Ainternal%20len%3A116%20%28%2B%29
+59	transdecoder	five_prime_UTR	1	2	.	+	.	ID=59|m.5.utr5p1;Parent=59|m.5
+59	transdecoder	exon	1	348	.	+	.	ID=59|m.5.exon1;Parent=59|m.5
+59	transdecoder	CDS	3	347	.	+	.	ID=cds.59|m.5;Parent=59|m.5
+59	transdecoder	three_prime_UTR	348	348	.	+	.	ID=59|m.5.utr3p1;Parent=59|m.5
+
+60	transdecoder	gene	1	1261	.	+	.	ID=60|g.6;Name=ORF%2060%7Cg.6%2060%7Cm.6%20type%3A3prime_partial%20len%3A383%20%28%2B%29
+60	transdecoder	mRNA	1	1261	.	+	.	ID=60|m.6;Parent=60|g.6;Name=ORF%2060%7Cg.6%2060%7Cm.6%20type%3A3prime_partial%20len%3A383%20%28%2B%29
+60	transdecoder	five_prime_UTR	1	115	.	+	.	ID=60|m.6.utr5p1;Parent=60|m.6
+60	transdecoder	exon	1	1261	.	+	.	ID=60|m.6.exon1;Parent=60|m.6
+60	transdecoder	CDS	116	1261	.	+	.	ID=cds.60|m.6;Parent=60|m.6
+
+61	transdecoder	gene	1	868	.	+	.	ID=61|g.7;Name=ORF%2061%7Cg.7%2061%7Cm.7%20type%3Ainternal%20len%3A290%20%28%2B%29
+61	transdecoder	mRNA	1	868	.	+	.	ID=61|m.7;Parent=61|g.7;Name=ORF%2061%7Cg.7%2061%7Cm.7%20type%3Ainternal%20len%3A290%20%28%2B%29
+61	transdecoder	exon	1	868	.	+	.	ID=61|m.7.exon1;Parent=61|m.7
+61	transdecoder	CDS	1	867	.	+	.	ID=cds.61|m.7;Parent=61|m.7
+61	transdecoder	three_prime_UTR	868	868	.	+	.	ID=61|m.7.utr3p1;Parent=61|m.7
+
+62	transdecoder	gene	1	1024	.	+	.	ID=62|g.8;Name=ORF%2062%7Cg.8%2062%7Cm.8%20type%3A5prime_partial%20len%3A266%20%28%2B%29
+62	transdecoder	mRNA	1	1024	.	+	.	ID=62|m.8;Parent=62|g.8;Name=ORF%2062%7Cg.8%2062%7Cm.8%20type%3A5prime_partial%20len%3A266%20%28%2B%29
+62	transdecoder	five_prime_UTR	1	1	.	+	.	ID=62|m.8.utr5p1;Parent=62|m.8
+62	transdecoder	exon	1	1024	.	+	.	ID=62|m.8.exon1;Parent=62|m.8
+62	transdecoder	CDS	2	799	.	+	.	ID=cds.62|m.8;Parent=62|m.8
+62	transdecoder	three_prime_UTR	800	1024	.	+	.	ID=62|m.8.utr3p1;Parent=62|m.8
+
+63	transdecoder	gene	1	973	.	-	.	ID=63|g.9;Name=ORF%2063%7Cg.9%2063%7Cm.9%20type%3A5prime_partial%20len%3A231%20%28-%29
+63	transdecoder	mRNA	1	973	.	-	.	ID=63|m.9;Parent=63|g.9;Name=ORF%2063%7Cg.9%2063%7Cm.9%20type%3A5prime_partial%20len%3A231%20%28-%29
+63	transdecoder	five_prime_UTR	972	973	.	-	.	ID=63|m.9.utr5p1;Parent=63|m.9
+63	transdecoder	exon	1	973	.	-	.	ID=63|m.9.exon1;Parent=63|m.9
+63	transdecoder	CDS	279	971	.	-	.	ID=cds.63|m.9;Parent=63|m.9
+63	transdecoder	three_prime_UTR	1	278	.	-	.	ID=63|m.9.utr3p1;Parent=63|m.9
+
