@@ -1,1 +1,0 @@
-blastn -evalue 0.0001 -outfmt '6 qseqid qlen sseqid slen frames pident nident length mismatch gapopen qstart qend sstart send evalue bitscore stitle' -db /gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/scratch/transcriptome-1/rrna.db -max_target_seqs 20 -query 1.fa

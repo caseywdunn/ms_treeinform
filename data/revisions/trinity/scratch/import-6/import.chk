@@ -7,7 +7,7 @@ p4
 sS'paths'
 p5
 (lp6
-V/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/data/JGI_NEMVEC.fa
+V/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/trinity/data/Hydra_magnipapillata_rna.fa
 p7
 asS'annotated'
 p8
@@ -21,7 +21,7 @@ S'import.chk'
 p11
 sS'id'
 p12
-S'JGI_NEMVEC'
+S'NCBI_HYDMAG'
 p13
 sa(dp14
 g3

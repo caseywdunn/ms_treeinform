@@ -16,14 +16,12 @@ bowtie
 for i in {0..4}
 do
     bowtie2-build $DATADIR/scratch/transcriptome-$((i+1))/trinity_out_dir/Trinity.fasta $CORSETDIR/transcriptome-$((i+1))
-    FILES=`ls $DATADIR/data/${fastq[$i]}_1.fq | sed 's/_1.fq//g'` # need to work on this, also it is fastq data
+    FILES=`ls $DATADIR/data/${fastq[$i]}_1.fq | sed 's/_1.fq//g'`
     for F in $FILES ; do
         R1=${F}_1.fq
         R2=${F}_2.fq
         bowtie2 --all -x $CORSETDIR/transcriptome-$((i+1)) -1 $R1 -2 $R2 > ${F}.sam  
         samtools view -S -b ${F}.sam > ${F}.bam
+	corset $DATADIR/data/${F}.bam -p ${fastq[$i]}
     done
 done
-
-#corset
-corset $DATADIR/data/*.bam
