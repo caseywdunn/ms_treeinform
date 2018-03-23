@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Craseoa lathetica</title>
+<title>Nanomia bijuga</title>
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <style type="text/css">
 body {
@@ -39,13 +39,877 @@ element.nextElementSibling.style.display = "none";
 </style>
 </head>
 <body>
-<h1><em>Craseoa lathetica</em></h1>
+<h1><em>Nanomia bijuga</em></h1>
 <blockquote>
 <table class="table table-striped table-condensed">
-<tr><td><b>id</b></td><td>SRX288432</td></tr>
-<tr><td><b>ncbi_id</b></td><td>316205</td></tr>
+<tr><td><b>id</b></td><td>SRX288430</td></tr>
+<tr><td><b>ncbi_id</b></td><td>168759</td></tr>
 </table>
 </blockquote>
 <h2 id="toc">Table of Contents</a></h2><table class="table table-striped">
+
+<tr class="minimal">
+<td class="minimal">
+<b>Run 23</b><br/><i>transcriptome</i><br/>2018-03-22T23:52:53.206127<br/>node936
+</td>
+<td class="minimal">
+<ul><li><a href="#insert_size_23">insert_size</a></li><li><a href="#rrna_23">rrna</a></li><li><a href="#assemble_23">assemble</a></li><li><a href="#translate_23">translate</a></li></ul>
+</td>
+<td class="minimal">
+<pre>Wall Time (s)      :     43125.79
+User Time (s)      :    588659.28
+System Time (s)    :     53725.69
+Max Memory (KB)    :   67,714,000</pre>
+</td>
+</tr>
 </table>
+<div id="insert_size_23" class="stage">
+<h2>insert_size <small>(Run 23)</small></h2>
+<blockquote>
+<p>Estimates the insert size distribution of paired-end Illumina data by
+assembling a subset of the data and mapping read pairs to it. The insert
+size does not include the adapters added during library preparation.</p>
+
+</blockquote>
+<table class="table table-striped table-condensed table-mini">
+<tr><td><b>Mean insert size (bp)</b></td><td class="right">275.02</td></tr>
+<tr><td><b>Standard deviation (bp)</b></td><td class="right">45.03</td></tr>
+</table>
+<img src="23.insert.hist.png"/>
+<blockquote><p>A histogram of insert sizes.</p>
+</blockquote>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">364.11 [sum]</td>
+<td class="right">3354.50 [sum]</td>
+<td class="right">1966.20 [sum]</td>
+<td class="right">1,502,468 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+filter_illumina
+</td>
+<td>
+assemble_subset
+</td>
+<td class="right">
+3.86
+</td>
+<td class="right">
+0.99
+</td>
+<td class="right">
+1.76
+</td>
+<td class="right">
+76,380
+</td>
+</tr>
+<tr>
+<td>
+trinity
+</td>
+<td>
+assemble_subset
+</td>
+<td class="right">
+355.30
+</td>
+<td class="right">
+3308.90
+</td>
+<td class="right">
+1930.77
+</td>
+<td class="right">
+1,502,468
+</td>
+</tr>
+<tr>
+<td>
+bowtie2-build
+</td>
+<td>
+estimate_insert
+</td>
+<td class="right">
+0.82
+</td>
+<td class="right">
+0.70
+</td>
+<td class="right">
+0.11
+</td>
+<td class="right">
+101,300
+</td>
+</tr>
+<tr>
+<td>
+bowtie2
+</td>
+<td>
+estimate_insert
+</td>
+<td class="right">
+4.13
+</td>
+<td class="right">
+43.91
+</td>
+<td class="right">
+33.55
+</td>
+<td class="right">
+778,716
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="rrna_23" class="stage">
+<h2>rrna <small>(Run 23)</small></h2>
+<blockquote>
+<p>Assembles and identifies ribosomal RNA (rRNA) sequences, removes read pairs
+that map to these rRNA sequences, and provides a variety of diagnostics about
+rRNA. A single exemplar sequence is presented for each type of rRNA that is
+found, but rRNA read pairs are excluded by mapping to a large set of rRNA
+transcripts that are derived from multiple assemblies over a range of data
+subset sizes.</p>
+
+</blockquote>
+<table class="table table-striped table-condensed table-mini">
+<tr><td><b>Read pairs examined</b></td><td class="right">52,533,443</td></tr>
+<tr><td><b>Read pairs kept</b></td><td class="right">47,004,538</td></tr>
+<tr><td><b>Percent kept</b></td><td class="right">89.5%</td></tr>
+</table>
+<table class="table table-striped table-condensed table-mini">
+<tr>
+<td>Gene</td>
+<td style="text-align:right">Mapped Reads</td>
+<td style="text-align:right">Percent</td>
+</tr>
+<tr>
+<td>large-nuclear-rRNA</td>
+<td style="text-align:right">4,610,611</td>
+<td style="text-align:right">4.4%</td>
+</tr>
+<tr>
+<td>small-nuclear-rRNA</td>
+<td style="text-align:right">2,125,678</td>
+<td style="text-align:right">2.0%</td>
+</tr>
+<tr>
+<td>small-mito-rRNA</td>
+<td style="text-align:right">11,700</td>
+<td style="text-align:right">0.0%</td>
+</tr>
+<tr>
+<td>large-mito-rRNA</td>
+<td style="text-align:right">3,567,284</td>
+<td style="text-align:right">3.4%</td>
+</tr>
+</table>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">1602.55 [sum]</td>
+<td class="right">4729.52 [sum]</td>
+<td class="right">4134.55 [sum]</td>
+<td class="right">1,245,632 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+filter_illumina
+</td>
+<td>
+assemble_subsets.1000
+</td>
+<td class="right">
+0.28
+</td>
+<td class="right">
+0.01
+</td>
+<td class="right">
+0.02
+</td>
+<td class="right">
+76,532
+</td>
+</tr>
+<tr>
+<td>
+trinity
+</td>
+<td>
+assemble_subsets.1000
+</td>
+<td class="right">
+5.70
+</td>
+<td class="right">
+16.66
+</td>
+<td class="right">
+6.05
+</td>
+<td class="right">
+689,308
+</td>
+</tr>
+<tr>
+<td>
+filter_illumina
+</td>
+<td>
+assemble_subsets.2500
+</td>
+<td class="right">
+0.07
+</td>
+<td class="right">
+0.02
+</td>
+<td class="right">
+0.04
+</td>
+<td class="right">
+76,780
+</td>
+</tr>
+<tr>
+<td>
+trinity
+</td>
+<td>
+assemble_subsets.2500
+</td>
+<td class="right">
+7.76
+</td>
+<td class="right">
+29.86
+</td>
+<td class="right">
+9.98
+</td>
+<td class="right">
+689,308
+</td>
+</tr>
+<tr>
+<td>
+filter_illumina
+</td>
+<td>
+assemble_subsets.5000
+</td>
+<td class="right">
+0.27
+</td>
+<td class="right">
+0.04
+</td>
+<td class="right">
+0.08
+</td>
+<td class="right">
+76,824
+</td>
+</tr>
+<tr>
+<td>
+trinity
+</td>
+<td>
+assemble_subsets.5000
+</td>
+<td class="right">
+13.20
+</td>
+<td class="right">
+54.50
+</td>
+<td class="right">
+32.82
+</td>
+<td class="right">
+687,344
+</td>
+</tr>
+<tr>
+<td>
+filter_illumina
+</td>
+<td>
+assemble_subsets.10000
+</td>
+<td class="right">
+0.59
+</td>
+<td class="right">
+0.05
+</td>
+<td class="right">
+0.19
+</td>
+<td class="right">
+76,836
+</td>
+</tr>
+<tr>
+<td>
+trinity
+</td>
+<td>
+assemble_subsets.10000
+</td>
+<td class="right">
+21.65
+</td>
+<td class="right">
+128.25
+</td>
+<td class="right">
+64.56
+</td>
+<td class="right">
+689,464
+</td>
+</tr>
+<tr>
+<td>
+filter_illumina
+</td>
+<td>
+assemble_subsets.25000
+</td>
+<td class="right">
+1.07
+</td>
+<td class="right">
+0.16
+</td>
+<td class="right">
+0.46
+</td>
+<td class="right">
+76,840
+</td>
+</tr>
+<tr>
+<td>
+trinity
+</td>
+<td>
+assemble_subsets.25000
+</td>
+<td class="right">
+45.75
+</td>
+<td class="right">
+367.80
+</td>
+<td class="right">
+167.50
+</td>
+<td class="right">
+685,632
+</td>
+</tr>
+<tr>
+<td>
+filter_illumina
+</td>
+<td>
+assemble_subsets.50000
+</td>
+<td class="right">
+1.88
+</td>
+<td class="right">
+0.30
+</td>
+<td class="right">
+0.85
+</td>
+<td class="right">
+76,840
+</td>
+</tr>
+<tr>
+<td>
+trinity
+</td>
+<td>
+assemble_subsets.50000
+</td>
+<td class="right">
+88.00
+</td>
+<td class="right">
+759.56
+</td>
+<td class="right">
+324.23
+</td>
+<td class="right">
+1,056,948
+</td>
+</tr>
+<tr>
+<td>
+filter_illumina
+</td>
+<td>
+assemble_subsets.100000
+</td>
+<td class="right">
+2.89
+</td>
+<td class="right">
+0.54
+</td>
+<td class="right">
+1.77
+</td>
+<td class="right">
+76,832
+</td>
+</tr>
+<tr>
+<td>
+trinity
+</td>
+<td>
+assemble_subsets.100000
+</td>
+<td class="right">
+167.86
+</td>
+<td class="right">
+1632.87
+</td>
+<td class="right">
+620.02
+</td>
+<td class="right">
+1,245,632
+</td>
+</tr>
+<tr>
+<td>
+makeblastdb
+</td>
+<td>
+blast_transcripts
+</td>
+<td class="right">
+0.03
+</td>
+<td class="right">
+0.01
+</td>
+<td class="right">
+0.01
+</td>
+<td class="right">
+76,856
+</td>
+</tr>
+<tr>
+<td>
+blastn
+</td>
+<td>
+blast_transcripts
+</td>
+<td class="right">
+0.83
+</td>
+<td class="right">
+0.65
+</td>
+<td class="right">
+0.27
+</td>
+<td class="right">
+114,872
+</td>
+</tr>
+<tr>
+<td>
+bowtie2-build
+</td>
+<td>
+map_reads
+</td>
+<td class="right">
+0.86
+</td>
+<td class="right">
+0.16
+</td>
+<td class="right">
+0.09
+</td>
+<td class="right">
+98,492
+</td>
+</tr>
+<tr>
+<td>
+bowtie2
+</td>
+<td>
+map_reads
+</td>
+<td class="right">
+185.49
+</td>
+<td class="right">
+1501.39
+</td>
+<td class="right">
+2100.21
+</td>
+<td class="right">
+647,508
+</td>
+</tr>
+<tr>
+<td>
+exclude
+</td>
+<td>
+exclude_reads
+</td>
+<td class="right">
+1058.38
+</td>
+<td class="right">
+236.68
+</td>
+<td class="right">
+805.36
+</td>
+<td class="right">
+849,456
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="assemble_23" class="stage">
+<h2>assemble <small>(Run 23)</small></h2>
+<blockquote>
+<p>Assembles reads into transcripts, processes the assembly, and generates
+assembly diagnostics. Read pairs are first filtered at a more stringent
+mean quality threshold. Transcriptome assembly is generated with Trinity
+assembler.</p>
+
+</blockquote>
+<h4>Illumina Filtering</h4>
+<table class="table table-striped table-condensed table-mini">
+<tr><td><b>Read pairs examined</b></td><td class="right">47,004,538</td></tr>
+<tr><td><b>Read pairs kept</b></td><td class="right">31,710,123</td></tr>
+<tr><td><b>Percent kept</b></td><td class="right">67.5%</td></tr>
+<tr><td><b>Illumina quality threshold</b></td><td class="right">33</td></tr>
+<tr><td><b>Adapter fails</b></td><td class="right">168,302</td></tr>
+<tr><td><b>Quality fails</b></td><td class="right">19,716,857</td></tr>
+<tr><td><b>Base composition fails</b></td><td class="right">1,390,528</td></tr>
+</table>
+<h4>Sequence Types</h4>
+<table class="table table-striped table-condensed table-mini">
+<tr><td></td>
+<td><b>protein-coding</b></td>
+<td><b>ribosomal-large</b></td>
+<td><b>ribosomal-small</b></td>
+<td><b>unknown</b></td>
+</tr>
+</tr><td><b>mitochondrial</b></td>
+<td>9</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tr><td><b>nuclear</b></td>
+<td>25,735</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tr><td><b>plastid</b></td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tr><td><b>unknown</b></td>
+<td>31,204</td>
+<td>0</td>
+<td>0</td>
+<td>69,798</td>
+</tr>
+</tr><td><b>vector</b></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>3</td>
+</tr>
+</table>
+<blockquote><p>Table showing classification of genome and molecule types for the
+sequences.</p>
+</blockquote>
+<img src="23.assembly.coverage.svg"/>
+<h4>Confidence vs. Expression</h4>
+<img src="23.assembly.confidence.png" />
+<div class="well well-sm" style="text-align:center">
+<h4>Downloads</h4>
+<a href="23.assembly.fa" class="btn btn-lg btn-success">Assembly FASTA</a>
+</div>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">31994.31 [sum]</td>
+<td class="right">418380.10 [sum]</td>
+<td class="right">45234.74 [sum]</td>
+<td class="right">67,156,176 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+filter_illumina
+</td>
+<td>
+filter_data
+</td>
+<td class="right">
+1440.78
+</td>
+<td class="right">
+863.71
+</td>
+<td class="right">
+552.63
+</td>
+<td class="right">
+81,752
+</td>
+</tr>
+<tr>
+<td>
+trinity
+</td>
+<td>
+assemble
+</td>
+<td class="right">
+22461.79
+</td>
+<td class="right">
+313593.95
+</td>
+<td class="right">
+39464.46
+</td>
+<td class="right">
+67,156,176
+</td>
+</tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+remove_vectors
+</td>
+<td class="right">
+7.81
+</td>
+<td class="right">
+63.60
+</td>
+<td class="right">
+37.11
+</td>
+<td class="right">
+473,128
+</td>
+</tr>
+<tr>
+<td>
+makeblastdb
+</td>
+<td>
+remove_rrna
+</td>
+<td class="right">
+0.05
+</td>
+<td class="right">
+0.01
+</td>
+<td class="right">
+0.02
+</td>
+<td class="right">
+473,152
+</td>
+</tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+remove_rrna
+</td>
+<td class="right">
+5.19
+</td>
+<td class="right">
+56.16
+</td>
+<td class="right">
+31.05
+</td>
+<td class="right">
+473,152
+</td>
+</tr>
+<tr>
+<td>
+rsem-eval-calculate-score
+</td>
+<td>
+estimate_confidence
+</td>
+<td class="right">
+8078.69
+</td>
+<td class="right">
+103802.68
+</td>
+<td class="right">
+5149.46
+</td>
+<td class="right">
+1,967,028
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
+<div id="translate_23" class="stage">
+<h2>translate <small>(Run 23)</small></h2>
+<blockquote>
+<p>Cleans transcripts to remove ribosomal, mitochondrial, vector, and
+low-complexity sequences.  Vector sequences could include untrimmed adapters or
+plasmids (we sometimes find sequences in our data for the protein expression
+vectors used to manufacture the sample preparation enzymes).  Raw reads are
+mapped back to the transcripts to estimate coverage and assign TPKM values.
+Finally, transcripts are annotated with blast hits against SwissProt.</p>
+
+</blockquote>
+<h4>Resourse Usage</h4>
+<table class="table">
+<tr>
+<th>Wall Time (s)</th>
+<th>User Time (s)</th>
+<th>System Time (s)</th>
+<th>Max Memory (KB)</th>
+</tr>
+<td class="right">8824.09 [sum]</td>
+<td class="right">160528.42 [sum]</td>
+<td class="right">128.27 [sum]</td>
+<td class="right">405,280 [max]</td>
+</tr>
+</table>
+<a class="btn btn-info" onclick="togglestats(this)"><i class="icon-list-alt icon-white"></i> Show/hide details</a>
+<table class="stats table table-striped table-condensed">
+<tr><th>
+Command</th><th>Stage</th><th>Wall Time (s)</th><th>User Time (s)</th><th>System Time (s)</th><th>Max Memory (KB)
+</th></tr>
+<tr>
+<td>
+TransDecoder.LongOrfs
+</td>
+<td>
+identify_orfs.TransDecoder
+</td>
+<td class="right">
+267.56
+</td>
+<td class="right">
+262.12
+</td>
+<td class="right">
+0.53
+</td>
+<td class="right">
+405,280
+</td>
+</tr>
+<tr>
+<td>
+parallel
+</td>
+<td>
+annotate_orfs
+</td>
+<td class="right">
+8556.53
+</td>
+<td class="right">
+160266.29
+</td>
+<td class="right">
+127.74
+</td>
+<td class="right">
+405,280
+</td>
+</tr>
+</tr>
+</table>
+<a class="btn" href="#toc"><i class="icon-list"></i> Back to TOC</a>
+</div>
 </body></html>
