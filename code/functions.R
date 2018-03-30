@@ -74,6 +74,53 @@ annotate_siph = function( phylo ) {
   return(phylo)
 }
 
+#' Checks if for 2 transcripts either both the trinity clustering and corset clustering
+#' are both the same or if they are both different.
+#'
+#' @param row_ids transcript IDs
+#' @param corset_clustering data frame with trinity & corset gene clusterings
+#' @return 1 if trinity & corset clustering are both the same/different, 0 else
+check_cluster_identity = function(row_ids, clustering) {
+  rows <- clustering[row_ids,]
+  unique_rows <- length(unique(rows$Trinity.gene)) + length(unique(rows$Corset.gene))
+  # if trinity_gene & corset_gene are both same, unique_rows = 2
+  # if trinity_gene & corset_gene are both different, unique_rows = 4
+  # else = 3
+  if(unique_rows == 2 || unique_rows == 4) return(1)
+  else return(0)
+}
+
+#' Computes the proportion of transcript pairs that share the same gene assignment
+#' between trinity and corset. A pair of transcripts shares the same gene assignment
+#' if they are assigned to the same gene by both trinity & corset, or if they are
+#' assigned to different genes by both trinity & corset.
+#'
+#' @param corset_clustering data frame with trinity & corset gene clusterings; from corset output
+#' @return proportion of transcript pairs sharing same gene assignment
+compute_corset_trinity_similarity = function(corset_clustering) {
+  all_pairs <- combn(1:nrow(clustering),2,simplify=FALSE)
+  gene_assignments <- mclapply(all_pairs,function(x) check_cluster_identity(x, clustering))
+  return(sum(gene_assignments)/length(all_pairs))
+}
+
+#' Returns cluster size distribution
+#'
+#' @param clustering vector with gene clusterings
+#' @return data frame with columns size (=cluster size) and freq (=frequency of that cluster)
+cluster_size_distribution = function(clustering) {
+  df<-data.frame(table(table(clustering)))
+  colnames(df) <- c("size","freq")
+  return(df)
+}
+
+#' Goes through corset clustering file and filters out all singleton clusters
+#'
+#' @param corset_clustering data frame with triniy & corset gene clusterings
+#' @return row numbers of transcripts that have different corset and trinity clusterings
+filter_singletons = function(corset_clustering) {
+
+}
+
 #' Go through internal nodes and make sure there is no assignment of
 #' speciation events with ancestor/child nodes as the same speciation event
 #' (i.e. (Cnidaria, Cnidaria):Cnidaria)
@@ -190,7 +237,7 @@ calibrate_tree = function ( nhx, calibration_times, ... ) {
 }
 
 #' Calibrate a list of treeio::treedata objects
-#' 
+#'
 #' @param trees A list of treeio::treedata objects with branch lengths
 #'  in expected numbers of substitutions
 #' @param cores Number of cores to use for mclapply
@@ -201,7 +248,7 @@ calibrate_trees = function(trees, cores) {
 }
 
 #' Annotate a list of treeio::treedata objects with subtree heights
-#' 
+#'
 #' @param trees A list of treeio::treedata objects
 #' @param cores Number of cores to use for mclapply
 #' @return A list of calibrated treeio::treedata objects with
@@ -243,7 +290,7 @@ dt_phyldog = function(k, ResultFiles, calibration_times) {
   calibrated = calibrate_trees(trees, cores)
   annotated = heights_trees(calibrated, cores)
   no_na = annotated[which(!is.na(annotated))]
-  
+
   # filter out trees with height > 1
   no_heights = mclapply(no_na, function(x) {
     h = x@data %>% select(height) %>% max
@@ -252,6 +299,6 @@ dt_phyldog = function(k, ResultFiles, calibration_times) {
   no_heights = no_heights[which(!is.na(no_heights))]
   dt = unlist(mclapply(no_heights, function(x) unlist(x@data %>% filter(Ev=="D") %>% select(height))))
   dt = dt[which(!is.na(dt))]
-  
+
   return(list(trees, annotated, dt))
 }
