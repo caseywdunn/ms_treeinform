@@ -9,7 +9,6 @@
 source activate agalma
 module load phyldog/Aug2016
 
-SLURM_ARRAY_TASK_ID=1
 treeinform=( 28 29 30 31 32 33 34 35 36 )
 multalign=( 40 43 46 49 52 56 60 64 68 )
 
