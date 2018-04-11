@@ -35,8 +35,8 @@ age <- c(0.1718036, 0.1430510, 0.2490215, 0.3227746, 0.5157844, 1.0000000)
 clade <- c("Calycophora", "Agalmatidae", "Chodorophora", "Siphonophora", "Hydrozoa", "Cnidaria")
 calibration_times = data.frame(age, clade, stringsAsFactors = FALSE)
 
-#5202 gene trees
-#s <- 226:7340
+#5187 gene trees
+#s <- 1:5606
 #before <- dt_phyldog(s, "data/revisions/phyldog/before/", calibration_times)
 #trees_before <- before[[1]]
 #calibrated_before <- before[[2]]
@@ -48,22 +48,15 @@ load("data/revisions/dt_before.Rdata")
 load("data/revisions/trees_before.Rdata")
 load("data/revisions/calibrated_before.Rdata")
 
-#l <- 27804:28204
+#l <- 36523:43609
+#threshold_5 <- dt_phyldog(l, "data/revisions/phyldog/threshold-5/", calibration_times)[[3]]
+#save(threshold_5, file="data/revisions/dt_threshold-5.Rdata")
+load("data/revisions/dt_threshold-5.Rdata")
 
-#l <- 5302:10507
-#threshold_5 <- dt_phyldog(l, "data/threshold-5/", calibration_times)[[3]]
-#save(threshold_5, file="data/dt_threshold-5.Rdata")
-#load("data/dt_threshold-5.Rdata")
-
-#l <- 26881:33481
-#threshold_2 <- dt_phyldog(l, "data/threshold-2/", calibration_times)[[3]]
-#save(threshold_2, file="data/dt_threshold-2.Rdata")
-#load("data/dt_threshold-2.Rdata")
-
-#l <- 26825:33580
-#threshold_8 <- dt_phyldog(l, "data/threshold-8/", calibration_times)[[3]]
-#save(threshold_8, file="data/dt_threshold-8.Rdata")
-#load("data/dt_threshold-8.Rdata")
+#l <- 58509:65608
+#threshold_8 <- dt_phyldog(l, "data/revisions/phyldog/threshold-8/", calibration_times)[[3]]
+#save(threshold_8, file="data/revisions/dt_threshold-8.Rdata")
+load("data/revisions/dt_threshold-8.Rdata")
 
 #threshold_mix <- dt_phyldog(l, "data/threshold-mix/", calibration_times)[[3]]
 #save(threshold_mix, file="data/dt_threshold-mix.Rdata")
@@ -82,7 +75,7 @@ Most analyses are loaded from saved Rdata objects to speed up reproduction of th
 
 ## Comparison to other transcript clustering methods
 
-We compared Trinity clustering results with one other...
+We compared Trinity clustering results with Corset clustering results in order to get a sense of whether 
 
 ```{r, corset_compare, echo=FALSE, warnings=FALSE}
 #clusters.mod.txt <- (Sys.glob("data/revisions/corset/*-clusters.mod.txt"))
@@ -174,7 +167,7 @@ Ones <- rep(1, N)
 #results <- run.jags(model="code/runjags.txt", n.chains=3, thin=1) # will take ~1hr
 #results <- autorun.jags(model="code/runjags_revision.txt", n.chains=3, thin=1) # will take ~3hrs
 #save(results, file="data/revisions/runjags_results2.Rdata")
-load("data/revisions/runjags_results.Rdata")
+#load("data/revisions/runjags_results2.Rdata")
 sum_results = results$summaries
 
 alpha = sum_results[1,4]
@@ -219,7 +212,7 @@ subtree_lengths = mcmapply(function(x, y) {
 # select max out of subtree lengths
 thresh = unlist(subtree_lengths) %>% max
 
-stl <- unlist(lengths)
+#stl <- unlist(lengths)
 ```
 
 
@@ -287,16 +280,16 @@ In order to validate that treeinform improves the accuracy of assigning transcri
 Second, we compared the density of duplication times under the model provided for Component 2 of the mixture model to the distribution of estimated duplication times for gene trees from Agalma1.0 before treeinform, and gene trees from Agalma1.0 after treeinform under 3 different thresholds: 50, 0.05, and the default value 0.02 (Supplementary Figure 4). We again fitted chronograms with the same Siphonophora species tree onto all gene trees from Agalma1.0 and filtered out those gene trees with time of origin greater than 1, so that duplication times were comparable between trees. Visually, the analyses with the 0.02 threshold comes closest to the theoretical.
 
 ```{r, fig3b, echo=FALSE, eval=FALSE, warnings=FALSE, fig.cap="Density from theoretical and the empirical density under the 3 different thresholds as well as before treeinform was run. The distribution before treeinform has a large peak on the left that is removed by treeinform with all examined thresholds. Of the evaluated thresholds, 0.02 is closest to the expected distribution."}
-dt <- c(dt_before, threshold_mix, threshold_2, threshold_5)
+dt <- c(dt_before, threshold_mix, threshold_5, threshold_8)
 l1 = length(dt_before)
-l2 = length(threshold_mix)
-l3 = length(threshold_2)
-l4 = length(threshold_5)
+#l2 = length(threshold_mix)
+l3 = length(threshold_5)
+l4 = length(threshold_8)
 Threshold <- rep(NA, l1+l2+l3+l4)
 Threshold[1:l1] <- "Before"
-Threshold[l1+1:l2] <- "0.02"
-Threshold[l1+l2+1:l3] <- "50"
-Threshold[l1+l2+l3+1:l4] <- "0.05"
+#Threshold[l1+1:l2] <- "0.02"
+Threshold[l1+l2+1:l3] <- "0.05"
+Threshold[l1+l2+l3+1:l4] <- "0.00005"
 data = data.frame(dt, Threshold)
 f = function(x) dup_pdf(x, 1, lambda, mu)
 ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold), bw=0.02) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density") + theme_classic() + theme(legend.position = c(0.8, 0.6)) + geom_hline(yintercept=0, color="white") + geom_vline(xintercept=0, color="white")

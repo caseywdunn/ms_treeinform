@@ -118,7 +118,12 @@ cluster_size_distribution = function(clustering) {
 #' @param corset_clustering data frame with triniy & corset gene clusterings
 #' @return row numbers of transcripts that have different corset and trinity clusterings
 filter_singletons = function(corset_clustering) {
-
+  n_occur1 <- data.frame(table(corset_clustering$Trinity.gene))
+  n_occur2 <- data.frame(table(corset_clustering$Corset.gene))
+  filter1 <- corset_clustering[corset_clustering$Trinity.gene %in% n_occur1$Var1[n_occur1$Freq>1],]
+  filter2 <- corset_clustering[corset_clustering$Corset.gene %in% n_occur2$Var1[n_occur2$Freq>1],]
+  corset_clustering[rowSums(corset_clustering)>1,] #think this should do the trick but need to test
+  # actually needs slightly more thought because needs to be true for both corset & trinity columns
 }
 
 #' Go through internal nodes and make sure there is no assignment of
