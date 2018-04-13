@@ -113,6 +113,13 @@ num_corset_over_30<-sum(corset_over_30$freq)
 ggplot(data=new_df,aes(x=size,y=freq,color=Method,group=Method))+geom_point(alpha=0.7)+scale_y_log10()+xlab("Cluster Size")+ylab("Count")+ggtitle("Cluster size counts for Trinity & Corset by Sample") + theme_classic() + geom_line() + facet_wrap(~ID, ncol=2) + scale_x_discrete(breaks=seq(0,70,by=10))
 ```
 
+```{r, ari, echo=FALSE}
+filtered_corset <- mclapply(corset_files, function(x) filter_singletons(x), mc.cores=cores)
+aris <- mclapply(filtered_corset, function(x) ari(x[[2]],x[[1]]), mc.cores=cores)
+```
+
+Something something table of the aris.
+
 ## Assessing the extent of transcript assignment errors
 
 We first examined the prevalence of transcript misassignment. For each node in each of the `r toString(length(trees_before))` gene phylogenies, we calculated the length of the corresponding subtree. This is the sum of the length of all branches in the subtree defined by the node. An excess of very short subtrees would be a strong indication of assigning different transcripts of the same gene, which have very similar sequences and therefore short branches connecting them in phylogenetic trees, to different genes. This is the pattern we found (Supplementary Figure 1).

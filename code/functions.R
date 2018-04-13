@@ -1,3 +1,25 @@
+#' Computes Adjusted Rand Index taking into account count of filtered out
+#' singletons. Most of source code directly lifted from mclust package.
+#' 
+#' @param f number of filtered out singletons
+#' @param c corset & trinity filtered clustering data frame
+#' @return adjusted Rand Index
+ari <- function(f, c) {
+  x<-as.vector(c$Trinity.gene)
+  y<-as.vector(c$Corset.gene)
+  if(length(x) != length(y))
+    stop("arguments must be vectors of the same length")
+  tab <- table(x,y)
+  if(all(dim(tab)==c(1,1))) return(1)
+  a <- sum(choose(tab, 2))
+  b <- sum(choose(rowSums(tab), 2)) - a
+  c <- sum(choose(colSums(tab), 2)) - a
+  d <- choose(sum(tab)+f, 2) - a - b - c
+  ARI <- (a - (a + b) * (a + c)/(a + b + c + d)) /
+    ((a + b + a + c)/2 - (a + b) * (a + c)/(a + b + c + d))
+  return(ARI)
+}
+
 #' Computes pdf of duplication event for time s given tree origin time t,
 #' birth rate lambda, death rate mu
 #'
@@ -26,18 +48,18 @@ dup_pdf <- function(s,t,lambda,mu) {
 dup_cdf_sampler <- function(s,t,lambda,mu,u) {
   if(s > t) { return(1-u) }
   else {
-  num <- (1-exp(-(lambda-mu)*s))*(lambda - mu*exp(-(lambda-mu)*t))
-  denom <- (lambda-mu*exp(-(lambda-mu)*s))*(1-exp(-(lambda-mu)*t))
-  f <- num/denom
-  return(f-u)
+    num <- (1-exp(-(lambda-mu)*s))*(lambda - mu*exp(-(lambda-mu)*t))
+    denom <- (lambda-mu*exp(-(lambda-mu)*s))*(1-exp(-(lambda-mu)*t))
+    f <- num/denom
+    return(f-u)
   }
 }
 
 dup_cdf <- function(s,t,lambda,mu) {
-    num <- (1-exp(-(lambda-mu)*s))*(lambda - mu*exp(-(lambda-mu)*t))
-    denom <- (lambda-mu*exp(-(lambda-mu)*s))*(1-exp(-(lambda-mu)*t))
-    f <- num/denom
-    return(f)
+  num <- (1-exp(-(lambda-mu)*s))*(lambda - mu*exp(-(lambda-mu)*t))
+  denom <- (lambda-mu*exp(-(lambda-mu)*s))*(1-exp(-(lambda-mu)*t))
+  f <- num/denom
+  return(f)
 }
 
 #' Helper function to read in newick trees; will skip over a non-existent
@@ -59,18 +81,18 @@ annotate_siph = function( phylo ) {
   # get vector of internal node numbers
   n_tips = length(phylo$tip.label)
   internal_nodes = n_tips+1:phylo$Nnode
-
+  
   # go thru vector & assign clade label based on
   # set of descendant tips
   clade_labels = sapply(internal_nodes, function(x) suppressWarnings(siph_help(phylo, x)))
-
+  
   # go thru internal nodes and make sure there are no assignments of
   # speciation events with ancestor/child nodes as the same speciation event
   # (i.e. (Cnidaria, Cnidaria):Cnidaria)
   new_clade_labels = sapply(internal_nodes, function(x) remove_ancestor(phylo, x, clade_labels, internal_nodes))
-
+  
   phylo$node.label = new_clade_labels
-
+  
   return(phylo)
 }
 
@@ -118,12 +140,10 @@ cluster_size_distribution = function(clustering) {
 #' @param corset_clustering data frame with triniy & corset gene clusterings
 #' @return row numbers of transcripts that have different corset and trinity clusterings
 filter_singletons = function(corset_clustering) {
-  n_occur1 <- data.frame(table(corset_clustering$Trinity.gene))
-  n_occur2 <- data.frame(table(corset_clustering$Corset.gene))
-  filter1 <- corset_clustering[corset_clustering$Trinity.gene %in% n_occur1$Var1[n_occur1$Freq>1],]
-  filter2 <- corset_clustering[corset_clustering$Corset.gene %in% n_occur2$Var1[n_occur2$Freq>1],]
-  corset_clustering[rowSums(corset_clustering)>1,] #think this should do the trick but need to test
-  # actually needs slightly more thought because needs to be true for both corset & trinity columns
+  tg<-corset_clustering$Trinity.gene
+  cg<-corset_clustering$Corset.gene
+  d<-duplicated(tg) | duplicated(tg, fromLast=TRUE) | duplicated(cg) | duplicated(cg, fromLast=TRUE)
+  list(corset_clustering[d,],sum(d))
 }
 
 #' Go through internal nodes and make sure there is no assignment of
@@ -141,9 +161,9 @@ remove_ancestor = function(phylo, x, clade_labels, internal_nodes) {
   descendants = hutan::descendants( phylo, x )
   descendants = descendants[ descendants %in% internal_nodes ]
   n_tips = length(phylo$tip.label)
-
+  
   descendant_names = clade_labels[descendants-n_tips]
-
+  
   if( clade_labels[x-n_tips] %in% descendant_names ){ return(NA) }
   else { return(clade_labels[x-n_tips]) }
 }
@@ -178,17 +198,17 @@ parse_gene_trees = function( tree_text ){
   tree_tc = textConnection( tree_text )
   tree = treeio::read.nhx( tree_tc )
   close( tree_tc )
-
+  
   tree@phylo = annotate_siph(tree@phylo)
   tree@data$label = c( tree@phylo$tip.label, tree@phylo$node.label )
-
+  
   n_nodes = nrow( tree@data )
   n_tips = length( tree@phylo$tip.label )
   internal_nodes = ( n_tips + 1 ):n_nodes
   is_speciation = tree@data$Ev == "S"
   is_speciation[ is.na( is_speciation ) ] = FALSE
   internal_speciation_nodes = tree@data$node[ ( tree@data$node > n_tips ) & is_speciation ]
-
+  
   return( tree )
 }
 
@@ -215,7 +235,7 @@ is.tip.nhx = function( nhx ) {
 #' @return A treeio::treedata object if successfully calibrated
 #' @export
 calibrate_tree = function ( nhx, calibration_times, ... ) {
-
+  
   # Create calibration matrix for speciation nodes
   calibration =
     nhx@data[ !is.tip.nhx( nhx ), ] %>%
@@ -226,11 +246,11 @@ calibrate_tree = function ( nhx, calibration_times, ... ) {
     mutate( age.max = age ) %>%
     select( node, age.min, age.max ) %>%
     mutate( soft.bounds = NA )
-
+  
   tree = try(
     ape::chronos( nhx@phylo, calibration=calibration)
   )
-
+  
   if( "phylo" %in% class( tree ) ){
     class( tree ) = "phylo"
     nhx@phylo = tree
@@ -288,14 +308,14 @@ heights = function(nhx) {
 dt_phyldog = function(k, ResultFiles, calibration_times) {
   cores = parallel::detectCores()
   if (cores < 1) { cores = 1 }
-
+  
   trees <- mclapply(k, function(x) parse_gene_trees(processTree(paste0(ResultFiles, x, ".ReconciledTree"))), mc.cores = cores)
   trees <- trees[which(!unlist(mclapply(trees, is.null)))]
-
+  
   calibrated = calibrate_trees(trees, cores)
   annotated = heights_trees(calibrated, cores)
   no_na = annotated[which(!is.na(annotated))]
-
+  
   # filter out trees with height > 1
   no_heights = mclapply(no_na, function(x) {
     h = x@data %>% select(height) %>% max
@@ -304,6 +324,6 @@ dt_phyldog = function(k, ResultFiles, calibration_times) {
   no_heights = no_heights[which(!is.na(no_heights))]
   dt = unlist(mclapply(no_heights, function(x) unlist(x@data %>% filter(Ev=="D") %>% select(height))))
   dt = dt[which(!is.na(dt))]
-
+  
   return(list(trees, annotated, dt))
 }
