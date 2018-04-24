@@ -1,6 +1,6 @@
 #' Computes Adjusted Rand Index taking into account count of filtered out
 #' singletons. Most of source code directly lifted from mclust package.
-#' 
+#'
 #' @param f number of filtered out singletons
 #' @param c corset & trinity filtered clustering data frame
 #' @return adjusted Rand Index
@@ -62,6 +62,15 @@ dup_cdf <- function(s,t,lambda,mu) {
   return(f)
 }
 
+#' Computes KS statistic for duplication times for given lambda, mu
+#' 
+#' @param dt vector of duplication times
+#' @param lambda birth rate
+#' @param mu death rate
+ks.dt = function(dt,lambda,mu) {
+  ks.test(dt, function(x) dup_cdf(x,1,lambda,mu))$p.value
+}
+
 #' Helper function to read in newick trees; will skip over a non-existent
 #' tree rather than return an error
 #'
@@ -81,18 +90,18 @@ annotate_siph = function( phylo ) {
   # get vector of internal node numbers
   n_tips = length(phylo$tip.label)
   internal_nodes = n_tips+1:phylo$Nnode
-  
+
   # go thru vector & assign clade label based on
   # set of descendant tips
   clade_labels = sapply(internal_nodes, function(x) suppressWarnings(siph_help(phylo, x)))
-  
+
   # go thru internal nodes and make sure there are no assignments of
   # speciation events with ancestor/child nodes as the same speciation event
   # (i.e. (Cnidaria, Cnidaria):Cnidaria)
   new_clade_labels = sapply(internal_nodes, function(x) remove_ancestor(phylo, x, clade_labels, internal_nodes))
-  
+
   phylo$node.label = new_clade_labels
-  
+
   return(phylo)
 }
 
@@ -161,9 +170,9 @@ remove_ancestor = function(phylo, x, clade_labels, internal_nodes) {
   descendants = hutan::descendants( phylo, x )
   descendants = descendants[ descendants %in% internal_nodes ]
   n_tips = length(phylo$tip.label)
-  
+
   descendant_names = clade_labels[descendants-n_tips]
-  
+
   if( clade_labels[x-n_tips] %in% descendant_names ){ return(NA) }
   else { return(clade_labels[x-n_tips]) }
 }
@@ -198,17 +207,17 @@ parse_gene_trees = function( tree_text ){
   tree_tc = textConnection( tree_text )
   tree = treeio::read.nhx( tree_tc )
   close( tree_tc )
-  
+
   tree@phylo = annotate_siph(tree@phylo)
   tree@data$label = c( tree@phylo$tip.label, tree@phylo$node.label )
-  
+
   n_nodes = nrow( tree@data )
   n_tips = length( tree@phylo$tip.label )
   internal_nodes = ( n_tips + 1 ):n_nodes
   is_speciation = tree@data$Ev == "S"
   is_speciation[ is.na( is_speciation ) ] = FALSE
   internal_speciation_nodes = tree@data$node[ ( tree@data$node > n_tips ) & is_speciation ]
-  
+
   return( tree )
 }
 
@@ -235,7 +244,7 @@ is.tip.nhx = function( nhx ) {
 #' @return A treeio::treedata object if successfully calibrated
 #' @export
 calibrate_tree = function ( nhx, calibration_times, ... ) {
-  
+
   # Create calibration matrix for speciation nodes
   calibration =
     nhx@data[ !is.tip.nhx( nhx ), ] %>%
@@ -246,11 +255,11 @@ calibrate_tree = function ( nhx, calibration_times, ... ) {
     mutate( age.max = age ) %>%
     select( node, age.min, age.max ) %>%
     mutate( soft.bounds = NA )
-  
+
   tree = try(
     ape::chronos( nhx@phylo, calibration=calibration)
   )
-  
+
   if( "phylo" %in% class( tree ) ){
     class( tree ) = "phylo"
     nhx@phylo = tree
@@ -308,14 +317,14 @@ heights = function(nhx) {
 dt_phyldog = function(k, ResultFiles, calibration_times) {
   cores = parallel::detectCores()
   if (cores < 1) { cores = 1 }
-  
+
   trees <- mclapply(k, function(x) parse_gene_trees(processTree(paste0(ResultFiles, x, ".ReconciledTree"))), mc.cores = cores)
   trees <- trees[which(!unlist(mclapply(trees, is.null)))]
-  
+
   calibrated = calibrate_trees(trees, cores)
   annotated = heights_trees(calibrated, cores)
   no_na = annotated[which(!is.na(annotated))]
-  
+
   # filter out trees with height > 1
   no_heights = mclapply(no_na, function(x) {
     h = x@data %>% select(height) %>% max
@@ -324,6 +333,41 @@ dt_phyldog = function(k, ResultFiles, calibration_times) {
   no_heights = no_heights[which(!is.na(no_heights))]
   dt = unlist(mclapply(no_heights, function(x) unlist(x@data %>% filter(Ev=="D") %>% select(height))))
   dt = dt[which(!is.na(dt))]
-  
+
   return(list(trees, annotated, dt))
 }
+
+#' Returns subtree lengths for a phyldog gene tree where the subtree length is the
+#' sum of all the branch lengths for tips and internal nodes from the same species in
+#' a duplication event.
+#'
+#' @param tree Phyldog-annotated nhx tree.
+#' @return A vector of subtree lengths
+subtree_lengths = function(tree) {
+  phylo = tree@phylo
+  nnode = phylo$Nnode
+  data = tree@data
+  bl = c(phylo$edge.length, 0)
+  data[,'bl'] = bl[order(c(phylo$edge[,2], length(phylo$tip.label)+1))]
+  des = lapply(length(phylo$tip.label)+1:nnode, function(z) descendants(phylo, z))
+  td = lapply(length(phylo$tip.label)+1:nnode, function(z) tip_descendants(phylo, z))
+  duplicates = sapply(td, function(z) {
+    sapply(strsplit(names(z), '@'), '[')[1,] %>% duplicated %>% any
+  })
+  only_duplicates = des[which(duplicates)]
+  len = lapply(only_duplicates, function(z) {
+    filter(data, node %in% z) %>% select(bl) %>% sum
+  })
+  return(len)
+}
+
+#' Returns subtree lengths for a list of phyldog gene trees.
+#'
+#' @param trees List of phyldog-annotated nhx trees.
+#' @param cores Number of cores for mclapply
+#' @return A list of subtree lengths
+multi_subtree_lengths = function(trees, cores) {
+  mclapply(trees, subtree_lengths, mc.cores=cores)
+}
+
+#' Pulls out all model IDs and associated species taxa from list of trees
