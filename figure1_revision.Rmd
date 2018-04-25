@@ -31,7 +31,6 @@ Running this R notebook will regenerate Figure 1 from the manuscript. Data consi
 
 ```{r, fig1a, echo=FALSE, include=FALSE}
 fig1a_tree = read.nhx("data/revisions/phyldog/before/7.ReconciledTree")@phylo
-fig1a_labels = unlist(strsplit(fig1a_tree$tip.label, "@"))
 fig1a_colors = rep(1, length(fig1a_tree$tip.label)+fig1a_tree$Nnode)
 #32566, 32567, 32568, 32569 are the model IDs we're looking for
 # here they are 30,31,32,33

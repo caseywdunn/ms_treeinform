@@ -13,6 +13,7 @@ bibliography: supplementary.bib
 library(ape)
 library(scales)
 library(ggplot2)
+library(reshape2)
 library(dplyr)
 library(hutan)
 library(treeio)
@@ -27,6 +28,7 @@ if (cores < 1) { cores = 1 }
 set.seed(1287234)
 
 source("code/functions.R")
+source("code/summary_stats.R")
 ```
 
 ```{r, parse_trees, include=FALSE, warnings=FALSE}
@@ -55,9 +57,13 @@ load("data/revisions/calibrated_before.Rdata")
 load("data/revisions/dt_threshold-5.Rdata")
 
 #l <- 51176:56944
-#threshold_7 <- dt_phyldog(l, "data/revisions/phyldog/threshold-7/", calibration_times)[[3]]
-#save(threshold_7, file="data/revisions/dt_threshold-7.Rdata")
+#threshold_7 <- dt_phyldog(l, "data/revisions/phyldog/threshold-7/", calibration_times)
+#trees_7 <- threshold_7[[1]]
+#dt_7 <- threshold_7[[3]]
+#save(trees_7, file="data/revisions/trees_threshold-7.Rdata")
+#save(dt_7, file="data/revisions/dt_threshold-7.Rdata")
 load("data/revisions/dt_threshold-7.Rdata")
+load("data/revisions/trees_threshold_7.Rdata")
 
 #l <- 58509:65608
 #threshold_8 <- dt_phyldog(l, "data/revisions/phyldog/threshold-8/", calibration_times)[[3]]
@@ -268,9 +274,25 @@ ggplot(data.frame(x=dt_before)) + geom_histogram(aes(x=x,y=..density..), fill='w
 ## Validating the effectiveness of treeinform
 
 ```{r, fused_percentage, echo=FALSE, fig.cap='The percentage of reassigned tips is plotted above on a log scale. The original assembly had 433,071 genes, with at most 23,396 possible candidates (7.43% of genes) for reassignment. The default threshold for treeinform is highlighted in light blue (TODO: its not, yet).'}
-orig_assembly = 433071
-t=1:10 # original thresholds were 5000*10^(-t)
-threshold = 5000*10^(-t)
+genetree_path <- "data/revisions/trinity/genetrees/"
+#thresholds<-head(list.files(genetree_path), -1)
+before_genetrees<-read_trees(paste0(genetree_path,"before"),"newick",cores)
+before_counts<-count_all_transcripts(before_genetrees,cores)
+orig_assembly = sum(before_counts)
+
+#genetrees<-lapply(thresholds, function(x) read_trees(paste0(genetree_path,x), "newick",cores))
+#counts<-lapply(genetrees, function(x) count_all_transcripts(x,cores))
+#save(counts,file="data/revisions/counts.Rdata")
+load(file="data/revisions/counts.Rdata")
+total_percentage<-sapply(counts, function(x) sum(before_counts-x)/orig_assembly)
+
+percentages<-mclapply(counts, function(x) (before_counts-x)/before_counts,mc.cores=cores)
+wide_table<-data.frame(cbind(do.call(rbind,percentages),thresholds))
+long_table<-melt(wide_table,id.vars=c("thresholds"))
+long_table$value<-as.numeric(long_table$value)
+
+test<-melt(data.frame(cbind(do.call(rbind,percentages),thresholds,total_percentage)),id.vars=c("thresholds"))
+
 # numbers taken from slurm output
 reassigned = c(23560, 23560, 22930, 11515, 5350, 3364, 3052, 3024, 2955, 0)
 newly_created = c(9167, 9167, 9189, 5271, 2495, 1548, 1398, 1384, 1395, 0)
@@ -291,6 +313,19 @@ fused.df.percents <- transmute(fused.df, threshold, reassigned=reassigned/orig_a
 
 #ggplot(fused.df.percents, aes(threshold, reassigned)) + geom_jitter(aes(colour=grp)) + scale_x_log10() + ggtitle("Percentage of reassigned genes vs threshold") + xlab("Threshold") + ylab("Percentage") + theme_classic() + theme(legend.position="none") + geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=0.015), map=aes(x=x, y=y), label="0.02", hjust=-0.4, colour="#56B4E9", size=3)
 ggplot(fused.df.percents, aes(threshold, reassigned)) + geom_jitter() + scale_x_log10() + ggtitle("Percentage of reassigned genes vs threshold") + xlab("Threshold") + ylab("Percentage") + theme_classic() + theme(legend.position="none")
+
+#ggplot(long_table,aes(thresholds,value)) + geom_point(aes(group=variable,color=variable)) + geom_point(data=data.frame(thresholds,total_percentage) + ggtitle("Percentage of reassigned genes by species vs threshold") + xlab("Threshold") + ylab("Percentage")
+
+# also mean-variance plot
+mean_var <- long_table %>% group_by(thresholds) %>% summarise(mean=mean(value),var=var(value))
+```
+
+```{r, eval=FALSE}
+# could be a chunk somewhere, has some summary statistics...
+gt_before <- mclapply(1:5606, function(x) read.tree(paste0("../revisions/before/",x,".newick")), mc.cores=cores)
+before_counts <- count_all_transcripts(trees_before, cores)
+after_counts <- count_all_transcripts(trees_7, cores)
+before_counts - after_counts
 ```
 
 In order to validate that treeinform improves the accuracy of assigning transcripts to genes under the specified threshold, we performed two analyses. First, we plotted the percentage of reassigned genes at different thresholds to assess the performance of the default threshold value of `r toString(signif(thresh,3))` (Supplementary Figure 5). Below the default value, the percentage of reassigned genes begins to plateau, while above the default value the percentage of reassigned genes increases very quickly, increasing the likelihood of treeinform to reassign transcripts from different genes to the same gene in addition to reassign transcripts from the same gene together.
@@ -298,11 +333,11 @@ In order to validate that treeinform improves the accuracy of assigning transcri
 Second, we compared the density of duplication times under the model provided for Component 2 of the mixture model to the distribution of estimated duplication times for gene trees from Agalma1.0 before treeinform, and gene trees from Agalma1.0 after treeinform under 3 different thresholds: 0.05, 0.0005, and 0.00005 (Supplementary Figure 6). We again fitted chronograms with the same Siphonophora species tree onto all gene trees from Agalma1.1 and filtered out those gene trees with time of origin greater than 1, so that duplication times were comparable between trees. Visually, the analyses with the 0.02 threshold comes closest to the theoretical. (TODO: edit this section)
 
 ```{r, fig3b, echo=FALSE, warnings=FALSE, fig.cap="Density from theoretical and the empirical density under the 3 different thresholds as well as before treeinform was run. The distribution before treeinform has a large peak on the left that is removed by treeinform with all examined thresholds."}
-dt <- c(dt_before, threshold_mix, threshold_5, threshold_7, threshold_8)
+dt <- c(dt_before, threshold_mix, threshold_5, dt_7, threshold_8)
 l1 = length(dt_before)
 l2 = length(threshold_mix)
 l3 = length(threshold_5)
-l4 = length(threshold_7)
+l4 = length(dt_7)
 l5 = length(threshold_8)
 Threshold <- rep(NA, l1+l2+l3+l4+l5)
 Threshold[1:l1] <- "Before"
@@ -332,7 +367,7 @@ d_before <- discretize(dt_before, numBins=100)
 d_mix <- discretize(threshold_mix, numBins=100)
 #d_2 <- discretize(threshold_2, numBins=100)
 d_5 <- discretize(threshold_5, numBins=100)
-d_7 <- discretize(threshold_7, numBins=100)
+d_7 <- discretize(dt_7, numBins=100)
 d_8 <- discretize(threshold_8, numBins=100)
 kl_dist <- c(KL.empirical(d_before, d_theo), KL.empirical(d_mix, d_theo), KL.empirical(d_5, d_theo), KL.empirical(d_7,d_theo), KL.empirical(d_8, d_theo))
 

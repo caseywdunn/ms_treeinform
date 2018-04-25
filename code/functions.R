@@ -63,7 +63,7 @@ dup_cdf <- function(s,t,lambda,mu) {
 }
 
 #' Computes KS statistic for duplication times for given lambda, mu
-#' 
+#'
 #' @param dt vector of duplication times
 #' @param lambda birth rate
 #' @param mu death rate
@@ -370,4 +370,15 @@ multi_subtree_lengths = function(trees, cores) {
   mclapply(trees, subtree_lengths, mc.cores=cores)
 }
 
-#' Pulls out all model IDs and associated species taxa from list of trees
+#' Reads all newick trees in a path
+#'
+#' @param path path to the newick trees
+#' @param extension extension for newick trees
+#' @param cores number of cores for mclapply
+#' @return An object of class multiphylo
+read_trees = function(path, extension, cores) {
+  files <- list.files(path,pattern=paste0("*.",extension),full.names=TRUE)
+  trees <- mclapply(files, read.tree, mc.cores=cores)
+  class(trees) <- "multiPhylo"
+  return(trees)
+}
