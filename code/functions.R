@@ -310,15 +310,15 @@ heights = function(nhx) {
 
 #' Calibrates trees and extracts duplication times from phyldog gene trees.
 #'
-#' @param k indices of phyldog gene trees to be extracted
 #' @param ResultFiles path to phyldog ResultFiles directory
 #' @param calibration_times Calibration times for the gene trees
 #' @return A vector of duplication times
-dt_phyldog = function(k, ResultFiles, calibration_times) {
+dt_phyldog = function(ResultFiles, calibration_times) {
   cores = parallel::detectCores()
   if (cores < 1) { cores = 1 }
 
-  trees <- mclapply(k, function(x) parse_gene_trees(processTree(paste0(ResultFiles, x, ".ReconciledTree"))), mc.cores = cores)
+  files <- list.files(ResultFiles,pattern=paste0("*.ReconciledTree"),full.names=TRUE)
+  trees <- mclapply(files, function(x) parse_gene_trees(processTree(x)), mc.cores = cores)
   trees <- trees[which(!unlist(mclapply(trees, is.null)))]
 
   calibrated = calibrate_trees(trees, cores)

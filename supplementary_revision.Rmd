@@ -21,7 +21,6 @@ library(parallel)
 library(knitr)
 library(runjags)
 library(entropy)
-#library(forecast) if we want boxcox
 
 cores = detectCores()
 if (cores < 1) { cores = 1 }
@@ -38,7 +37,6 @@ age <- c(0.1718036, 0.1430510, 0.2490215, 0.3227746, 0.5157844, 1.0000000)
 clade <- c("Calycophora", "Agalmatidae", "Chodorophora", "Siphonophora", "Hydrozoa", "Cnidaria")
 calibration_times = data.frame(age, clade, stringsAsFactors = FALSE)
 
-#5187 gene trees
 #s <- 1:5606
 #before <- dt_phyldog(s, "data/revisions/phyldog/before/", calibration_times)
 #trees_before <- before[[1]]
@@ -51,19 +49,24 @@ load("data/revisions/dt_before.Rdata")
 load("data/revisions/trees_before.Rdata")
 load("data/revisions/calibrated_before.Rdata")
 
+#threshold_4 <- dt_phyldog("data/revisions/phyldog/threshold-4/",calibration_times)[[3]]
+#save(threshold_4,file="data/revisions/dt_threshold-4.Rdata")
+load("data/revisions/dt_threshold-4.Rdata")
+
 #l <- 36523:43609
 #threshold_5 <- dt_phyldog(l, "data/revisions/phyldog/threshold-5/", calibration_times)[[3]]
 #save(threshold_5, file="data/revisions/dt_threshold-5.Rdata")
 load("data/revisions/dt_threshold-5.Rdata")
 
+#threshold_6 <- dt_phyldog("data/revisions/phyldog/threshold-6/",calibration_times)[[3]]
+#save(threshold_6,file="data/revisions/dt_threshold-6.Rdata")
+load("data/revisions/dt_threshold-6.Rdata")
+
 #l <- 51176:56944
 #threshold_7 <- dt_phyldog(l, "data/revisions/phyldog/threshold-7/", calibration_times)
-#trees_7 <- threshold_7[[1]]
 #dt_7 <- threshold_7[[3]]
-#save(trees_7, file="data/revisions/trees_threshold-7.Rdata")
 #save(dt_7, file="data/revisions/dt_threshold-7.Rdata")
 load("data/revisions/dt_threshold-7.Rdata")
-load("data/revisions/trees_threshold_7.Rdata")
 
 #l <- 58509:65608
 #threshold_8 <- dt_phyldog(l, "data/revisions/phyldog/threshold-8/", calibration_times)[[3]]
@@ -78,9 +81,9 @@ load("data/revisions/dt_threshold-mix.Rdata")
 
 ## Supplementary methods
 
-The code for the analyses presented here (including an executable version of this document) are available in a git repository at https://github.com/caseywdunn/ms_treeinform. The phylogenetic analyses considered here are based on a 7 taxon siphonophore [@Dunn2009] dataset. This dataset originated as the regression test dataset for the Agalma automated phylogenetics workflow [@Dunn2013] and was selected for its well-resolved species tree as well as the fact that treeinform is implemented in Agalma. The gene trees were built with Agalma1.1.0, and bash scripts for the run can be found at https://github.com/caseywdunn/ms_treeinform/code/revisions. Most analyses are loaded from saved Rdata objects to speed up reproduction of the notebook, with the code to generate the Rdata objects commented out. To reproduce the notebook in its entirety from the raw Agalma output will take around 5 hours.
+The code for the analyses presented here (including an executable version of this document) are available in a git repository at https://github.com/caseywdunn/ms_treeinform. The phylogenetic analyses considered here are based on a 7 taxon siphonophore [@Dunn2009] dataset. This dataset originated as the regression test dataset for the Agalma automated phylogenetics workflow [@Dunn2013] and was selected for its well-resolved species tree as well as the fact that treeinform is implemented in Agalma. The gene trees were built with Agalma1.1, and bash scripts for the run can be found at https://github.com/caseywdunn/ms_treeinform/code/revisions. Most analyses are loaded from saved Rdata objects to speed up reproduction of the notebook, with the code to generate the Rdata objects commented out. To reproduce the notebook in its entirety from the raw Agalma output will take around 5 hours. Including the posterior distribution from Gibbs sampling (see Selecting a threshold for transcript reassignment) rather than the parameter estimates will take around 30 hours.
 
-The phylogenetic analyses in Agalma followed standard approaches with default settings. Speciation and duplication nodes were identified in the gene trees with phyldog [@boussau2013genome]. Bash scripts and associated code for the runs can be found at in the same directory as above. Agalma uses the transcriptome assembler Trinity [@grabherr-2011], version 2.5.2.
+The phylogenetic analyses in Agalma followed standard approaches with default settings. Speciation and duplication nodes were identified in the gene trees with phyldog [@boussau2013genome]. Bash scripts and associated code for the runs can be found at in the same directory as above. Agalma uses the transcriptome assembler Trinity [@grabherr-2011], version 2.5.1.
 
 ## Assessing the extent of transcript assignment errors
 
@@ -90,7 +93,7 @@ Two issues could create a misleading impression in the histogram of subtree leng
 
 We therefore performed a calibrated analysis and focused only on duplication nodes. We first created a time calibrated species tree, with all tips with age 0 and the root node with age 1. We then transformed the branch lengths of the gene trees so that each speciation node in each gene tree had the same age as the corresponding node in the species tree (see source code for this document). A histogram of the calibrated duplication times (Supplementary Figure 2) indicates there is a large excess of recent duplications. This provides additional evidence for the frequent misassignment of transcripts from the same gene to artefactual recent gene duplicates.
 
-```{r, subtree_histo, echo=FALSE, warning=FALSE, fig.cap="Histogram of subtree lengths for internal nodes in each Siphonophora subset gene tree from Agalma1.0 containing tip descendants from the same species. Subtree lengths greater than 1 were filtered out for clarity."}
+```{r, subtree_histo, echo=FALSE, warning=FALSE, fig.cap="Histogram of subtree lengths for internal nodes in each Siphonophora subset gene tree from Agalma containing tip descendants from the same species. Subtree lengths greater than 1 were filtered out for clarity."}
 lengths = unlist(multi_subtree_lengths(trees_before, cores))
 
 lengths_lim = lengths[which(lengths<1)]
@@ -100,7 +103,7 @@ ggplot(data=data.frame(x=lengths_lim)) + geom_histogram(aes(x=x,y=..count../sum(
 
 ### Comparison to other transcript clustering methods
 
-In order to get a sense of whether the transcript misassignment errors were localized to Trinity or are a more general problem to trasncriptome assembly, we compared Trinity transcript clustering results with another transcript clustering tool, Corset [@Davidson2014] for the 5 species that had to be assembled. For 3 of the samples (SRX288285, SRX288430, SRX288431) we also ran cd-hit [@Fu2012] to remove transcripts with 100% identity in order to address some speed issues in Corset. The distribution of cluster sizes (Supplementary Figure 2) suggests that Corset tends to overcluster compared to Trinity, which would lead to similar misassignment errors.
+In order to get a sense of whether the transcript misassignment errors were localized to Trinity or are a more general problem to transcriptome assembly, we compared Trinity transcript clustering results with another transcript clustering tool, Corset [@Davidson2014] for the 5 species that had to be assembled. For 3 of the samples (SRX288285, SRX288430, SRX288431) we also ran cd-hit [@Fu2012] to remove transcripts with 100% identity in order to address some speed issues in Corset. The distribution of cluster sizes (Supplementary Figure 2) suggests that Corset tends to overcluster compared to Trinity, which would lead to similar misassignment errors.
 
 ```{r, corset_compare, echo=FALSE, warnings=FALSE, fig.cap="Cluster size counts for Trinity assembly and Corset clustering algorithm on Trinity contigs. There are 3 Trinity clusters with size greater than 30, while there are 20 Corset clusters with size greater than 30. This suggests that the same misassignment errors are generated by other transcriptome assemblers and clustering algorithms as well."}
 #clusters.mod.txt <- (Sys.glob("data/revisions/corset/*-clusters.mod.txt"))
@@ -134,7 +137,7 @@ num_corset_over_30<-sum(corset_over_30$freq) # returns 20
 suppressWarnings(ggplot(data=new_df,aes(x=size,y=freq,color=Method,group=Method))+geom_point(alpha=0.7)+scale_y_log10()+xlab("Cluster Size")+ylab("Count")+ggtitle("Cluster size counts for Trinity & Corset by sample") + theme_classic() + geom_line() + facet_wrap(~ID, ncol=2) + scale_x_discrete(breaks=seq(0,70,by=10)))
 ```
 
-Additionally, we computed the Adjusted Rand Index (todo: citation) to get a sense of the similarity between the Trinity and Corset clusterings. (Supplementary Table 1) The Adjusted Rand Index computes the proportion of pairs that either both belong to the same cluster, or both belong to different clusters, corrected for chance. Though we have no ground truth here, the ARI suggests that Trinity and Corset clusterings are more similar than dissimilar, and in the case of SRX288285, SRX288430, and SRX288431 are very similar.
+Additionally, we computed the Adjusted Rand Index [@Rand1971] to get a sense of the similarity between the Trinity and Corset clusterings. (Supplementary Table 1) The Adjusted Rand Index computes the proportion of pairs that either both belong to the same cluster, or both belong to different clusters, corrected for chance. The ARI ranges from 0 to 1, with 0 meaning the clusterings are maximally dissimilar and 1 meaning that the clusterings are exactly the same. Though we have no ground truth here, the ARI suggests that Trinity and Corset clusterings are more similar than dissimilar, and in the case of SRX288285, SRX288430, and SRX288431 are very similar.
 
 ```{r, ari, echo=FALSE}
 #filtered_corset <- mclapply(corset_files, function(x) filter_singletons(x), mc.cores=cores)
@@ -145,7 +148,7 @@ ari_df <- data.frame('Sample'=catalog_ids,"Adjusted Rand Index"=unlist(aris))
 kable(ari_df, format='pandoc', caption='Adjusted Rand Index between Trinity and Corset clusterings by sample.')
 ```
 
-```{r, corset_trees, echo=FALSE, warning=FALSE, fig.cap="Histogram of subtree lengths for internal nodes in each Siphonophora subset gene tree from Agalma1.1 with Corset clusterings containing tip descendants from the same species. Subtree lengths greater than 1 were filtered out for clarity."}
+```{r, corset_trees, echo=FALSE, warning=FALSE, fig.cap="Histogram of subtree lengths for internal nodes in each Siphonophora subset gene tree from Agalma with Corset clusterings containing tip descendants from the same species. Subtree lengths greater than 1 were filtered out for clarity."}
 #k<-1:5644
 #corset_tree_files <- "data/revisions/corset/phyldog/"
 #corset_trees <- mclapply(k, function(x) parse_gene_trees(processTree(paste0(corset_tree_files, x, ".ReconciledTree"))), mc.cores = cores)
@@ -162,9 +165,9 @@ rejection_level_tc <- 1.36*sqrt((length(corset_lengths)+length(lengths))/(length
 ggplot(data=data.frame(x=corset_lengths_lim)) + geom_histogram(aes(x=x,y=..count../sum(..count..)), binwidth=0.01, fill='white', color='black') + theme_classic() + xlab("Subtree length") + ylab("Frequency") #+ geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=0.08), map=aes(x=x, y=y), label="0.02", vjust=1.4, angle=90, colour="#56B4E9", size=3)
 ```
 
-Supplementary Figure 3 shows the histogram of subtree lengths for internal nodes in each Siphonophora subset gene tree with Corset clusterings. It shares the same characteristics as in Supplementary Figure 1, and the two-sample Kolmogorov-Smirnov test returns a test statistic of $D=$`r toString(signif(trinity_corset_ks,3))` which is less than the rejection threshold at level 0.05 for the samples, `r toString(signif(rejection_level_tc,3))`. This indicates that regardless of which transcript clustering method is chosen, the same transcript misassignment errors persist. Given the intrinsic challenges of assigning assembled transcripts to genes it is likely that the same misassignment errors are generated by other transcriptome assemblers as well.
+Supplementary Figure 3 shows the histogram of subtree lengths for internal nodes in each Siphonophora subset gene tree with Corset clusterings. It shares the same characteristics as in Supplementary Figure 1, and the two-sample Kolmogorov-Smirnov test returns a test statistic of D=`r toString(signif(trinity_corset_ks,3))` which is less than the rejection threshold at level 0.05 for the samples, `r toString(signif(rejection_level_tc,3))`. This indicates that regardless of which transcript clustering method is chosen, the same transcript misassignment errors persist. Given the intrinsic challenges of assigning assembled transcripts to genes it is likely that the same misassignment errors are generated by other transcriptome assemblers as well.
 
-## Selecting a threshold for transcript reassignment
+## Selecting a threshold for transcript reassignment {#threshold}
 
 ```{r, runjags, include=FALSE}
 #load("data/dt_before.Rdata")
@@ -249,7 +252,7 @@ Let $x_{i, k}$ represent duplication time $i$ from gene tree $G_k$, with $z_{i} 
 
 $$ P(x_{i,k}) = \pi_1 \Gamma(x_{i,k}|\alpha, \beta) + \pi_2 f(x_{i,k} | t_{or,k}=t, \lambda, \mu)$$
 
-We used Just Another Gibbs Sampler (JAGS) [@Plummer03jags] to perform Bayesian Gibbs Sampling in order to infer the parameters $\alpha$, $\beta$, $\lambda$, and $\mu$ as well as the mixing proportions $\pi_1$ and $\pi_2$. This gave us the parameter estimates in Table 2, as well as the posterior probability that a duplication time $x$ is drawn from component 1 or component 2, i.e. $P(z|x)$.
+We used Just Another Gibbs Sampler (JAGS) [@Plummer03jags] to perform Bayesian Gibbs Sampling in order to infer the parameters $\alpha$, $\beta$, $\lambda$, and $\mu$ as well as the mixing proportions $\pi_1$ and $\pi_2$. This gave us the parameter estimates in Table 2.
 
 ```{r, runjags_table, echo=FALSE}
 sum_format = sum_results[,c("Lower95", "Mean", "Upper95", "MCerr")]
@@ -257,14 +260,11 @@ rownames(sum_format) <- c("$\\alpha$", "$\\beta$", "$\\mu$", "$\\lambda$", "$\\p
 kable(sum_format, format='pandoc', caption='Summary of parameter estimates from JAGS.')
 ```
 
-The posterior probability gives us a way to determine the probability of error, as $P(z = 1 | x)$ is the error if we decide $x$ is drawn from the 2nd component, and $P(z = 2 | x)$ is the error if we decide $x$ is drawn from the 1st component. If we care more about having fewer correctly assigned transcripts being erroneously flagged as misassigned, then we can use the posterior probability to select an appropriate threshold for treeinform by selecting $T$ such that $P(z = 2 | x) < \alpha$ for all $x < T$, where $\alpha$ is the error rate. Here we decided to use $\alpha = 0.05$. In Bayesian decision theory this is equivalent to a loss matrix of $\begin{bmatrix} \lambda_{11} & \lambda_{12} \\ \lambda_{21} & \lambda_{22} \end{bmatrix} = \begin{bmatrix} 0 & 1 \\ 19 & 0 \end{bmatrix}$, where each entry $\lambda_{mn}$ is the penalty for selecting component $n$ when $x_{i,k}$ is actually drawn from component $m$. This gives us the threshold `r toString(signif(intersection,4))`.
+The posterior probability that a duplication time $x$ is drawn from component 1 or component 2, i.e. $P(z|x)$ gives us a way to determine the probability of error. It can be inferred from Gibbs sampling as well, although it can also be estimated from the parameters of the mixture model. If we decide $x$ is drawn from the 2nd component, then $P(z=1|x)$ will be the error probability, and if we decide $x$ is drawn from the 1st component, then $P(z=2|x)$ is the error probability. If we care more about having fewer correctly assigned transcripts being erroneously flagged as misassigned, then we can use the posterior probability to select an appropriate threshold for treeinform by selecting $T$ such that $P(z = 2 | x) < \alpha$ for all $x < T$, where $\alpha$ is the error rate. Here we decided to use $\alpha = 0.05$. In Bayesian decision theory this is equivalent to a loss matrix of $\begin{bmatrix} \lambda_{11} & \lambda_{12} \\ \lambda_{21} & \lambda_{22} \end{bmatrix} = \begin{bmatrix} 0 & 1 \\ 19 & 0 \end{bmatrix}$, where each entry $\lambda_{mn}$ is the penalty for selecting component $n$ when $x_{i,k}$ is actually drawn from component $m$. This gives us the threshold `r toString(signif(intersection,4))`.
 
-From that threshold, we can back-calibrate to determine a subtree branch length threshold for use in treeinform. Specifically, we took all duplication events with times below the intersection point on all chronogram-fitted gene trees, mapped them to the equivalent events on the phyldog-outputted gene trees, computed the subtree length of all events, and then took the maximum of those subtree lengths. From the intersection point `r toString(signif(intersection,4))`, this gave us a threshold of `r toString(signif(thresh,3))`.
+From that threshold, we can back-calibrate to determine a subtree branch length threshold for use in treeinform. Specifically, we took all duplication events with times below the intersection point on all chronogram-fitted gene trees, mapped them to the equivalent events on the phyldog-outputted gene trees, computed the subtree length of all events, and then took the maximum of those subtree lengths. From the intersection point `r toString(signif(intersection,4))`, this gave us a threshold of `r toString(signif(thresh,3))`, which we approximate with 0.0005.
 
-```{r, runjags_viz, echo=FALSE, warnings=FALSE, fig.cap='Histogram of the inferred duplication times. We first ran phyldog [@boussau2013genome] on the Siphonophora subset multiple sequence alignments from Agalma1.1.0 and a user-inputted species tree. This provided gene trees with internal nodes annotated as duplication or speciation events. We then fitted chronograms onto these gene trees with our user-inputted species tree.'}
-#Freedman-Diaconis rule for binwidth ~= 0.025 (to make it even)
-#bw <- 2*IQR(dt_before)/length(dt_before)^(1/3)
-
+```{r, runjags_viz, echo=FALSE, warnings=FALSE, fig.cap='Histogram of the inferred duplication times. We first ran phyldog [@boussau2013genome] on the Siphonophora subset multiple sequence alignments from Agalma and a user-inputted species tree. This provided gene trees with internal nodes annotated as duplication or speciation events. We then fitted chronograms onto these gene trees with our user-inputted species tree.'}
 ggplot(data.frame(x=dt_before)) + geom_histogram(aes(x=x,y=..density..), fill='white', color='black', binwidth=0.01) + stat_function(geom="line",fun=mix1,args=list(p1,alpha,beta),xlim=c(0.005,1), aes(color="line1"))+stat_function(geom="line",fun=mix2,args=list(p2,lambda,mu),aes(color="line2"))+ggtitle("Density Curves of Mixture Model Plotted on Histogram of\n Inferred Duplication Times Before Treeinform") + scale_color_manual("Components of Mixture Model", labels=c('line1' = expression("Component 1, " * pi[1]*Gamma(x, alpha, beta)), 'line2' = expression("Component 2, "*pi[2]*f(x,1,lambda,mu))), values=c("#FF000080", "blue")) + xlab("Duplication Times") + ylab("Density") + theme_classic() + theme(legend.position = c(0.8, 0.6))
 
 #z = theme(legend.position = "none", text=element_text(colour='#838787', size = 20), plot.background=element_rect(fill ='#222222'), panel.background=element_rect(fill='#222222'), legend.background=element_rect(fill='#222222'), axis.line=element_line(colour='#838787'), axis.text=element_text(colour='#838787', size=15), axis.ticks = element_line(colour='#838787'), line=element_line(size=5))
@@ -273,9 +273,9 @@ ggplot(data.frame(x=dt_before)) + geom_histogram(aes(x=x,y=..density..), fill='w
 
 ## Validating the effectiveness of treeinform
 
-```{r, fused_percentage, echo=FALSE, fig.cap='The percentage of reassigned tips is plotted above on a log scale. The original assembly had 433,071 genes, with at most 23,396 possible candidates (7.43% of genes) for reassignment. The default threshold for treeinform is highlighted in light blue (TODO: its not, yet).'}
-genetree_path <- "data/revisions/trinity/genetrees/"
-#thresholds<-head(list.files(genetree_path), -1)
+```{r, fused_percentage, echo=FALSE, warnings=FALSE,fig.cap='The percentage of reassigned tips is plotted above on a log scale. The original assembly had 433,071 genes, with 47,688 included in the gene trees after Agalma filtering criteria, and at most 23,396 possible candidates (49.06% of genes) for reassignment. The default threshold for treeinform is marked by the grey vertical dashed line.'}
+genetree_path <- "data/revisions/genetrees/"
+thresholds<-head(list.files(genetree_path), -1)
 before_genetrees<-read_trees(paste0(genetree_path,"before"),"newick",cores)
 before_counts<-count_all_transcripts(before_genetrees,cores)
 orig_assembly = sum(before_counts)
@@ -284,67 +284,47 @@ orig_assembly = sum(before_counts)
 #counts<-lapply(genetrees, function(x) count_all_transcripts(x,cores))
 #save(counts,file="data/revisions/counts.Rdata")
 load(file="data/revisions/counts.Rdata")
-total_percentage<-sapply(counts, function(x) sum(before_counts-x)/orig_assembly)
+Total_percentage<-sapply(counts, function(x) sum(before_counts-x)/orig_assembly)
 
 percentages<-mclapply(counts, function(x) (before_counts-x)/before_counts,mc.cores=cores)
-wide_table<-data.frame(cbind(do.call(rbind,percentages),thresholds))
+size<-rep(1,8*length(percentages))
+size[(7*length(percentages)+1):(8*length(percentages))]<-2
+size<-as.factor(size)
+thresholds<-as.numeric(thresholds)
+wide_table<-data.frame(cbind(do.call(rbind,percentages),thresholds,Total_percentage))
+colnames(wide_table) <- sapply(strsplit(colnames(wide_table),"_"),function(x) x[1])
 long_table<-melt(wide_table,id.vars=c("thresholds"))
+long_table<-cbind(long_table,size)
 long_table$value<-as.numeric(long_table$value)
-
-test<-melt(data.frame(cbind(do.call(rbind,percentages),thresholds,total_percentage)),id.vars=c("thresholds"))
-
-# numbers taken from slurm output
-reassigned = c(23560, 23560, 22930, 11515, 5350, 3364, 3052, 3024, 2955, 0)
-newly_created = c(9167, 9167, 9189, 5271, 2495, 1548, 1398, 1384, 1395, 0)
-revised_assembly = c(418678, 418678, 419330, 426827, 430216, 431255, 431417, 431431, 431511, 433071)
-fused.df <- data.frame(threshold,reassigned, newly_created, revised_assembly)
-
-# additional thresholds to fill out plot: 0.01, 0.025, 0.035, 0.15, 0.25, 0.35, 1.5, 2.5, 3.5
-threshold_add = c(0.01, 0.02, 0.035, 0.15, 0.25, 0.35)
-reassigned_add = c(3762, 4333, 4861, 7371, 8877, 10098)
-newly_created_add = c(1736, 2008, 2262, 3430, 4108, 4647)
-revised_add = c(431045, 430746, 430472, 429130, 428302, 427620)
-fused.df <- rbind(fused.df, data.frame(threshold=threshold_add, reassigned=reassigned_add, newly_created=newly_created_add, revised_assembly=revised_add))
-fused.df.percents <- transmute(fused.df, threshold, reassigned=reassigned/orig_assembly)
+long_table$thresholds<-as.numeric(long_table$thresholds)
 
 # coloring for threshold selection & mixture model selection
 #grp <- c(rep(1, 18), 2)
 #fused.df.percents <- cbind(fused.df.percents, grp)
+cbbPalette <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#000000")
 
-#ggplot(fused.df.percents, aes(threshold, reassigned)) + geom_jitter(aes(colour=grp)) + scale_x_log10() + ggtitle("Percentage of reassigned genes vs threshold") + xlab("Threshold") + ylab("Percentage") + theme_classic() + theme(legend.position="none") + geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=0.015), map=aes(x=x, y=y), label="0.02", hjust=-0.4, colour="#56B4E9", size=3)
-ggplot(fused.df.percents, aes(threshold, reassigned)) + geom_jitter() + scale_x_log10() + ggtitle("Percentage of reassigned genes vs threshold") + xlab("Threshold") + ylab("Percentage") + theme_classic() + theme(legend.position="none")
+ggplot(long_table,aes(thresholds,value)) + geom_vline(xintercept=0.0005, linetype='dashed', color='grey') + geom_text(data=data.frame(x=0.0005,y=0.25), map=aes(x=x, y=y), label="0.0005", vjust=1.4, angle=90, colour="grey", size=3) + geom_point(aes(group=variable,color=variable,shape=size), alpha=0.5) + geom_line(aes(group=variable,color=variable,linetype=size)) + ggtitle("Percentage of reassigned genes by species + total percentage vs threshold") + xlab("Threshold") + ylab("Percentage") + scale_x_log10() + theme_classic() + scale_shape(guide="none") + scale_linetype(guide="none") + scale_colour_manual(name="Species",labels=c("Abylopsis","Agalma","Craseoa","Hydra","Nanomia","Nematostella","Physalia","Total"),values=cbbPalette)
 
-#ggplot(long_table,aes(thresholds,value)) + geom_point(aes(group=variable,color=variable)) + geom_point(data=data.frame(thresholds,total_percentage) + ggtitle("Percentage of reassigned genes by species vs threshold") + xlab("Threshold") + ylab("Percentage")
-
-# also mean-variance plot
-mean_var <- long_table %>% group_by(thresholds) %>% summarise(mean=mean(value),var=var(value))
+hydra_percentage<-sapply(1:4, function(x) (before_counts-counts[[x]])[4]/sum(before_counts-counts[[x]]))
+default_percentages<-filter(long_table, thresholds==5e-04)
 ```
+In order to validate that treeinform improves the accuracy of assigning transcripts to genes under the specified threshold, we performed two analyses. First, we plotted the percentage of reassigned genes at different thresholds to assess the performance of the default threshold value of 0.0005 (Supplementary Figure 5). Below the default value, the percentage of reassigned genes begins to plateau, while above the default value the percentage of reassigned genes increases very quickly, increasing the likelihood of treeinform to reassign transcripts from different genes to the same gene in addition to reassign transcripts from the same gene together.
 
-```{r, eval=FALSE}
-# could be a chunk somewhere, has some summary statistics...
-gt_before <- mclapply(1:5606, function(x) read.tree(paste0("../revisions/before/",x,".newick")), mc.cores=cores)
-before_counts <- count_all_transcripts(trees_before, cores)
-after_counts <- count_all_transcripts(trees_7, cores)
-before_counts - after_counts
-```
+We also looked at the percentage of reassigned genes for each species in order to get a sense of how variable by species transcript misassignment was. The percentage of reassigned genes for each species was rather variable, with Hydra magnipapillata having a much higher proportion of reassigned genes (16.03%) at the threshold. This affected the total proportion of reassigned genes as well, with the majority (46-47%) of reassigned genes at and around the treeinform threshold coming from Hydra magnapapillata. However, even for the other species, 1.88-6.18% of genes were reassigned at the threshold. 
 
-In order to validate that treeinform improves the accuracy of assigning transcripts to genes under the specified threshold, we performed two analyses. First, we plotted the percentage of reassigned genes at different thresholds to assess the performance of the default threshold value of `r toString(signif(thresh,3))` (Supplementary Figure 5). Below the default value, the percentage of reassigned genes begins to plateau, while above the default value the percentage of reassigned genes increases very quickly, increasing the likelihood of treeinform to reassign transcripts from different genes to the same gene in addition to reassign transcripts from the same gene together.
-
-Second, we compared the density of duplication times under the model provided for Component 2 of the mixture model to the distribution of estimated duplication times for gene trees from Agalma1.0 before treeinform, and gene trees from Agalma1.0 after treeinform under 3 different thresholds: 0.05, 0.0005, and 0.00005 (Supplementary Figure 6). We again fitted chronograms with the same Siphonophora species tree onto all gene trees from Agalma1.1 and filtered out those gene trees with time of origin greater than 1, so that duplication times were comparable between trees. Visually, the analyses with the 0.02 threshold comes closest to the theoretical. (TODO: edit this section)
+Second, we compared the density of duplication times under the model provided for Component 2 of the mixture model to the distribution of estimated duplication times for gene trees from Agalma before treeinform, and gene trees from Agalma after treeinform under 3 different thresholds: 0.05, 0.0005, and 0.07 (Supplementary Figure 6). We again fitted chronograms with the same Siphonophora species tree onto all gene trees from Agalma and filtered out those gene trees with time of origin greater than 1, so that duplication times were comparable between trees. Visually, the analyses with the 0.0005 threshold comes closest to the theoretical.
 
 ```{r, fig3b, echo=FALSE, warnings=FALSE, fig.cap="Density from theoretical and the empirical density under the 3 different thresholds as well as before treeinform was run. The distribution before treeinform has a large peak on the left that is removed by treeinform with all examined thresholds."}
-dt <- c(dt_before, threshold_mix, threshold_5, dt_7, threshold_8)
+dt <- c(dt_before, threshold_mix, threshold_5, dt_7)
 l1 = length(dt_before)
 l2 = length(threshold_mix)
 l3 = length(threshold_5)
 l4 = length(dt_7)
-l5 = length(threshold_8)
-Threshold <- rep(NA, l1+l2+l3+l4+l5)
+Threshold <- rep(NA, l1+l2+l3+l4)
 Threshold[1:l1] <- "Before"
 Threshold[l1+1:l2] <- "0.07"
 Threshold[l1+l2+1:l3] <- "0.05"
 Threshold[l1+l2+l3+1:l4] <- "0.0005"
-Threshold[l1+l2+l3+l4+1:l5] <- "0.00005"
 data = data.frame(dt, Threshold)
 f = function(x) dup_pdf(x, 1, lambda, mu)
 ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold), bw=0.02) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density") + theme_classic() + theme(legend.position = c(0.8, 0.6)) + geom_hline(yintercept=0, color="white") + geom_vline(xintercept=0, color="white")
@@ -353,7 +333,7 @@ ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold), bw=0
 #ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold), bw=0.02) + stat_function(fun=f, color='white') + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density") + theme_classic() + geom_hline(yintercept=0, color="#222222") + geom_vline(xintercept=0, color="#222222") + z
 ```
 
-Additionally, we computed the Kullback-Leibler distance [@kullback1951] between the distributions of duplication times under different thresholds and the theoretical distribution of duplication times (Table 2). Kullback-Leibler distance, otherwise known as relative entropy, measures the distance between two distributions. (TODO: update this. Maybe a plot of KL distance would be better?) The KL distance between the distribution of duplication times after running treeinform with the default threshold value of 0.02 come closest to the theoretical distribution as compared to both threshold levels below and above the default value. This indicates that treeinform produces more accurate gene trees with appropriate threshold selection.
+Additionally, we computed the Kullback-Leibler distance [@kullback1951] between the distributions of duplication times under different thresholds and the theoretical distribution of duplication times (Table 3). Kullback-Leibler distance, otherwise known as relative entropy, measures the distance between two distributions. The KL distance between the distribution of duplication times after running treeinform with the default threshold value of 0.0005 is not minimal, but is robust as compared to both threshold levels below and above the default value. This indicates that treeinform produces more accurate gene trees with appropriate threshold selection.
 
 ```{r, kl, echo=FALSE, warning=FALSE, fig.cap=''}
 z.pre <- rep(NA, 10000)
@@ -367,12 +347,13 @@ d_before <- discretize(dt_before, numBins=100)
 d_mix <- discretize(threshold_mix, numBins=100)
 #d_2 <- discretize(threshold_2, numBins=100)
 d_5 <- discretize(threshold_5, numBins=100)
+d_6 <- discretize(threshold_6, numBins=100)
 d_7 <- discretize(dt_7, numBins=100)
 d_8 <- discretize(threshold_8, numBins=100)
-kl_dist <- c(KL.empirical(d_before, d_theo), KL.empirical(d_mix, d_theo), KL.empirical(d_5, d_theo), KL.empirical(d_7,d_theo), KL.empirical(d_8, d_theo))
+kl_dist <- c(KL.empirical(d_before, d_theo), KL.empirical(d_mix, d_theo), KL.empirical(d_5, d_theo), KL.empirical(d_6,d_theo), KL.empirical(d_7,d_theo), KL.empirical(d_8, d_theo))
 
 kl <- data.frame("KL Distance" = kl_dist)
-rownames(kl) <- c("Before", "0.07", "0.05", "0.0005", "5e-05")
+rownames(kl) <- c("Before", "0.07", "0.05", "0.005", "0.0005", "5e-05")
 kable(kl, format='pandoc', caption='Kullback-Leibler distances between duplication times after running treeinform with different thresholds and theoretical duplication times.')
 ```
 
