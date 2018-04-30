@@ -148,7 +148,7 @@ ari_df <- data.frame('Sample'=catalog_ids,"Adjusted Rand Index"=unlist(aris))
 kable(ari_df, format='pandoc', caption='Adjusted Rand Index between Trinity and Corset clusterings by sample.')
 ```
 
-```{r, corset_trees, echo=FALSE, warning=FALSE, fig.cap=paste("Supplementary Figure 3. Histogram of subtree lengths for internal nodes in each Siphonophora subset gene tree from Agalma with Corset clusterings containing tip descendants from the same species. Subtree lengths greater than 1 were filtered out for clarity.")}
+```{r, corset_trees, echo=FALSE, warning=FALSE, fig.cap="Histogram of subtree lengths for internal nodes in each Siphonophora subset gene tree from Agalma with Corset clusterings containing tip descendants from the same species. Subtree lengths greater than 1 were filtered out for clarity."}
 #k<-1:5644
 #corset_tree_files <- "data/revisions/corset/phyldog/"
 #corset_trees <- mclapply(k, function(x) parse_gene_trees(processTree(paste0(corset_tree_files, x, ".ReconciledTree"))), mc.cores = cores)
