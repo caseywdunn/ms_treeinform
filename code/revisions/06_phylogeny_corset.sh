@@ -8,7 +8,7 @@
 source activate agalma
 
 DATADIR=/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions/corset
-export AGALMA_DB=$DATADIR/agalma_corset.sqlite
+export AGALMA_DB=/users/aguang/data/aguang/corset/agalma_corset.sqlite
 export BIOLITE_RESOURCES="threads=${SLURM_CPUS_ON_NODE},memory=${SLURM_MEM_PER_NODE}M"
 
 set -e

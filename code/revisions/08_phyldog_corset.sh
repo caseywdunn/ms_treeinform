@@ -1,21 +1,17 @@
 #!/bin/bash
 #SBATCH -t 6:00:00
-#SBATCH -n 12
+#SBATCH -n 16
 #SBATCH -N 8
-#SBATCH --mem=110G
+#SBATCH --mem=60G
 #SBATCH -J phyldog
-#SBATCH --array=1-9
+#SBATCH -C intel
 
 source activate agalma
 module load phyldog/Aug2016
 
-SLURM_ARRAY_TASK_ID=1
-treeinform=( 28 29 30 31 32 33 34 35 36 )
-multalign=( 40 43 46 49 52 56 60 64 68 )
-
 CODEDIR=/users/aguang/scratch/treeinform/ms_treeinform/code
-WORKDIR=/users/aguang/scratch/treeinform/ms_treeinform/data/revisions/trinity/scratch/treeinform-${treeinform[$SLURM_ARRAY_TASK_ID-1]}
-PHYLDOGDIR=/users/aguang/scratch/treeinform/ms_treeinform/data/revisions/trinity/phyldog/threshold-${SLURM_ARRAY_TASK_ID}
+WORKDIR=/users/aguang/scratch/treeinform/ms_treeinform/data/revisions/corset/scratch
+PHYLDOGDIR=/users/aguang/scratch/treeinform/ms_treeinform/data/revisions/corset/phyldog
 
 mkdir -p $PHYLDOGDIR
 
@@ -24,15 +20,13 @@ mkdir -p links
 mkdir -p OptionFiles
 mkdir -p ResultFiles
 
-cd $WORKDIR/multalign-${multalign[$SLURM_ARRAY_TASK_ID-1]}
-mkdir -p fa-gb # move fa-gb files for phyldog into here
-cd alignments
-for f in *.fa-gb
+
+cd $WORKDIR/genetree-101/alignments
+for f in *.fa
 do
-  NAME=${f%.fa-gb}
+  NAME=${f%.fa}
   OUT="$PHYLDOGDIR/links/$f"
   cat $f | python $CODEDIR/phyldog/parse_links.py >$OUT
-  mv $f ../fa-gb
 done
 echo "links parsed"
 
@@ -42,7 +36,7 @@ echo "Species names printed"
 
 cd $PHYLDOGDIR
 # inputFile.txt for prepareData.py
-echo $WORKDIR/multalign-${multalign[$SLURM_ARRAY_TASK_ID-1]}/fa-gb > inputFile.txt
+echo $WORKDIR/genetree-101/alignments > inputFile.txt
 echo Protein >> inputFile.txt
 echo fasta >> inputFile.txt
 echo $PHYLDOGDIR/links >> inputFile.txt
@@ -60,9 +54,17 @@ echo 72 >> inputFile.txt # Time limit in hours
 python $CODEDIR/phyldog/prepareData.py < inputFile.txt
 
 cd OptionFiles
+sed -i 's/branchProbabilities.optimization=average_then_branchwise/branch.expected.numbers.optimization=branchwise/' GeneralOptions.txt
+
+
+GENETREEDIR=$WORKDIR/genetree-101/trees/
 for f in *.opt
 do
+  NEWICK=${f/.opt/.newick}
   sed -i ':a;N;$!ba;s/input.sequence.sites_to_use=all/output.events.file=$(RESULT)$(DATA)_Events.txt \ninput.sequence.sites_to_use=all/' $f
+  sed -i 's/######## Second, model options ########/rearrangement.gene.tree=spr \n######## Second, model options ########/' $
+  sed -i "s+init.gene.tree=bionj+init.gene.tree=user\ngene.tree.file=${GENETREEDIR}${NEWICK}+" $f
+  sed -i 's/.fa.reduced/.fa/' $f
 done
 
 srun phyldog param=$PHYLDOGDIR/OptionFiles/GeneralOptions.txt
