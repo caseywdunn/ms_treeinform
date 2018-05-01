@@ -4,6 +4,8 @@ title: Revising transcriptome assemblies with phylogenetic information
 output:
   pdf_document:
     toc: yes
+    includes:
+      in_header: header.tex
   html_notebook: default
   html_document: default
 bibliography: supplementary.bib

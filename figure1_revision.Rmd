@@ -65,11 +65,10 @@ class(new_tree) = "phylo"
 
 ```{r, plot, echo=FALSE, warning=FALSE, fig.cap='Gene tree 7 in before-treeinform set with associated alignment. Note that for Hydra_magnipapillata@32566, 32567, 32568, 32569, that 32566 and 32567 share the exact same sequences while the pairs (32567, 32568) and (32567, 32569) each differ only by a small gap. (this was additionally checked with seqinr::dist.alignment and ape::dist.gene). This suggests that Trinity/2.5.2 does not in fact address the transcript misassignment error.'}
 #tiff(filename="Figures/figure1.tiff",width=7,height=5,units="in",pointsize=8,res=350)
-#postscript(file="Figures/figure1.eps",width=7,height=5,fonts=c("sans"))
-#cairo_ps(file="Figures/figure1.eps",width=7,height=5,pointsize=8)
-msaplot(ggtree(new_tree), "data/revisions/modified.fasta", color=c("white","black","white","white"), offset=0.4, width=0.8) + geom_tiplab(size=5, label=label) + geom_hilight(node=hydra_ancestor, extend=0.25, fill='grey')
+#postscript(file="Figures/figure1_revision.eps",width=7,height=5,fonts=c("sans"))
+#cairo_ps(file="Figures/figure1_revision.eps",width=7,height=5,pointsize=8)
+msaplot(ggtree(new_tree), "data/revisions/modified.fasta", color=c("white","black","white","white"), offset=0.3, width=0.8) + geom_tiplab(size=4, aes(color=fig1a_colors), label=label)
 #dev.off()
-suppressMessages(msaplot(ggtree(tree)+geom_tiplab(size=2,align=TRUE,linesize=.5),fasta="7.fa",offset=0.7))
 ```
 
 ```{r, for_presentation, eval=FALSE, include=FALSE}
