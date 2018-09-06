@@ -20,6 +20,7 @@ library(parallel)
 library(knitr)
 library(runjags)
 library(entropy)
+library(hutan)
 
 cores = detectCores()
 if (cores < 1) { cores = 1 }
