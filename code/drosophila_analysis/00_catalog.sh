@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -t 1:00:00
+#SBATCH -t 8:00:00
 
 # this script replicates setting up a conda environment of agalma1.1.0 with trinity/2.5.1 loaded,
 # and downloads the dataset for the analyses. At this time (February 19, 2018) this is the
@@ -9,7 +9,7 @@ conda create -n agalma -c dunnlab agalma
 
 source activate agalma
 
-DATADIR=/gpfs/scratch/aguang/treeinform/ms_treeinform/data/drosophila_analysis
+DATADIR=/gpfs/scratch/aguang/ms_treeinform/data/drosophila_analysis
 export BIOLITE_RESOURCES="database=$DATADIR/trinity/agalma_trinity.sqlite"
 export AGALMA_DB=$DATADIR/trinity/agalma_trinity.sqlite
 
