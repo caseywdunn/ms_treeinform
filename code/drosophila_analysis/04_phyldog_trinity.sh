@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -t 24:00:00
-#SBATCH -N 8
-#SBATCH -c 16
+#SBATCH -N 4
+#SBATCH -c 8
 #SBATCH --mem=60G
 #SBATCH -C intel
 #SBATCH -J phyldog
@@ -11,7 +11,7 @@
 module load phyldog/Aug2016
 
 WORKDIR=/gpfs/scratch/aguang/ms_treeinform/data/drosophila_analysis/trinity/scratch/
-CODEDIR=/gpfs/scratch/aguang/ms_treeinform/code
+CODEDIR=/gpfs/scratch/aguang/ms_treeinform/code/phyldog
 
 cd $WORKDIR
 mkdir -p links
