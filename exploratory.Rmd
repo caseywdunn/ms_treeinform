@@ -35,14 +35,19 @@ source("code/summary_stats.R")
 Trinity isoform to gene data is from:
 
  * "/Users/aguang/Dropbox (Brown)/treeinform/ms_treeinform/data/drosophila_analysis/trinity"
+ 
+It was generated from our sqlite3 database from agalma using `dump_sqlite.py` with the following command:
+`python dump_sqlite.py agalma_trinity.sqlite 0 15 19 23 27 31 35 39`.
 
 ```{r, isoform_num, echo=FALSE, warning=FALSE}
-trinity_genes<-read.csv(file.path(PATH,"trinity.csv"))
-melanogasters<-trinity_genes %>% filter(run_id==6) # run_id=6 is Drosophila melanogaster
-melano_versions<-split(melanogasters, f=melanogasters$version) # split by version
-isoform_num<-mclapply(melano_versions, function(x) cluster_size_distribution(x$gene), mc.cores=cores)
+thresholds=c(50,5,.5,.005,.0005,.00005,.0000005)
+versions=c(15,19,23,27,31,35,39) # treeinform versions
+csv_files<-c("trinity.csv",sapply(versions, function(x) paste0("treeinform",x,".csv")))
+isoform_genes<-lapply(csv_files, function(x) read.csv(file.path(PATH,x)))
+isoform_num<-mclapply(isoform_genes, function(x) cluster_size_distribution(x$gene), mc.cores=cores)
 
-cds<-read.csv("/Users/aguang/Dropbox (Brown)/treeinform/drosophila_analysis")
+cds<-read.table("/Users/aguang/Dropbox (Brown)/treeinform/drosophila_analysis/dmel_unique_protein_isoforms_fb_2018_04.tsv",sep="\t",skip=4,col.names=c("FBgn","FB_gene_symbol","representative_protein","identical_protein(s)"),header=FALSE,fill=TRUE)
+cds_isoform_num<-cluster_size_distribution(cds$FBgn)
 ```
 
 ```{r, trees_before}
