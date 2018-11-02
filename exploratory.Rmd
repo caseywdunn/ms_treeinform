@@ -1,0 +1,57 @@
+---
+title: "Exploratory treeinform notebook"
+output: html_notebook
+---
+
+# Overview
+
+This is a notebook exploring comparisons of Trinity assemblies pre and post treeinform to Drosophila genome CDS and PacBio isoseq assembly.
+
+```{r, setup, include=FALSE}
+library(ape)
+library(scales)
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+library(hutan)
+library(treeio)
+library(parallel)
+library(knitr)
+library(runjags)
+library(entropy)
+
+cores = detectCores()
+if (cores < 1) { cores = 1 }
+set.seed(1287234)
+
+PATH="/Users/aguang/Dropbox\ (Brown)/treeinform/ms_treeinform/data/drosophila_analysis/trinity"
+
+source("code/functions.R")
+source("code/summary_stats.R")
+```
+
+# Data
+
+Trinity isoform to gene data is from:
+
+ * "/Users/aguang/Dropbox (Brown)/treeinform/ms_treeinform/data/drosophila_analysis/trinity"
+
+```{r, isoform_num, echo=FALSE, warning=FALSE}
+trinity_genes<-read.csv(file.path(PATH,"trinity.csv"))
+melanogasters<-trinity_genes %>% filter(run_id==6) # run_id=6 is Drosophila melanogaster
+melano_versions<-split(melanogasters, f=melanogasters$version) # split by version
+isoform_num<-mclapply(melano_versions, function(x) cluster_size_distribution(x$gene), mc.cores=cores)
+
+cds<-read.csv("/Users/aguang/Dropbox (Brown)/treeinform/drosophila_analysis")
+```
+
+```{r, trees_before}
+```
+
+```{r, gapped_histogram}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).
