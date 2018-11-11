@@ -1,11 +1,13 @@
 ---
 title: "Exploratory treeinform notebook"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 # Overview
 
-This is a notebook exploring comparisons of Trinity assemblies pre and post treeinform to Drosophila genome CDS and PacBio isoseq assembly.
+This is a notebook exploring comparisons of Trinity assemblies pre and post treeinform to Drosophila genome CDS sequences.
 
 ```{r, setup, include=FALSE}
 library(ape)
@@ -19,44 +21,118 @@ library(parallel)
 library(knitr)
 library(runjags)
 library(entropy)
+library(assertthat)
 
 cores = detectCores()
 if (cores < 1) { cores = 1 }
 set.seed(1287234)
 
-PATH="/Users/aguang/Dropbox\ (Brown)/treeinform/ms_treeinform/data/drosophila_analysis/trinity"
+PATH="/Users/aguang/Dropbox\ (Brown)/treeinform/ms_treeinform/data/drosophila_analysis"
+TRINITY_PATH=file.path(PATH,"trinity")
+
+#library(treeinform) (if you installed from Github as a package)
+source("R/read_trees.R")
+source("R/cluster_size_dist.R")
 
 source("code/functions.R")
 source("code/summary_stats.R")
 ```
 
-# Data
-
-Trinity isoform to gene data is from:
-
- * "/Users/aguang/Dropbox (Brown)/treeinform/ms_treeinform/data/drosophila_analysis/trinity"
- 
-It was generated from our sqlite3 database from agalma using `dump_sqlite.py` with the following command:
-`python dump_sqlite.py agalma_trinity.sqlite 0 15 19 23 27 31 35 39`.
-
 ```{r, isoform_num, echo=FALSE, warning=FALSE}
 thresholds=c(50,5,.5,.005,.0005,.00005,.0000005)
+genetree_versions=c(18,22,26,30,34,38,42) # treeinform genetree versions
 versions=c(15,19,23,27,31,35,39) # treeinform versions
 csv_files<-c("trinity.csv",sapply(versions, function(x) paste0("treeinform",x,".csv")))
-isoform_genes<-lapply(csv_files, function(x) read.csv(file.path(PATH,x)))
+isoform_genes<-lapply(csv_files, function(x) read.csv(file.path(TRINITY_PATH,x)))
 isoform_num<-mclapply(isoform_genes, function(x) cluster_size_distribution(x$gene), mc.cores=cores)
 
-cds<-read.table("/Users/aguang/Dropbox (Brown)/treeinform/drosophila_analysis/dmel_unique_protein_isoforms_fb_2018_04.tsv",sep="\t",skip=4,col.names=c("FBgn","FB_gene_symbol","representative_protein","identical_protein(s)"),header=FALSE,fill=TRUE)
+cds<-read.table(file.path(PATH,"dmel_unique_protein_isoforms_fb_2018_04.tsv"),sep="\t",skip=4,col.names=c("FBgn","FB_gene_symbol","representative_protein","identical_protein(s)"),header=FALSE,fill=TRUE)
 cds_isoform_num<-cluster_size_distribution(cds$FBgn)
+
+genetrees <- read_trees(file.path(PATH,"genetree-10"),"newick",cores=cores)
 ```
 
-```{r, trees_before}
+# Data
+
+Data is in:
+
+ * `PATH = "/Users/aguang/Dropbox (Brown)/treeinform/ms_treeinform/data/drosophila_analysis"`
+ * CDS isoform data for Drosophila melanogaster is from FlyBase and stored as
+ `dmel_unique_protein_isoforms_fb_2018_04.tsv`
+ * Trinity and treeinform isoform to gene mappings for Drosophila melanogaster are stored in the `trinity` folder in $PATH. They were generated from the agalma database as `.csv` files with the following command:
+ `python dump_sqlite.py agalma_trinity.sqlite 0 15 19 23 27 31 35 39`.
+ * genetrees from Trinity and treeinform are stored under `genetree-x` folders in $PATH, where `x` corresponds to their run id in the agalma database.
+
+# Figures
+
+There were `r toString(length(genetrees))` gene trees from Agalma for the Drosophila dataset pre-treeinform. We plotted 3 figures: subtree branch lengths across all gene trees (Figure 1), cluster size counts for Trinity+treeinform and CDS for Drosophila Melanogaster (Figure 2) and percentage of reassigned tips from treeinform by species (Figure 3). The subtree branch lengths, which actually don't have the peak close to 0 we saw in the 7-taxa Siphonophore dataset.
+
+When looking at cluster size counts for Drosophila melanogaster Trinity+treeinform and CDS, where a cluster is defined as a set of transcripts that all belong to the same gene, immediately we see that Trinity identifies many more transcripts and genes than are in the CDS, which treeinform doesn't reduce significantly (Figure 2). This was not the case for the 7-taxa Siphonophore dataset and can likely be attributed to the distribution of subtree branch lengths in Figure 1.
+
+In a similar vein, very few tips (it looks like less than 1%) are reassigned until a subtree branch length threshold of 0.5 (Figure 3).
+
+```{r, subtree, echo=FALSE, warning=FALSE, fig.cap="The subtree branch lengths for Drosophila actually look pretty good."}
+lengths = unlist(multi_subtree_lengths(genetrees, cores))
+lengths_lim = lengths[which(lengths<1)]
+ggplot(data=data.frame(x=lengths_lim)) + geom_histogram(aes(x=x,y=..count../sum(..count..)), binwidth=0.01, fill='white', color='black') + theme_classic() + xlab("Subtree length") + ylab("Frequency") #+ geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=0.08), map=aes(x=x, y=y), label="0.02", vjust=1.4, angle=90, colour="#56B4E9", size=3)
 ```
 
-```{r, gapped_histogram}
-plot(cars)
+```{r, basic_stats_isoform, echo=FALSE, warning=FALSE}
+num_cds_genes <- length(unique(cds$FBgn)) # 13931
+num_trinity_genes <- length(unique(isoform_genes[[1]]$gene)) # 27668
+
+# theme_classic() + geom_line() + facet_wrap(~ID, ncol=2) + scale_x_discrete(breaks=seq(0,70,by=10)))
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+```{r, clusters, echo=FALSE, warning=FALSE, fig.cap='Three different thresholds of treeinform are plotted along with just Trinity and CDS, but the lines for just Trinity and treeinform are all roughly the same. This is the plot for Drosophila Melanogaster.'}
+# index of isoform_num we want is 1, 4, 5, 6
+methods<-c("trinity","treeinform-.5","treeinform-.005","treeinform-.0005", "CDS" )
+ids<-rep("melanogaster",5)
+list_dfs <- list(isoform_num[[1]],isoform_num[[4]],isoform_num[[5]],isoform_num[[6]],cds_isoform_num)
+for_plotting<-single_cluster_df(list_dfs,methods,ids)
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file).
+plot_clusters(for_plotting) +
+  ggtitle("Cluster size counts for Trinity, CDS and different thresholds of treeinform") + 
+  scale_x_discrete(breaks=seq(0,80,by=10))
+```
+
+```{r, fused_percentage_pre, echo=FALSE, warnings=FALSE}
+phylos<-lapply(genetrees, function(x) x@phylo)
+before_counts<-count_all_transcripts(phylos,cores)
+orig_assembly = sum(before_counts)
+
+treeinform_genetrees<-lapply(genetree_versions, function(x) {
+  files <- list.files(file.path(PATH,paste0("genetree-",x)),
+                      pattern="*.newick",full.names=TRUE)
+  trees <- mclapply(files,read.tree,mc.cores=cores)
+  class(trees) <- "multiPhylo"
+  return(trees)
+})
+counts<-lapply(treeinform_genetrees, function(x) count_all_transcripts(x,cores))
+#save(counts,file="data/revisions/counts.Rdata")
+#load(file="data/revisions/counts.Rdata")
+Total_percentage<-sapply(counts, function(x) sum(before_counts-x)/orig_assembly)
+
+percentages<-mclapply(counts, function(x) (before_counts-x)/before_counts,mc.cores=cores)
+size<-rep(1,8*length(percentages))
+size[(7*length(percentages)+1):(8*length(percentages))]<-2
+size<-as.factor(size)
+thresholds<-as.numeric(thresholds)
+wide_table<-data.frame(cbind(do.call(rbind,percentages),thresholds,Total_percentage))
+long_table<-melt(wide_table,id.vars=c("thresholds"))
+long_table<-cbind(long_table,size)
+long_table$value<-as.numeric(long_table$value)
+long_table$thresholds<-as.numeric(long_table$thresholds)
+
+# coloring for threshold selection & mixture model selection
+#grp <- c(rep(1, 18), 2)
+#fused.df.percents <- cbind(fused.df.percents, grp)
+cbbPalette <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#000000")
+
+hydra_percentage<-sapply(1:4, function(x) (before_counts-counts[[x]])[4]/sum(before_counts-counts[[x]]))
+default_percentages<-filter(long_table, thresholds==5e-04)
+```
+
+```{r, fused_percentage, echo=FALSE, warnings=FALSE, fig.cap="The percentage of reassigned tips is plotted above on a log scale."}
+ggplot(long_table,aes(thresholds,value)) + geom_point(aes(group=variable,color=variable,shape=size), alpha=0.5) + geom_line(aes(group=variable,color=variable,linetype=size)) + ggtitle("Percentage of reassigned genes by species + total percentage vs threshold") + xlab("Threshold") + ylab("Percentage") + scale_x_log10() + theme_classic() + scale_shape(guide="none") + scale_linetype(guide="none") + scale_colour_manual(name="Species",labels=c("Drosophila ananassae","Drosophila melanogaster","Drosophila mojavensis","Drosophila pseudoobscura","Drosophila simulans","Drosophila virilis","Drosophila yakuba","Total"),values=cbbPalette)
+```

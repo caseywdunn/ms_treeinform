@@ -71,15 +71,6 @@ ks.dt = function(dt,lambda,mu) {
   ks.test(dt, function(x) dup_cdf(x,1,lambda,mu))$p.value
 }
 
-#' Helper function to read in newick trees; will skip over a non-existent
-#' tree rather than return an error
-#'
-#' @param string Path to tree file
-#' @return tree_text - Character string representing nhx tree
-#' @export
-processTree = function(x) tryCatch({ readLines(x) },
-                                   error = function(e) { NULL })
-
 #' Annotates a tree from the agalma 7 taxa Siphonophora test dataset
 #' with internal node clade names
 #'
@@ -203,31 +194,6 @@ siph_help = function(phylo, x) {
   else { return(NA) }
 }
 
-#' Parses nhx text from gene trees and returns branch lengths
-#' for duplication events
-#'
-#' @param tree_text Character string representing nhx tree
-#' @return A list of branch lengths
-#' @export
-parse_gene_trees = function( tree_text ){
-  if (is.null(tree_text)) { return(NULL) }
-  tree_tc = textConnection( tree_text )
-  tree = treeio::read.nhx( tree_tc )
-  close( tree_tc )
-
-  tree@phylo = annotate_siph(tree@phylo)
-  tree@data$label = c( tree@phylo$tip.label, tree@phylo$node.label )
-
-  n_nodes = nrow( tree@data )
-  n_tips = length( tree@phylo$tip.label )
-  internal_nodes = ( n_tips + 1 ):n_nodes
-  is_speciation = tree@data$Ev == "S"
-  is_speciation[ is.na( is_speciation ) ] = FALSE
-  internal_speciation_nodes = tree@data$node[ ( tree@data$node > n_tips ) & is_speciation ]
-
-  return( tree )
-}
-
 #' Get a boolean vector corresponding to all tips and internal nodes of
 #' a tree, with value TRUE for tips and FALSE for internal nodes
 #'
@@ -319,19 +285,19 @@ heights = function(nhx) {
 #'
 #' @param ResultFiles path to phyldog ResultFiles directory
 #' @param calibration_times Calibration times for the gene trees
-#' @return A vector of duplication times
+#' @return A list with trees from parse_gene_trees, calibrated&annotated trees, and duplication times
 dt_phyldog = function(ResultFiles, calibration_times) {
   cores = parallel::detectCores()
   if (cores < 1) { cores = 1 }
-
+  
   files <- list.files(ResultFiles,pattern=paste0("*.ReconciledTree"),full.names=TRUE)
   trees <- mclapply(files, function(x) parse_gene_trees(processTree(x)), mc.cores = cores)
   trees <- trees[which(!unlist(mclapply(trees, is.null)))]
-
+  
   calibrated = calibrate_trees(trees, cores)
   annotated = heights_trees(calibrated, cores)
   no_na = annotated[which(!is.na(annotated))]
-
+  
   # filter out trees with height > 1
   no_heights = mclapply(no_na, function(x) {
     h = x@data %>% select(height) %>% max
@@ -340,7 +306,7 @@ dt_phyldog = function(ResultFiles, calibration_times) {
   no_heights = no_heights[which(!is.na(no_heights))]
   dt = unlist(mclapply(no_heights, function(x) unlist(x@data %>% filter(Ev=="D") %>% select(height))))
   dt = dt[which(!is.na(dt))]
-
+  
   return(list(trees, annotated, dt))
 }
 
@@ -375,17 +341,4 @@ subtree_lengths = function(tree) {
 #' @return A list of subtree lengths
 multi_subtree_lengths = function(trees, cores) {
   mclapply(trees, subtree_lengths, mc.cores=cores)
-}
-
-#' Reads all newick trees in a path
-#'
-#' @param path path to the newick trees
-#' @param extension extension for newick trees
-#' @param cores number of cores for mclapply
-#' @return An object of class multiphylo
-read_trees = function(path, extension, cores) {
-  files <- list.files(path,pattern=paste0("*.",extension),full.names=TRUE)
-  trees <- mclapply(files, read.tree, mc.cores=cores)
-  class(trees) <- "multiPhylo"
-  return(trees)
 }
