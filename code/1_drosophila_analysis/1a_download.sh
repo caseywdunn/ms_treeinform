@@ -6,7 +6,7 @@
 
 source activate agalma
 
-DATADIR=/gpfs/scratch/aguang/ms_treeinform/data/drosophila_analysis
+DATADIR=/gpfs/data/datasci/aguang/treeinform/drosophila/
 export BIOLITE_RESOURCES="database=$DATADIR/agalma_trinity.sqlite"
 export AGALMA_DB=$DATADIR/agalma_trinity.sqlite
 
