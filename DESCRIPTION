@@ -1,0 +1,17 @@
+Package: treeinform
+Title: treeinform
+Version: 0.0.0.9000
+Authors@R: c(person("August", "Guang", email = "august_guang@brown.edu", role = c("aut", "cre")),
+  person("Felipe","Zapata",email="fzapata@ucla.edu", role="aut"),
+  person("Casey","W. Dunn", email="casey.dunn@yale.edu", role="aut"))
+Description: Associated code and data for treeinform manuscript.
+Depends: R (>= 3.5.1)
+Imports:
+  assertthat,
+  treeio,
+  parallel
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Suggests: testthat
+RoxygenNote: 6.1.0
