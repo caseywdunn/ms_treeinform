@@ -1,24 +1,20 @@
 #!/bin/bash
 #SBATCH -t 1:00:00
 
-# this script replicates setting up a conda environment of agalma1.1.0 with trinity/2.5.1 loaded,
-# and downloads the dataset for the analyses. At this time (February 19, 2018) this is the
-# latest version of trinity.
-
-#conda create -n agalma -c dunnlab agalma
+# 2a_download.sh: downloads reads for Siphonophora
 
 source activate agalma
 
-DATADIR=/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions
-export BIOLITE_RESOURCES="database=$DATADIR/trinity/agalma_trinity.sqlite"
-export AGALMA_DB=$DATADIR/trinity/agalma_trinity.sqlite
+DATADIR=/gpfs/data/datasci/aguang/treeinform/agalma/trinity
+export BIOLITE_RESOURCES="database=$DATADIR/agalma_trinity.sqlite"
+export AGALMA_DB=$DATADIR/agalma_trinity.sqlite
 
 # make a new database & new folders for each threshold
-mkdir -p $DATADIR/trinity/data
-mkdir -p $DATADIR/trinity/scratch
-mkdir -p $DATADIR/trinity/reports
+mkdir -p $DATADIR/data
+mkdir -p $DATADIR/scratch
+mkdir -p $DATADIR/reports
 
-cd $DATADIR/trinity/data
+cd $DATADIR/data
 
 EMAIL=august_guang@brown.edu
 bl-sra import -c -e $EMAIL SRX288432 &
