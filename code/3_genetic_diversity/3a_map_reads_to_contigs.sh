@@ -2,7 +2,7 @@
 #SBATCH -t 6:00:00
 #SBATCH --mem=64G
 #SBATCH -n 8
-#SBATCH --array=1-13
+#SBATCH --array=7-13
 
 # Assumes you have reads and contigs from running code in drosophila_assembly
 # and agalma_assembly already or through an alternative method.
@@ -14,7 +14,7 @@ drosophila_fastqs=( SRR768436 SRR768438 SRR768440 SRR166831 SRR166818 SRR166810 
 drosophila_ids=( 1 2 3 4 5 6 7 ) # transcriptome IDs
 drosophila_srx=( SRX246999 SRX247001 SRX247003 SRX054483 SRX054470 SRX054462 SRX054487 )
 
-AGALMA_DIR=/gpfs/data/datasci/aguang/treeinform/agalma
+AGALMA_DIR=/gpfs/data/datasci/aguang/treeinform/agalma/trinity
 agalma_ids=( 1 2 3 4 5 6 7 )
 agalma_srx=( SRX288276 SRX288285 SRX288430 SRX288431 SRX288432 )
 agalma_fastqs=( SRR871525 SRR871526 SRR871527 SRR871528 SRR871529 )
