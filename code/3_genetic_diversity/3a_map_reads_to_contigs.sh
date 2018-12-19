@@ -1,6 +1,8 @@
 #!/bin/bash
-#SBATCH -t 8:00:00
-#SBATCH --array=0-13
+#SBATCH -t 6:00:00
+#SBATCH --mem=64G
+#SBATCH -n 8
+#SBATCH --array=1-13
 
 # Assumes you have reads and contigs from running code in drosophila_assembly
 # and agalma_assembly already or through an alternative method.
@@ -30,14 +32,12 @@ then
     R1=$DROSOPHILA_DIR/data/${fastq}_1.fastq
     R2=$DROSOPHILA_DIR/data/${fastq}_2.fastq
     bwa index $DROSOPHILA_DIR/scratch/transcriptome-${ID}/trinity_out_dir/Trinity.fasta
-    bwa mem $DROSOPHILA_DIR/scratch/transcriptome-${ID}/trinity_out_dir/Trinity.fasta $R1 $R2 > ${srx_id}.sam
+    bwa mem -t 8 $DROSOPHILA_DIR/scratch/transcriptome-${ID}/trinity_out_dir/Trinity.fasta $R1 $R2 > ${srx_id}.sam
 
-
-    # discard contigs with coverage less than average 2.5x/individual
-    # defined as total length of mapped reads / contig length
     samtools view -bS ${srx_id}.sam > ${srx_id}.bam
+    rm ${srx_id}.sam # you're free to keep the sam files if you want but they are very large
+    samtools sort -m 8G -@ 8 -o ${srx_id}.sorted.bam -T temp -O bam ${srx_id}.bam
     samtools depth ${srx_id}.bam > ${srx_id}_coverage.txt
-    # filter by coverage
 else
     mkdir -p $AGALMA_DIR/scratch/genetic_diversity
     cd $AGALMA_DIR/scratch/genetic_diversity
@@ -50,11 +50,10 @@ else
     R1=$AGALMA_DIR/data/${fastq}_1.fastq
     R2=$AGALMA_DIR/data/${fastq}_2.fastq
     bwa index $AGALMA_DIR/scratch/transcriptome-${ID}/trinity_out_dir/Trinity.fasta
-    bwa mem $AGALMA_DIR/scratch/transcriptome-${ID}/trinity_out_dir/Trinity.fasta $R1 $R2 > ${srx_id}.sam
+    bwa mem -t 8 $AGALMA_DIR/scratch/transcriptome-${ID}/trinity_out_dir/Trinity.fasta $R1 $R2 > ${srx_id}.sam
 
-    # discard contigs with coverage less than average 2.5x/individual
-    # defined as total length of mapped reads / contig length
     samtools view -bS ${srx_id}.sam > ${srx_id}.bam
+    rm ${srx_id}.sam # you're free to keep the sam files if you want but they are very large
+    samtools sort -m 8G -@ 8 -o ${srx_id}.sorted.bam -T temp -O bam ${srx_id}.bam
     samtools depth ${srx_id}.bam > ${srx_id}_coverage.txt
-    # filter by coverage
 fi

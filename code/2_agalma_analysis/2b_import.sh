@@ -6,14 +6,14 @@
 
 source activate agalma
 
-DATADIR=/gpfs/scratch/aguang/treeinform/ms_treeinform/data/revisions
-export AGALMA_DB=$DATADIR/trinity/agalma_trinity.sqlite
+DATADIR=/gpfs/data/datasci/aguang/treeinform/agalma/trinity
+export AGALMA_DB=$DATADIR/agalma_trinity.sqlite
 export BIOLITE_RESOURCES="threads=${SLURM_CPUS_ON_NODE},memory=${SLURM_MEM_PER_NODE}M"
 
 IDS=( JGI_NEMVEC NCBI_HYDMAG )
 ID=${IDS[$SLURM_ARRAY_TASK_ID-1]}
 echo $ID
 
-cd $DATADIR/trinity/scratch
+cd $DATADIR/scratch
 agalma import --id $ID
 agalma translate --id $ID
