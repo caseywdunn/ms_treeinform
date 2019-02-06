@@ -5,10 +5,6 @@ output:
   html_notebook: default
 ---
 
-# Overview
-
-This is a notebook exploring comparisons of Trinity assemblies pre and post treeinform to Drosophila genome CDS sequences.
-
 ```{r, setup, include=FALSE}
 library(ape)
 library(scales)
@@ -22,13 +18,11 @@ library(knitr)
 library(runjags)
 library(entropy)
 library(assertthat)
+library(PopGenome)
 
 cores = detectCores()
 if (cores < 1) { cores = 1 }
 set.seed(1287234)
-
-PATH="/Users/aguang/Dropbox\ (Brown)/treeinform/ms_treeinform/data/drosophila_analysis"
-TRINITY_PATH=file.path(PATH,"trinity")
 
 #library(treeinform) (if you installed from Github as a package)
 source("R/read_trees.R")
@@ -38,7 +32,34 @@ source("code/functions.R")
 source("code/summary_stats.R")
 ```
 
+# Overview
+
+This is a notebook exploring two things: 1) computations of genetic diversity based on Trinity Drosophila and Agalma assemblies as done in (REFERENCE) and 2) comparisons of Trinity Drosophila assemblies pre and post treeinform to Drosophila genome CDS sequences. Our hypothesis is that assemblers like Trinity have more difficulty resolving splice variants with paralogs in species with higher genetic diversity. In such cases, a tool like treeinform that uses phylogenetic information to correct assemblies is useful to reduce assembly error. To check on this hypothesis we first check the genetic diversity of Drosophila and Agalma, as our subhypothesis is that Drosophila has lower genetic diversity than Agalma. If our expectations are confirmed then the next step is to repeat the analysis with a "medium" complexity clade.
+
+# Computations of genetic diversity in Drosophila and Agalma
+
+```{r, genetic_diversity_data, echo=FALSE, warning=FALSE}
+PATH="/Users/aguang/Dropbox (Brown)/treeinform/ms_treeinform/data/genetic_diversity"
+drosophila_infile <- file.path(PATH,"Drosophila")
+drosophila.GENOME.class <- readData(drosophila_infile, format="VCF")
+drosophila.GENOME.class <- F_ST.stats(drosophila.GENOME.class)
+get.diversity(drosophila.GENOME.class)[1,1][[1]][3]
+agalma_infile <- file.path(PATH,"Agalma")
+agalma.GENOME.class <- readData(agalma_infile, format="VCF")
+agalma.GENOME.class <- F_ST.stats(agalma.GENOME.class, subsites="syn")
+get.diversity(agalma.GENOME.class)[1,1][[1]][3]
+```
+
+## Data
+
+Data is in:
+  * `PATH="/Users/aguang/Dropbox (Brown)/treeinform/ms_treeinform/data/genetic_diversity"`
+
+# Comparisons of Trinity Drosophila assemblies pre and post treeinform to genome CDS
+
 ```{r, isoform_num, echo=FALSE, warning=FALSE}
+PATH="/Users/aguang/Dropbox\ (Brown)/treeinform/ms_treeinform/data/drosophila_analysis"
+TRINITY_PATH=file.path(PATH,"trinity")
 thresholds=c(50,5,.5,.005,.0005,.00005,.0000005)
 genetree_versions=c(18,22,26,30,34,38,42) # treeinform genetree versions
 versions=c(15,19,23,27,31,35,39) # treeinform versions
@@ -52,7 +73,7 @@ cds_isoform_num<-cluster_size_distribution(cds$FBgn)
 genetrees <- read_trees(file.path(PATH,"genetree-10"),"newick",cores=cores)
 ```
 
-# Data
+## Data
 
 Data is in:
 
@@ -63,7 +84,7 @@ Data is in:
  `python dump_sqlite.py agalma_trinity.sqlite 0 15 19 23 27 31 35 39`.
  * genetrees from Trinity and treeinform are stored under `genetree-x` folders in $PATH, where `x` corresponds to their run id in the agalma database.
 
-# Figures
+## Figures
 
 There were `r toString(length(genetrees))` gene trees from Agalma for the Drosophila dataset pre-treeinform. We plotted 3 figures: subtree branch lengths across all gene trees (Figure 1), cluster size counts for Trinity+treeinform and CDS for Drosophila Melanogaster (Figure 2) and percentage of reassigned tips from treeinform by species (Figure 3). The subtree branch lengths, which actually don't have the peak close to 0 we saw in the 7-taxa Siphonophore dataset.
 
@@ -136,3 +157,5 @@ default_percentages<-filter(long_table, thresholds==5e-04)
 ```{r, fused_percentage, echo=FALSE, warnings=FALSE, fig.cap="The percentage of reassigned tips is plotted above on a log scale."}
 ggplot(long_table,aes(thresholds,value)) + geom_point(aes(group=variable,color=variable,shape=size), alpha=0.5) + geom_line(aes(group=variable,color=variable,linetype=size)) + ggtitle("Percentage of reassigned genes by species + total percentage vs threshold") + xlab("Threshold") + ylab("Percentage") + scale_x_log10() + theme_classic() + scale_shape(guide="none") + scale_linetype(guide="none") + scale_colour_manual(name="Species",labels=c("Drosophila ananassae","Drosophila melanogaster","Drosophila mojavensis","Drosophila pseudoobscura","Drosophila simulans","Drosophila virilis","Drosophila yakuba","Total"),values=cbbPalette)
 ```
+
+# References
