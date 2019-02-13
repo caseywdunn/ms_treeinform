@@ -142,17 +142,6 @@ cluster_size_distribution = function(clustering) {
   return(df)
 }
 
-#' Goes through corset clustering file and filters out all singleton clusters
-#'
-#' @param corset_clustering data frame with triniy & corset gene clusterings
-#' @return row numbers of transcripts that have different corset and trinity clusterings
-filter_singletons = function(corset_clustering) {
-  tg<-corset_clustering$Trinity.gene
-  cg<-corset_clustering$Corset.gene
-  d<-duplicated(tg) | duplicated(tg, fromLast=TRUE) | duplicated(cg) | duplicated(cg, fromLast=TRUE)
-  list(corset_clustering[d,],sum(d))
-}
-
 #' Go through internal nodes and make sure there is no assignment of
 #' speciation events with ancestor/child nodes as the same speciation event
 #' (i.e. (Cnidaria, Cnidaria):Cnidaria)
