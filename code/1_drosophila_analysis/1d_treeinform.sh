@@ -23,3 +23,5 @@ agalma treeinform -p 10 --id threshold-${SLURM_ARRAY_TASK_ID} -t $threshold #--r
 agalma homologize --id threshold-${SLURM_ARRAY_TASK_ID}
 agalma multalign --id threshold-${SLURM_ARRAY_TASK_ID}
 agalma genetree --id threshold-${SLURM_ARRAY_TASK_ID}
+
+#python dump_sqlite.py $AGALMA_DB 0 15 19 23 27 31 35 39 43 47
