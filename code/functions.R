@@ -1,25 +1,3 @@
-#' Computes Adjusted Rand Index taking into account count of filtered out
-#' singletons. Most of source code directly lifted from mclust package.
-#'
-#' @param f number of filtered out singletons
-#' @param c corset & trinity filtered clustering data frame
-#' @return adjusted Rand Index
-ari <- function(f, c) {
-  x<-as.vector(c$Trinity.gene)
-  y<-as.vector(c$Corset.gene)
-  if(length(x) != length(y))
-    stop("arguments must be vectors of the same length")
-  tab <- table(x,y)
-  if(all(dim(tab)==c(1,1))) return(1)
-  a <- sum(choose(tab, 2))
-  b <- sum(choose(rowSums(tab), 2)) - a
-  c <- sum(choose(colSums(tab), 2)) - a
-  d <- choose(sum(tab)+f, 2) - a - b - c
-  ARI <- (a - (a + b) * (a + c)/(a + b + c + d)) /
-    ((a + b + a + c)/2 - (a + b) * (a + c)/(a + b + c + d))
-  return(ARI)
-}
-
 #' Computes pdf of duplication event for time s given tree origin time t,
 #' birth rate lambda, death rate mu
 #'
@@ -123,23 +101,6 @@ compute_corset_trinity_similarity = function(corset_clustering) {
   all_pairs <- combn(1:nrow(clustering),2,simplify=FALSE)
   gene_assignments <- mclapply(all_pairs,function(x) check_cluster_identity(x, clustering))
   return(sum(gene_assignments)/length(all_pairs))
-}
-
-#' Returns cluster size distribution
-#'
-#' @param clustering vector with gene names/IDs
-#' @return data frame with columns size (=cluster size) and freq (=frequency of that cluster)
-#' 
-#' @example 
-#' # gene vector is based off of Trinity annotation but can be any format as long as it is gene names/IDs
-#' # for example Corset annotation would be of format Cluster-1.0, Cluster-2.0, etc.
-#' genes <- c("DN1_c0_g1","DN1_c0_g1","DN1_c0_g2","DN2_c0_g1")
-#' cluster_size_distribution(genes)
-#' # output is data frame with 2 clusters of size 1 and 1 cluster of size 2
-cluster_size_distribution = function(clustering) {
-  df<-data.frame(table(table(clustering)))
-  colnames(df) <- c("size","freq")
-  return(df)
 }
 
 #' Go through internal nodes and make sure there is no assignment of

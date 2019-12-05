@@ -1,3 +1,20 @@
+#' Computes cluster stats.
+#' 
+#' Computes from a data frame with clusterings in column 1 and column 2:
+#' 1) number of singleton clusters, 2) number of pairs in the same clustering in columns 1 and 2
+#' 3) number of pairs with the same clustering in 2 and different clusterings in 1, and
+#' 4) number of pairs with the same clustering in 1 and different clusterings in 2.
+#' 
+#' @param df data frame
+#' @return List with num_singleton, num_same_subset, num_same_Y_diff_X
+#' @export
+cluster_stats <- function(df) {
+  s <- singletons(df)
+  filter_df <- as.data.frame(df[!s,])
+  tab <- table(as.character(filter_df[,1]),as.character(filter_df[,2]))
+  return(list(sum(s),same_subset(tab),same_Y_diff_X(tab),same_X_diff_Y(tab),different_subset(tab)))
+}
+
 #' Computes number of pairs in a matrix from `table` that
 #' are in the same subset. Intended to identify transcripts
 #' that have been mapped to the same gene clusters between
@@ -70,14 +87,18 @@ different_subset <- function(tab) {
 #' cc <- correctly_clustered(df)
 #' @export
 correctly_clustered <- function(df) {
-  tab <- table(df[,1],df[,2])
-  return(same_subset(tab) + singletons(df))
+  s <- singletons(df)
+  filter_df <- as.data.frame(df[!s,])
+  tab <- table(as.character(filter_df[,1]),as.character(filter_df[,2]))
+  return(list(sum(s), same_subset(filter_df)))
 }
 
-#' Computes number of singleton clusters.
+#' Computes singleton clusters.
+#' 
+#' Computes which rows in the data frame have singleton clusters for both column 1 and column 2.
 #' 
 #' @param df Data frame with two columns containing only clusterings (do not need same label)
-#' @return row numbers of transcripts that have singleton clusters and the number of singleton clusterings
+#' @return vector of TRUE/FALSE for transcripts that have singleton clusters
 #' @examples
 #' df <- data.frame(col1=c(1,1,2,2,2,2,3,4,5),col2=c(1,1,2,3,3,3,4,4,5))
 #' s <- singletons(df)
@@ -85,8 +106,7 @@ correctly_clustered <- function(df) {
 singletons <- function(df) {
   c1 <- df[,1]
   c2 <- df[,2]
-  d <- duplicated(c1) | duplicated(c1, fromLast=TRUE) | duplicated(c2) | duplicated(c2, fromLast=TRUE)
-  list(df[d,],sum(d))
+  !(duplicated(c1) | duplicated(c1, fromLast=TRUE) | duplicated(c2) | duplicated(c2, fromLast=TRUE))
 }
 
 #' Computes Adjusted Rand Index taking into account count of filtered out
@@ -96,8 +116,8 @@ singletons <- function(df) {
 #' @param c corset & trinity filtered clustering data frame
 #' @return adjusted Rand Index
 ari <- function(f, c) {
-  x<-as.vector(c$Trinity.gene)
-  y<-as.vector(c$Corset.gene)
+  x<-as.data.frame(c)[,1]
+  y<-as.data.frame(c)[,2]
   if(length(x) != length(y))
     stop("arguments must be vectors of the same length")
   tab <- table(x,y)
