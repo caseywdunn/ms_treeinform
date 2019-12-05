@@ -6,14 +6,13 @@
 #SBATCH -C intel
 #SBATCH -J phyldog
 
-#source activate agalma
-# need to install phyldog...
-module load phyldog/Aug2016
+source activate agalma
 
-WORKDIR=/gpfs/scratch/aguang/ms_treeinform/data/drosophila_analysis/trinity/scratch/
-CODEDIR=/gpfs/scratch/aguang/ms_treeinform/code/phyldog
+WORKDIR=/gpfs/data/cbc/aguang/treeinform/drosophila/scratch
+CODEDIR=/gpfs/data/cbc/aguang/treeinform/ms_treeinform/code/phyldog
 
 cd $WORKDIR
+"""
 mkdir -p links
 mkdir -p OptionFiles
 mkdir -p ResultFiles
@@ -55,5 +54,5 @@ for f in *.opt
 do
   sed -i ':a;N;$!ba;s/input.sequence.sites_to_use=all/output.events.file=$(RESULT)$(DATA)_Events.txt \ninput.sequence.sites_to_use=all/' $f
 done
-
+"""
 srun phyldog param=$WORKDIR/OptionFiles/GeneralOptions.txt
