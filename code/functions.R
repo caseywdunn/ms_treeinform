@@ -271,7 +271,7 @@ subtree_lengths = function(tree) {
   nnode = phylo$Nnode
   data = tree@data
   bl = c(phylo$edge.length, 0)
-  data[,'bl'] = bl[order(c(phylo$edge[,2], length(phylo$tip.label)+1))]
+  data$bl = bl[order(c(phylo$edge[,2], length(phylo$tip.label)+1))]
   des = lapply(length(phylo$tip.label)+1:nnode, function(z) descendants(phylo, z))
   td = lapply(length(phylo$tip.label)+1:nnode, function(z) tip_descendants(phylo, z))
   duplicates = sapply(td, function(z) {
@@ -279,7 +279,7 @@ subtree_lengths = function(tree) {
   })
   only_duplicates = des[which(duplicates)]
   len = lapply(only_duplicates, function(z) {
-    filter(data, node %in% z) %>% select(bl) %>% sum
+    dplyr::filter(data, node %in% z) %>% dplyr::select(bl) %>% sum
   })
   return(len)
 }
@@ -291,4 +291,27 @@ subtree_lengths = function(tree) {
 #' @return A list of subtree lengths
 multi_subtree_lengths = function(trees, cores) {
   mclapply(trees, subtree_lengths, mc.cores=cores)
+}
+
+#' Returns subtree lengths for a list of ape gene trees.
+#' 
+#' 
+multi_subtree_lengths2 = function(phylos, cores) {
+  mclapply(phylos, subtree_lengths2, mc.cores=cores)
+}
+subtree_lengths2 = function(phylo) {
+  nnode = phylo$Nnode
+  data = as_tibble(phylo)
+  bl = c(phylo$edge.length, 0)
+  data$bl = bl[order(c(phylo$edge[,2], length(phylo$tip.label)+1))]
+  des = lapply(length(phylo$tip.label)+1:nnode, function(z) descendants(phylo, z))
+  td = lapply(length(phylo$tip.label)+1:nnode, function(z) tip_descendants(phylo, z))
+  duplicates = sapply(td, function(z) {
+    sapply(strsplit(names(z), '@'), '[')[1,] %>% duplicated %>% any
+  })
+  only_duplicates = des[which(duplicates)]
+  len = lapply(only_duplicates, function(z) {
+    dplyr::filter(data, node %in% z) %>% dplyr::select(bl) %>% sum
+  })
+  return(len)
 }

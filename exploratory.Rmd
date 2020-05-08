@@ -1,5 +1,5 @@
 ---
-title: "Exploratory treeinform notebook"
+title: "Additional empirical data"
 output:
   pdf_document: default
   html_notebook: default
@@ -15,7 +15,7 @@ library(hutan)
 library(treeio)
 library(parallel)
 library(knitr)
-library(runjags)
+#library(runjags)
 library(entropy)
 library(assertthat)
 library(Biostrings)
@@ -48,7 +48,7 @@ thresholds=c(50,5,.5,.005,.0005,.00005,.0000005)
 genetree_versions=c(18,22,26,30,34,38,42) # treeinform genetree versions
 versions=c(15,19,23,27,31,35,39) # treeinform versions
 csv_files<-c("trinity.csv",sapply(versions, function(x) paste0("treeinform",x,".csv")))
-isoform_genes<-lapply(csv_files, function(x) read.csv(gttreyy file.path(TRINITY_PATH,x)))
+isoform_genes<-lapply(csv_files, function(x) read.csv(file.path(TRINITY_PATH,x)))
 isoform_num<-mclapply(isoform_genes, function(x) cluster_size_distribution(x$gene), mc.cores=cores)
 
 cds<-read.table(file.path(PATH,"dmel_unique_protein_isoforms_fb_2018_04.tsv"),sep="\t",skip=4,col.names=c("FBgn","FB_gene_symbol","representative_protein","identical_protein(s)"),header=FALSE,fill=TRUE)
@@ -214,9 +214,12 @@ agg_treeinforms <- matrix(Reduce(function(x,y) mapply(function(a,b) a + b, x, y)
 thresholds=c(0,500,50,5,.5,.05,.005,.0005,.00005,.000005,.0000005, 0.4, 0.3, 0.2, 0.1, 0.09, 0.08, 0.07, 0.06)
 correct <- c(agg[2],agg_treeinforms[2,])
 diff_Y_same_X <- c(agg[4],agg_treeinforms[4,])
-cds_table <- data.frame(correct,diff_Y_same_X,thresholds)
-ggplot(cds_table, aes(x=diff_Y_same_X,y=correct)) + geom_point() + geom_line() + ggtitle("Pairs of orrectly assigned transcripts vs\n pairs of transcripts incorrectly assigned to the same gene\n as threshold increases for 6 species of Drosophila") + xlab("Transcripts incorrectly assigned to the same gene") + ylab("Correctly assigned transcripts") + theme_classic() +
-  ggrepel::geom_label_repel(aes(label = thresholds))
+diff_X_same_Y <- c(agg[3],agg_treeinforms[3,])
+cds_table <- data.frame(correct,diff_Y_same_X,diff_X_same_Y,thresholds)
+cds_table$precision <- cds_table$correct/(cds_table$correct+cds_table$diff_Y_same_X)
+cds_table$recall <- cds_table$correct/(cds_table$correct+cds_table$diff_X_same_Y)
+ggplot(cds_table, aes(x=diff_Y_same_X,y=correct)) + geom_point() + geom_line() + xlab("Recall") + ylab("Precision") + theme_classic() + ggrepel::geom_label_repel(aes(label = thresholds)) #+ ggtitle("Pairs of orrectly assigned transcripts vs\n pairs of transcripts incorrectly assigned to the same gene\n as threshold increases for 6 species of Drosophila") 
+# Precision is correctly assigned transcripts/correct + incorrectly assigned to same gene. Recall is correctly assigned/correct + incorrectly assigned to different genes.
 ```
 
 # Echinoderm plots
@@ -227,11 +230,15 @@ ggplot(cds_table, aes(x=diff_Y_same_X,y=correct)) + geom_point() + geom_line() +
 ```{r, echino_subtree, echo=FALSE, warning=FALSE, fig.cap="Not a big peak again."}
 # don't have this data...
 PATH="/Users/aguang/Dropbox\ (Brown)/treeinform/echinoderm_analysis"
-load(file.path(PATH,"echino_lengths.Rdata"))
+#echino_lengths2<-multi_subtree_lengths2(echino_genetrees,4)
+#echino_lengths2 <- unlist(echino_lengths2)
+#save(echino_lengths2,file=file.path(PATH,"echino_lengths2.Rdata"))
+load(file.path(PATH,"echino_lengths2.Rdata"))
+#load(file.path(PATH,"echino_lengths.Rdata"))
 #echino_genetrees <- read_trees(file.path(PATH,"genetrees"),"newick",cores=cores)
 echino_genetrees <- read.tree(file.path(PATH,"genetrees.newick"))
 #echino_lengths = unlist(multi_subtree_lengths(echino_genetrees, cores))
-echino_lengths_lim = echino_lengths[which(echino_lengths<1)]
+echino_lengths_lim = echino_lengths2[which(echino_lengths2<1)]
 ggplot(data=data.frame(x=echino_lengths_lim)) + geom_histogram(aes(x=x,y=..count../sum(..count..)), binwidth=0.01, fill='white', color='black') + theme_classic() + xlab("Subtree length") + ylab("Frequency") #+ geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=0.08), map=aes(x=x, y=y), label="0.02", vjust=1.4, angle=90, colour="#56B4E9", size=3)
 #test<-ast$literal_eval(readLines(file.path(PATH,"histo.txt")))
 ```

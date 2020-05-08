@@ -139,9 +139,11 @@ num_trinity_over_30<-sum(trinity_over_30$freq) # returns 3
 corset_over_30<-filter(new_df, Method=='Corset' & as.numeric(levels(size))[size]>30)
 num_corset_over_30<-sum(corset_over_30$freq) # returns 20
 
-#tiff(filename="Figures/corset_cluster.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=350)
+#tiff(filename="Figures/corset_cluster.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
 #pdf(file="Figures/corset_cluster.pdf",width=7,height=5,fonts=c("sans"))
-suppressWarnings(ggplot(data=new_df,aes(x=size,y=freq,color=Method,group=Method))+geom_point(alpha=0.7)+scale_y_log10()+xlab("Cluster Size")+ylab("Count")+ggtitle("Cluster size counts for Trinity & Corset by sample") + theme_classic() + geom_line() + facet_wrap(~ID, ncol=2) + scale_x_discrete(breaks=seq(0,70,by=10)))
+suppressWarnings(ggplot(data=new_df,aes(x=size,y=freq,color=Method,group=Method))+geom_point(alpha=0.7)+scale_y_log10()+xlab("Cluster Size")+ylab("Count") + theme_classic() + geom_line() + facet_wrap(~ID, ncol=2) + scale_x_discrete(breaks=seq(0,70,by=10)))
+# no titles for plos
+#+ggtitle("Cluster size counts for Trinity & Corset by sample")
 #dev.off()
 ```
 
@@ -171,7 +173,7 @@ corset_lengths_lim = corset_lengths[which(corset_lengths<1)]
 trinity_corset_ks <- ks.test(corset_lengths,lengths)$statistic
 rejection_level_tc <- 1.36*sqrt((length(corset_lengths)+length(lengths))/(length(corset_lengths)*length(lengths)))
 
-#tiff(filename="Figures/corset_lengths.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=350)
+#tiff(filename="Figures/corset_lengths.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
 #postscript(file="Figures/corset_lengths.eps",width=7,height=5,fonts=c("sans"))
 ggplot(data=data.frame(x=corset_lengths_lim)) + geom_histogram(aes(x=x,y=..count../sum(..count..)), binwidth=0.01, fill='white', color='black') + theme_classic() + xlab("Subtree length") + ylab("Frequency") #+ geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=0.08), map=aes(x=x, y=y), label="0.02", vjust=1.4, angle=90, colour="#56B4E9", size=3)
 #dev.off()
@@ -327,9 +329,10 @@ default_percentages<-filter(long_table, thresholds==5e-04)
 In order to validate that treeinform improves the accuracy of assigning transcripts to genes under the specified threshold, we performed two analyses. First, we plotted the percentage of reassigned genes at different thresholds to assess the performance of the default threshold value of 0.0005 (Supplementary Figure 5). Below the default value, the percentage of reassigned genes begins to plateau, while above the default value the percentage of reassigned genes increases very quickly, increasing the likelihood of treeinform to reassign transcripts from different genes to the same gene in addition to reassign transcripts from the same gene together.
 
 ```{r, fused_percentage, echo=FALSE, warnings=FALSE, fig.cap="The percentage of reassigned tips is plotted above on a log scale. The original assembly had 433,071 genes, with 47,688 included in the gene trees after Agalma filtering criteria, and at most 23,396 possible candidates (49.06% of genes) for reassignment. The default threshold for treeinform is marked by the grey vertical dashed line."}
-#tiff(filename="Figures/reassigned.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=350)
+#tiff(filename="Figures/reassigned.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
 #pdf(file="Figures/reassigned.pdf",width=7,height=5,fonts=c("sans"))
-ggplot(long_table,aes(thresholds,value*100)) + geom_vline(xintercept=0.0005, linetype='dashed', color='grey') + geom_text(data=data.frame(x=0.0005,y=0.25), map=aes(x=x, y=y), label="0.0005", vjust=1.4, angle=90, colour="grey", size=3) + geom_point(aes(group=variable,color=variable,shape=size), alpha=0.5) + geom_line(aes(group=variable,color=variable,linetype=size)) + ggtitle("Percentage of reassigned genes by species + total percentage vs threshold") + xlab("Threshold") + ylab("Percentage") + scale_x_log10() + theme_classic() + scale_shape(guide="none") + scale_linetype(guide="none") + scale_colour_manual(name="Species",labels=c("Abylopsis","Agalma","Craseoa","Hydra","Nanomia","Nematostella","Physalia","Total"),values=cbbPalette)
+ggplot(long_table,aes(thresholds,value*100)) + geom_vline(xintercept=0.0005, linetype='dashed', color='grey') + geom_text(data=data.frame(x=0.0005,y=0.25), map=aes(x=x, y=y), label="0.0005", vjust=1.4, angle=90, colour="grey", size=3) + geom_point(aes(group=variable,color=variable,shape=size), alpha=0.5) + geom_line(aes(group=variable,color=variable,linetype=size)) + xlab("Threshold") + ylab("Percentage") + scale_x_log10() + theme_classic() + scale_shape(guide="none") + scale_linetype(guide="none") + scale_colour_manual(name="Species",labels=c("Abylopsis","Agalma","Craseoa","Hydra","Nanomia","Nematostella","Physalia","Total"),values=cbbPalette)
+#+ ggtitle("Percentage of reassigned genes by species + total percentage vs threshold")
 #dev.off()
 ```
 
@@ -350,9 +353,10 @@ Threshold[l1+l2+1:l3] <- "0.05"
 Threshold[l1+l2+l3+1:l4] <- "0.0005"
 data = data.frame(dt, Threshold)
 f = function(x) dup_pdf(x, 1, lambda, mu)
-#tiff(filename="Figures/validate.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=350)
+#tiff(filename="Figures/validate.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
 #pdf(file="Figures/validate.pdf",width=7,height=5,fonts=c("sans"))
-ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold), bw=0.02) + stat_function(fun=f) + ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds") + xlab("Duplication Times") + ylab("Density") + theme_classic() + theme(legend.position = c(0.8, 0.6)) + geom_hline(yintercept=0, color="white") + geom_vline(xintercept=0, color="white")
+ggplot(data, aes(dt)) + geom_density(aes(group=Threshold, color=Threshold), bw=0.02) + stat_function(fun=f) + xlab("Duplication Times") + ylab("Density") + theme_classic() + theme(legend.position = c(0.8, 0.6)) + geom_hline(yintercept=0, color="white") + geom_vline(xintercept=0, color="white")
+#+ ggtitle("Density of inferred and theoretical duplication times\nunder different treeinform thresholds")
 #dev.off()
 
 # FOR PRES

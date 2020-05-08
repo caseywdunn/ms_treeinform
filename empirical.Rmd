@@ -1,0 +1,375 @@
+---
+title: "Additional empirical data"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+```{r, setup, include=FALSE}
+library(ape)
+library(scales)
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+library(hutan)
+library(treeio)
+library(parallel)
+library(knitr)
+#library(runjags)
+library(entropy)
+library(assertthat)
+library(Biostrings)
+library(ggrepel)
+
+cores = detectCores()
+if (cores < 1) { cores = 1 }
+set.seed(1287234)
+
+library(treeinform) #(if you installed from Github as a package)
+#source("R/read_trees.R")
+#source("R/cluster_size_dist.R")
+
+source("code/functions.R")
+source("code/summary_stats.R")
+```
+
+# Overview
+
+This is a notebook exploring 1) comparisons of Trinity Drosophila assemblies pre and post treeinform to Drosophila genome CDS sequences and 2) comparisons of Trinity S. Purpurata assemblies pre and post treeinform to S. Purpurata CDS sequences. Our hypothesis is that assemblers like Trinity have more difficulty resolving splice variants with paralogs in species with higher genetic diversity. In such cases, a tool like treeinform that uses phylogenetic information to correct assemblies is useful to reduce assembly error. To check on this hypothesis we compare transcripts pre and post treeinform.
+
+In the previous supplementary revision, we wrote that "Below the default value, the percentage of reassigned genes begins to plateau, while above the default value the percentage of reassigned genes increases very quickly, increasing the likelihood of treeinform to reassign transcripts from different genes to the same gene in addition to reassign transcripts from the same gene together." Here we show that given the correctly selected treeinform threshold, there is real added value using treeinform to reassign transcripts that have incorrectly been assigned to different genes to the same gene, while avoiding reassigning transcripts that correctly belong to different genes to the same gene.
+
+# Comparisons of Trinity Drosophila assemblies pre and post treeinform to genome CDS
+
+```{r, isoform_num, echo=FALSE, warning=FALSE}
+PATH="data/drosophila_analysis"
+TRINITY_PATH=file.path(PATH,"trinity")
+thresholds=c(50,5,.5,.005,.0005,.00005,.0000005)
+genetree_versions=c(18,22,26,30,34,38,42) # treeinform genetree versions
+versions=c(15,19,23,27,31,35,39) # treeinform versions
+csv_files<-c("trinity.csv",sapply(versions, function(x) paste0("treeinform",x,".csv")))
+isoform_genes<-lapply(csv_files, function(x) read.csv(file.path(TRINITY_PATH,x)))
+isoform_num<-mclapply(isoform_genes, function(x) cluster_size_distribution(x$gene), mc.cores=cores)
+
+cds<-read.table(file.path(PATH,"dmel_unique_protein_isoforms_fb_2018_04.tsv"),sep="\t",skip=4,col.names=c("FBgn","FB_gene_symbol","representative_protein","identical_protein(s)"),header=FALSE,fill=TRUE)
+cds_isoform_num<-cluster_size_distribution(cds$FBgn)
+
+genetrees <- read_trees(file.path(PATH,"genetree-10"),"newick",cores=cores)
+```
+
+## Data
+
+Data for Drosophila is in:
+
+ * `PATH = "data/drosophila_analysis"`
+ * genetrees from Trinity and treeinform are stored under `genetree-x` folders in $PATH, where `x` corresponds to their run id in the agalma database.
+ * blast alignments are in `blast`
+ 
+Data for S. Purpuratus is in:
+
+ * `PATH="data/echinoderm_analysis"`
+ * CDS isoform data for S. purpuratus is 
+
+```{r, subtree, echo=FALSE, warning=FALSE, fig.cap="The subtree branch lengths for Drosophila actually look pretty good."}
+# * Trinity and treeinform isoform to gene mappings for Drosophila melanogaster are stored in the `trinity` folder in $PATH. They were generated from the agalma database as `.csv` files with the following command:
+# `python dump_sqlite.py agalma_trinity.sqlite 0 15 19 23 27 31 35 39`.
+#tiff(filename="Figures/drosophila_subtree.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
+lengths = unlist(multi_subtree_lengths(genetrees, cores))
+lengths_lim = lengths[which(lengths<1)]
+ggplot(data=data.frame(x=lengths_lim)) + geom_histogram(aes(x=x,y=..count../sum(..count..)), binwidth=0.01, fill='white', color='black') + theme_classic() + xlab("Subtree length") + ylab("Frequency") #+ geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=0.08), map=aes(x=x, y=y), label="0.02", vjust=1.4, angle=90, colour="#56B4E9", size=3)
+#dev.off()
+```
+
+## Figures
+
+There were `r toString(length(genetrees))` gene trees from Agalma for the Drosophila dataset pre-treeinform. We plotted 3 figures: subtree branch lengths across all gene trees (Figure 1), cluster size counts for Trinity+treeinform and CDS for Drosophila Melanogaster (Figure 2) and percentage of reassigned tips from treeinform by species (Figure 3). The subtree branch lengths actually don't have the peak close to 0 we saw in the 7-taxa Siphonophore dataset. However, these are subtree branch lengths from trees produced by RAxML, as opposed to phyldog. (so just look at subtree branch lengths from trees produced by RAxML for agalma...)
+
+When looking at cluster size counts for Drosophila melanogaster Trinity+treeinform and CDS, where a cluster is defined as a set of transcripts that all belong to the same gene, immediately we see that Trinity identifies many more transcripts and genes than are in the CDS, which treeinform doesn't reduce significantly (Figure 2). This was not the case for the 7-taxa Siphonophore dataset and can likely be attributed to the distribution of subtree branch lengths in Figure 1.
+
+In a similar vein, very few tips (it looks like less than 1%) are reassigned until a subtree branch length threshold of 0.5 (Figure 3).
+
+```{r, basic_stats_isoform, echo=FALSE, warning=FALSE}
+num_cds_genes <- length(unique(cds$FBgn)) # 13931
+num_trinity_genes <- length(unique(isoform_genes[[1]]$gene)) # 27668
+
+# theme_classic() + geom_line() + facet_wrap(~ID, ncol=2) + scale_x_discrete(breaks=seq(0,70,by=10)))
+```
+
+```{r, clusters, echo=FALSE, warning=FALSE, fig.cap='Three different thresholds of treeinform are plotted along with just Trinity and CDS, but the lines for just Trinity and treeinform are all roughly the same. This is the plot for Drosophila Melanogaster.'}
+# index of isoform_num we want is 1, 4, 5, 6
+methods<-c("trinity","treeinform-.5","treeinform-.005","treeinform-.0005", "CDS" )
+ids<-rep("melanogaster",5)
+list_dfs <- list(isoform_num[[1]],isoform_num[[4]],isoform_num[[5]],isoform_num[[6]],cds_isoform_num)
+for_plotting<-single_cluster_df(list_dfs,methods,ids)
+
+plot_clusters(for_plotting) +
+  ggtitle("Cluster size counts for Trinity, CDS and different thresholds of treeinform") + 
+  scale_x_discrete(breaks=seq(0,80,by=10))
+```
+
+```{r, fused_percentage_pre, echo=FALSE, warnings=FALSE}
+phylos<-lapply(genetrees, function(x) x@phylo)
+before_counts<-count_all_transcripts(phylos,cores)
+orig_assembly = sum(before_counts)
+
+treeinform_genetrees<-lapply(genetree_versions, function(x) {
+  files <- list.files(file.path(PATH,paste0("genetree-",x)),
+                      pattern="*.newick",full.names=TRUE)
+  trees <- mclapply(files,read.tree,mc.cores=cores)
+  class(trees) <- "multiPhylo"
+  return(trees)
+})
+counts<-lapply(treeinform_genetrees, function(x) count_all_transcripts(x,cores))
+#save(counts,file="data/revisions/counts.Rdata")
+#load(file="data/revisions/counts.Rdata")
+Total_percentage<-sapply(counts, function(x) sum(before_counts-x)/orig_assembly)
+
+percentages<-mclapply(counts, function(x) (before_counts-x)/before_counts,mc.cores=cores)
+size<-rep(1,8*length(percentages))
+size[(7*length(percentages)+1):(8*length(percentages))]<-2
+size<-as.factor(size)
+thresholds<-as.numeric(thresholds)
+wide_table<-data.frame(cbind(do.call(rbind,percentages),thresholds,Total_percentage))
+long_table<-melt(wide_table,id.vars=c("thresholds"))
+long_table<-cbind(long_table,size)
+long_table$value<-as.numeric(long_table$value)
+long_table$thresholds<-as.numeric(long_table$thresholds)
+
+# coloring for threshold selection & mixture model selection
+#grp <- c(rep(1, 18), 2)
+#fused.df.percents <- cbind(fused.df.percents, grp)
+cbbPalette <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#000000")
+
+hydra_percentage<-sapply(1:4, function(x) (before_counts-counts[[x]])[4]/sum(before_counts-counts[[x]]))
+default_percentages<-filter(long_table, thresholds==5e-04)
+```
+
+```{r, fused_percentage, echo=FALSE, warnings=FALSE, fig.cap="The percentage of reassigned tips is plotted above on a log scale."}
+ggplot(long_table,aes(thresholds,value*100)) + geom_point(aes(group=variable,color=variable,shape=size), alpha=0.5) + geom_line(aes(group=variable,color=variable,linetype=size)) + ggtitle("Percentage of reassigned genes by species + total percentage vs threshold") + xlab("Threshold") + ylab("Percentage") + scale_x_log10() + theme_classic() + scale_shape(guide="none") + scale_linetype(guide="none") + scale_colour_manual(name="Species",labels=c("Drosophila ananassae","Drosophila melanogaster","Drosophila mojavensis","Drosophila pseudoobscura","Drosophila simulans","Drosophila virilis","Drosophila yakuba","Total"),values=cbbPalette)
+```
+
+### CDS comparisons
+
+The CDS comparisons are actually pretty interesting.
+
+```{r, cds_comparisons, echo=FALSE, warnings=FALSE}
+run_ids=c(2,3,4,5,6)
+treeinform_ids=c(11,15,19,23,27,31,35,39,43,47,58,59,60,61,62,63,64,65)
+srx_ids=c("SRX247001","SRX247003","SRX054483","SRX054470","SRX054462")
+# melanogaster is 6 / SRX054470
+
+PATH="/Users/aguang/Dropbox (Brown)/treeinform/ms_treeinform/data/drosophila_analysis"
+#files <- grep(".tsv",list.files(file.path(PATH,"blast")),value=TRUE)
+blast <- mclapply(srx_ids,
+                function(x) read.delim(file.path(PATH,"blast",paste0(x,".tsv")),header=FALSE,col.names=c("trinity","CDS","percent_identity","align_len","mismatch","gapopen","qstart","qned","sstart","send","evalue","bitscore")),
+                mc.cores=cores)
+gn_tr <- read.delim(file.path(PATH,"fbgn_fbtr_fbpp_fb_2018_04.tsv"),skip=4,col.names=c("FBgn","FBtr","FBpp"))[,2:1]
+replaced_blast <- mclapply(blast,
+                           function(x) {
+                             df <- replace_values(x, gn_tr, 2)
+                             df <- best_unique(df, 'trinity')
+                             trinity_split(ungroup(df))
+                           },
+                           mc.cores=cores)
+cs <- mclapply(replaced_blast, cluster_stats, mc.cores=cores)
+# 1=number of singletons, 2=number of pairs with same clusterings, 3=number of pairs with same clustering in 2 and diff in 1, 4=number of pairs with same clustering in 1 and diff in 2
+agg <- Reduce(function(x,y) mapply(function(a,b) a+b, x, y),cs)
+
+#treeinform_csv <- grep(".csv", list.files(file.path(PATH,"blast")),value=TRUE)
+trinitys <- mclapply(run_ids, function(x) {
+  csvs <- read.csv(file.path(PATH,"blast",paste0("trinity_",x,".csv")))
+  return(csvs) }, mc.cores=cores)
+replaced_blast_modelids <- mclapply(1:5,function(x) {
+  left_join(replaced_blast[[x]],trinitys[[x]],by=c("gene","isoform"))
+}, mc.cores=cores)
+# THESE ARE BY RUNID
+#treeinforms <- mclapply(run_ids,
+#                      function(x) {
+#                        csvs <- lapply(treeinform_ids, function(y) {
+#                          csv <- read.csv(file.path(PATH,"blast",paste0("treeinform_",y,"_",x,".csv")))
+#                          colnames(csv) <- #c("model_id",paste0("treeinform_",y,"_gene"),paste0("treeinform_",y,"_isoform"))
+#                          return(csv)
+#                          })
+#                        csvs[[length(csvs)+1]] = replaced_blast_modelids[[x-1]] #run_ids - 1
+#                        df <- Reduce(function(x,y) left_join(x,y,by="model_id"), csvs)
+                        #df[complete.cases(df),]
+#                      },
+#                      mc.cores=cores
+#)
+#cs_treeinforms <- mclapply(treeinforms,
+#                           function(x) {
+#                             lapply(treeinform_ids,
+#                                    function(y) cluster_stats(select(x,paste0("treeinform_",y,"_gene"),CDS))
+#                                    )
+#                           }, mc.cores=cores)
+#save(cs_treeinforms,file=file.path(PATH,"cs_treeinforms.Rdata"))
+load(file.path(PATH,"cs_treeinforms.Rdata"))
+# the cs_treeinforms are then by... treeinform_ids
+# we want to tally across species/run ids
+list_lists <- lapply(cs_treeinforms, function(x) do.call(cbind, x))
+agg_treeinforms <- matrix(Reduce(function(x,y) mapply(function(a,b) a + b, x, y), list_lists), nrow=4)
+
+#jaccard <- c(agg[2]/(agg[2]+agg[3]+agg[4]),agg_treeinforms[2,]/(agg_treeinforms[2,]+agg_treeinforms[3,]+agg_treeinforms[4,]))
+```
+
+```{r, cds_plots}
+thresholds=c(0,500,50,5,.5,.05,.005,.0005,.00005,.000005,.0000005, 0.4, 0.3, 0.2, 0.1, 0.09, 0.08, 0.07, 0.06)
+correct <- c(agg[2],agg_treeinforms[2,])
+diff_Y_same_X <- c(agg[4],agg_treeinforms[4,])
+diff_X_same_Y <- c(agg[3],agg_treeinforms[3,])
+cds_table <- data.frame(correct,diff_Y_same_X,diff_X_same_Y,thresholds)
+cds_table$precision <- cds_table$correct/(cds_table$correct+cds_table$diff_Y_same_X)
+cds_table$recall <- cds_table$correct/(cds_table$correct+cds_table$diff_X_same_Y)
+
+#tiff(filename="Figures/drosophila_cds.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
+ggplot(cds_table, aes(x=diff_Y_same_X,y=correct)) + geom_point() + geom_line() + xlab("Recall") + ylab("Precision") + theme_classic() + ggrepel::geom_label_repel(aes(label = thresholds)) #+ ggtitle("Pairs of orrectly assigned transcripts vs\n pairs of transcripts incorrectly assigned to the same gene\n as threshold increases for 6 species of Drosophila") 
+# Precision is correctly assigned transcripts/correct + incorrectly assigned to same gene. Recall is correctly assigned/correct + incorrectly assigned to different genes.
+```
+
+# Echinoderm plots
+
+## Subtree lengths
+
+
+```{r, echino_subtree, echo=FALSE, warning=FALSE, fig.cap="Not a big peak again."}
+# don't have this data...
+PATH="/Users/aguang/Dropbox\ (Brown)/treeinform/echinoderm_analysis"
+#echino_lengths2<-multi_subtree_lengths2(echino_genetrees,4)
+#echino_lengths2 <- unlist(echino_lengths2)
+#save(echino_lengths2,file=file.path(PATH,"echino_lengths2.Rdata"))
+load(file.path(PATH,"echino_lengths2.Rdata"))
+#load(file.path(PATH,"echino_lengths.Rdata"))
+#echino_genetrees <- read_trees(file.path(PATH,"genetrees"),"newick",cores=cores)
+echino_genetrees <- read.tree(file.path(PATH,"genetrees.newick"))
+#echino_lengths = unlist(multi_subtree_lengths(echino_genetrees, cores))
+echino_lengths_lim = echino_lengths2[which(echino_lengths2<1)]
+#tiff(filename="Figures/echinoderm_subtree.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
+ggplot(data=data.frame(x=echino_lengths_lim)) + geom_histogram(aes(x=x,y=..count../sum(..count..)), binwidth=0.01, fill='white', color='black') + theme_classic() + xlab("Subtree length") + ylab("Frequency") #+ geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=0.08), map=aes(x=x, y=y), label="0.02", vjust=1.4, angle=90, colour="#56B4E9", size=3)
+#test<-ast$literal_eval(readLines(file.path(PATH,"histo.txt")))
+```
+
+There were `r toString(length(echino_genetrees))` gene trees from Agalma for the Echinoderm dataset pre-treeinform. We plotted 2 figures here: subtree branch lengths across all gene trees (Figure 5), and correct clusterings vs transcripts incorrectly assigned to the same gene (Figure 7). 
+
+### CDS comparisons
+
+```{r, cds_comparisons_echino, echo=FALSE, warnings=FALSE}
+treeinform_ids=176:194
+
+PATH="/Users/aguang/Dropbox\ (Brown)/treeinform/echinoderm_analysis"
+echino_blast <- read.delim(file.path(PATH,"spur.tsv"),header=FALSE,col.names=c("trinity","CDS","percent_identity","align_len","mismatch","gapopen","qstart","qned","sstart","send","evalue","bitscore"))
+transcriptome_headers <- fasta.index(file.path(PATH,"sp","Transcriptome.fasta"))$desc
+splits <- lapply(transcriptome_headers, function(x) strsplit(x,split=" TSA: Strongylocentrotus purpuratus ")[[1]])
+echino_header <- sapply(splits, function(x) x[1])
+echino_gene <- sapply(splits, function(x) {
+  tmp <- strsplit(x[2],split="\\.|\\_")[[1]]
+  paste(tmp[1],tmp[2],sep=".")})
+gn_tr_echino <- data.frame(CDS=echino_header,gene=echino_gene)
+replaced_blast_df_echino <- replace_values(echino_blast, gn_tr_echino, 2)
+replaced_blast_df_echino <- best_unique(replaced_blast_df_echino, 'trinity')
+trinity_csv <- read.csv(file.path(PATH,"treeinforms","trinity_64.csv"))
+colnames(trinity_csv) <- c("model_id", "gene", "isoform")
+colnames(replaced_blast_df_echino)[1] <- "model_id"
+combined_blast_echino <- left_join(replaced_blast_df_echino, trinity_csv, by="model_id")
+combined_blast_echino <- ungroup(combined_blast_echino)
+echino_cs <- cluster_stats(combined_blast_echino[,c("gene","CDS")])
+# 1=number of singletons, 2=number of pairs with same clusterings, 3=number of pairs with same clustering in 2 and diff in 1, 4=number of pairs with same clustering in 1 and diff in 2
+# don't need the further Reduce step because we only have ONE species
+#echino_agg <- Reduce(function(x,y) mapply(function(a,b) a+b, x, y),echino_cs)
+
+#treeinforms <- mclapply(treeinform_ids, function(y) {
+#                          csv <- #read.csv(file.path(PATH,"treeinforms_with_spur",paste0("treeinform_",y,"_64.csv")))
+#                          colnames(csv) <- #c("model_id",paste0("treeinform_",y,"_gene"),paste0("treeinform_",y,"_isoform"))
+#                          return(csv)
+#                          }, mc.cores=cores)
+#treeinforms_all <- Reduce(function(x,y) left_join(x,y,by="model_id"), treeinforms)
+#save(file="treeinforms_withspur_all.Rdata",treeinforms_all)
+#load("treeinforms_all.Rdata")
+load("treeinforms_withspur_all.Rdata")
+#echino_treeinform_genes <- left_join(combined_blast_echino, treeinforms_all, by="model_id")
+#echino_cs_treeinforms <- mclapply(treeinform_ids, function(y)
+#  cluster_stats(select(echino_treeinform_genes,paste0("treeinform_",y,"_gene"),CDS)),
+#  mc.cores=cores)
+#save(file="echino_cs_treeinforms_withspur.Rdata",echino_cs_treeinforms)
+#load("echino_cs_treeinforms.Rdata")
+load("echino_cs_treeinforms_withspur.Rdata")
+echino_agg_treeinforms <- matrix(unlist(echino_cs_treeinforms),nrow=4)[,1:19]
+
+#echino_jaccard <- c(echino_cs[[2]]/(echino_cs[[2]]+echino_cs[[3]]+echino_cs[[4]]),echino_agg_treeinforms[2,]/(echino_agg_treeinforms[2,]+echino_agg_treeinforms[3,]+echino_agg_treeinforms[4,]))
+```
+
+```{r, fused_percentage_echino, eval=FALSE, echo=FALSE, warnings=FALSE, fig.cap="The percentage of reassigned tips is plotted above on a log scale."}
+# original assembly had 2906352 genes, with 380,142 included in gene trees after Agalma filtering criteria
+# 3746915 transcripts
+orig_assembly <- 2906352
+echino_before <- count_all_transcripts(echino_genetrees,cores)
+echino_orig <- sum(echino_before)
+
+t=1:10 # original thresholds were 5000*10^(-t)
+threshold = 5000*10^(-t)
+# numbers taken from slurm output
+reassigned = c(104679, 104678, 94452, 74520, 54447, 42711, 40948, 40916, 38323, 0)
+newly_created = c(43685, 43685, 42178, 36045, 27816, 22610, 21753, 21739, 22571, 0)
+revised_assembly = c(300654, 300654, 301277, 307667, 310760, 312020, 312193, 312198, 312342, 315041)
+fused.df <- data.frame(threshold,reassigned, newly_created, revised_assembly)
+
+# additional thresholds to fill out plot: 0.01, 0.025, 0.035, 0.15, 0.25, 0.35, 1.5, 2.5, 3.5
+threshold_add = c(0.01, 0.035, 0.15, 0.25, 0.35, 1.5, 2.5, 3.5)
+reassigned_add = c(45613, 48908, 52021, 63422, 68113, 71107, 83683, 87591, 90691)
+newly_created_add = c(23920, 25387, 26763, 31703, 33606, 34765, 39108, 40211, 41090)
+fused.df <- rbind(fused.df, data.frame(threshold=threshold_add, reassigned=reassigned_add, newly_created=newly_created_add, revised_assembly=revised_add))
+fused.df.percents <- transmute(fused.df, threshold, reassigned=reassigned/315041)
+
+# coloring for threshold selection & mixture model selection
+grp <- c(rep(1, 18), 2)
+fused.df.percents <- cbind(fused.df.percents, grp)
+
+ggplot(fused.df.percents, aes(threshold, reassigned)) + geom_jitter(aes(colour=grp)) + scale_x_log10() + ggtitle("Percentage of reassigned genes vs threshold") + xlab("Threshold") + ylab("Percentage") + theme_classic() + theme(legend.position="none") + geom_vline(xintercept=0.02, linetype='dashed', color='#56B4E9') + geom_text(data=data.frame(x=0.02,y=0.015), map=aes(x=x, y=y), label="0.02", hjust=-0.4, colour="#56B4E9", size=3)
+
+treeinform_genetrees<-lapply(genetree_versions, function(x) {
+  files <- list.files(file.path(PATH,paste0("genetree-",x)),
+                      pattern="*.newick",full.names=TRUE)
+  trees <- mclapply(files,read.tree,mc.cores=cores)
+  class(trees) <- "multiPhylo"
+  return(trees)
+})
+counts<-lapply(treeinform_genetrees, function(x) count_all_transcripts(x,cores))
+Total_percentage<-sapply(counts, function(x) sum(before_counts-x)/orig_assembly)
+
+percentages<-mclapply(counts, function(x) (before_counts-x)/before_counts,mc.cores=cores)
+size<-rep(1,8*length(percentages))
+size[(7*length(percentages)+1):(8*length(percentages))]<-2
+size<-as.factor(size)
+thresholds<-as.numeric(thresholds)
+wide_table<-data.frame(cbind(do.call(rbind,percentages),thresholds,Total_percentage))
+long_table<-melt(wide_table,id.vars=c("thresholds"))
+long_table<-cbind(long_table,size)
+long_table$value<-as.numeric(long_table$value)
+long_table$thresholds<-as.numeric(long_table$thresholds)
+
+# coloring for threshold selection & mixture model selection
+#grp <- c(rep(1, 18), 2)
+#fused.df.percents <- cbind(fused.df.percents, grp)
+cbbPalette <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#000000")
+
+ggplot(long_table,aes(thresholds,value)) + geom_point(aes(group=variable,color=variable,shape=size), alpha=0.5) + geom_line(aes(group=variable,color=variable,linetype=size)) + ggtitle("Percentage of reassigned genes by species + total percentage vs threshold") + xlab("Threshold") + ylab("Percentage") + scale_x_log10() + theme_classic() + scale_shape(guide="none") + scale_linetype(guide="none") + scale_colour_manual(name="Species",labels=c("Drosophila ananassae","Drosophila melanogaster","Drosophila mojavensis","Drosophila pseudoobscura","Drosophila simulans","Drosophila virilis","Drosophila yakuba","Total"),values=cbbPalette)
+```
+
+```{r, cds_plots_echino}
+echino_thresholds=c(0,500,50,5,.5,.05,.005,.0005,.00005,.000005,.0000005, 0.01, 0.02, 0.035, 0.15, 0.25, 0.35, 1.5, 2.5, 3.5)
+echino_correct <- c(echino_cs[[2]],echino_agg_treeinforms[2,])
+echino_diff_Y_same_X <- c(echino_cs[[4]],echino_agg_treeinforms[4,])
+echino_cds_table <- data.frame(correct=echino_correct,diff_Y_same_X=echino_diff_Y_same_X,thresholds=echino_thresholds)
+
+#tiff(filename="Figures/echinoderm_cds.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
+ggplot(echino_cds_table, aes(x=diff_Y_same_X,y=correct)) +
+  geom_point() + geom_line()  +
+  xlab("Transcripts incorrectly assigned to the same gene") +
+  ylab("Correctly assigned transcripts") + theme_classic() +
+  ggrepel::geom_label_repel(aes(label = thresholds))
+#dev.off()
+#+ggtitle("Pairs of correctly assigned transcripts vs\n pairs of transcripts incorrectly assigned to the same gene\n as threshold increases for S. purpuratus")
+#echino_ratio_table <- data.frame(echino_ratio, echino_thresholds)
+#ggplot(echino_ratio_table, aes(x=echino_thresholds,y=echino_ratio)) + geom_point() + ggtitle("Jaccard index of correctly assigned transcripts vs treeinform threshold") + xlab("Threshold") + ylab("Jaccard") + theme_classic()
+```
+
+# References

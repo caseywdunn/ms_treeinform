@@ -11,6 +11,7 @@ The repository is organized thusly:
 * **treeinform_preprint.pdf:** pdf of main manuscript preprint.
 * **supplementary.Rmd:** R notebook complete with code to generate all the figures and analyses for the Supplementary Information from original manuscript submission.
 * **supplementary_revision.Rmd:** R notebook complete with code to generate all the figures and analyses for the Supplementary Information from manuscript revision submission.
+* **empirical.Rmd:** R notebook complete with code to generate additional figures for PLOS ONE submission.
 * **figure1.Rmd:** R notebook with code to generate Figure 1 in the original main manuscript submission.
 * **figure1_revision.Rmd:** R notebook with code to generate Figure 1 in the main manuscript revision submission.
 * **data/:** folder with all the data that is used in supplementary.Rmd and for Figure 1.
