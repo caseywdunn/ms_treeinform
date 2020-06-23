@@ -222,7 +222,8 @@ cds_table$precision <- cds_table$correct/(cds_table$correct+cds_table$diff_Y_sam
 cds_table$recall <- cds_table$correct/(cds_table$correct+cds_table$diff_X_same_Y)
 
 #tiff(filename="Figures/drosophila_cds.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
-ggplot(cds_table, aes(x=diff_Y_same_X,y=correct)) + geom_point() + geom_line() + xlab("Recall") + ylab("Precision") + theme_classic() + ggrepel::geom_label_repel(aes(label = thresholds)) #+ ggtitle("Pairs of orrectly assigned transcripts vs\n pairs of transcripts incorrectly assigned to the same gene\n as threshold increases for 6 species of Drosophila") 
+ggplot(cds_table, aes(x=precision,y=recall)) + geom_point() + geom_line() + xlab("Recall") + ylab("Precision") + theme_classic() + ggrepel::geom_label_repel(aes(label = thresholds))
+#ggplot(cds_table, aes(x=diff_Y_same_X,y=correct)) + geom_point() + geom_line() + xlab("Recall") + ylab("Precision") + theme_classic() + ggrepel::geom_label_repel(aes(label = thresholds)) #+ ggtitle("Pairs of orrectly assigned transcripts vs\n pairs of transcripts incorrectly assigned to the same gene\n as threshold increases for 6 species of Drosophila") 
 # Precision is correctly assigned transcripts/correct + incorrectly assigned to same gene. Recall is correctly assigned/correct + incorrectly assigned to different genes.
 ```
 
@@ -358,18 +359,45 @@ ggplot(long_table,aes(thresholds,value)) + geom_point(aes(group=variable,color=v
 echino_thresholds=c(0,500,50,5,.5,.05,.005,.0005,.00005,.000005,.0000005, 0.01, 0.02, 0.035, 0.15, 0.25, 0.35, 1.5, 2.5, 3.5)
 echino_correct <- c(echino_cs[[2]],echino_agg_treeinforms[2,])
 echino_diff_Y_same_X <- c(echino_cs[[4]],echino_agg_treeinforms[4,])
-echino_cds_table <- data.frame(correct=echino_correct,diff_Y_same_X=echino_diff_Y_same_X,thresholds=echino_thresholds)
+echino_diff_X_same_Y <- c(echino_cs[[3]],echino_agg_treeinforms[3,])
+echino_cds_table <- data.frame(correct=echino_correct,diff_Y_same_X=echino_diff_Y_same_X,diff_X_same_Y=echino_diff_X_same_Y,thresholds=echino_thresholds)
+echino_cds_table$precision <- echino_cds_table$correct/(echino_cds_table$correct+echino_cds_table$diff_Y_same_X)
+echino_cds_table$recall <- echino_cds_table$correct/(echino_cds_table$correct+echino_cds_table$diff_X_same_Y)
 
 #tiff(filename="Figures/echinoderm_cds.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
-ggplot(echino_cds_table, aes(x=diff_Y_same_X,y=correct)) +
+ggplot(echino_cds_table, aes(x=recall,y=precision)) +
   geom_point() + geom_line()  +
-  xlab("Transcripts incorrectly assigned to the same gene") +
-  ylab("Correctly assigned transcripts") + theme_classic() +
+  xlab("Recall") +
+  ylab("Precision") + theme_classic() +
   ggrepel::geom_label_repel(aes(label = thresholds))
 #dev.off()
 #+ggtitle("Pairs of correctly assigned transcripts vs\n pairs of transcripts incorrectly assigned to the same gene\n as threshold increases for S. purpuratus")
 #echino_ratio_table <- data.frame(echino_ratio, echino_thresholds)
 #ggplot(echino_ratio_table, aes(x=echino_thresholds,y=echino_ratio)) + geom_point() + ggtitle("Jaccard index of correctly assigned transcripts vs treeinform threshold") + xlab("Threshold") + ylab("Jaccard") + theme_classic()
+```
+
+For the manuscript submission we also put the plots together using patchwork.
+
+```{r togtherplots}
+library(patchwork)
+p_dcds<-ggplot(cds_table, aes(x=recall,y=precision)) + geom_point() + geom_line() + xlab("Recall") + ylab("Precision") + theme_classic() + ggrepel::geom_label_repel(aes(label = thresholds))
+
+p_ecds<-ggplot(echino_cds_table, aes(x=recall,y=precision)) +
+  geom_point() + geom_line()  +
+  xlab("Recall") +
+  ylab("Precision") + theme_classic() +
+  ggrepel::geom_label_repel(aes(label = thresholds))
+
+tiff(filename="Figures/cds.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
+p_dcds / p_ecds
+dev.off()
+
+p_dlen<-ggplot(data=data.frame(x=lengths_lim)) + geom_histogram(aes(x=x,y=..count../sum(..count..)), binwidth=0.01, fill='white', color='black') + theme_classic() + xlab("Subtree length") + ylab("Frequency")
+p_elen<-ggplot(data=data.frame(x=echino_lengths_lim)) + geom_histogram(aes(x=x,y=..count../sum(..count..)), binwidth=0.01, fill='white', color='black') + theme_classic() + xlab("Subtree length") + ylab("Frequency")
+
+#tiff(filename="Figures/model_subtree.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
+p_dlen / p_elen
+#dev.off()
 ```
 
 # References
