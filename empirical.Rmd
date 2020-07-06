@@ -364,7 +364,7 @@ echino_cds_table <- data.frame(correct=echino_correct,diff_Y_same_X=echino_diff_
 echino_cds_table$precision <- echino_cds_table$correct/(echino_cds_table$correct+echino_cds_table$diff_Y_same_X)
 echino_cds_table$recall <- echino_cds_table$correct/(echino_cds_table$correct+echino_cds_table$diff_X_same_Y)
 
-#tiff(filename="Figures/echinoderm_cds.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
+#tiff(filename="figures/echinoderm_cds.tiff",width=7,height=5,family="Arial",units="in",pointsize=8,res=300)
 ggplot(echino_cds_table, aes(x=recall,y=precision)) +
   geom_point() + geom_line()  +
   xlab("Recall") +

@@ -9,21 +9,19 @@ Guang A, Howison M, Zapata F, Lawrence CE, Dunn CW. Revising transcriptome assem
 The repository is organized thusly:
 
 * **treeinform_preprint.pdf:** pdf of main manuscript preprint.
-* **supplementary.Rmd:** R notebook complete with code to generate all the figures and analyses for the Supplementary Information from original manuscript submission.
-* **supplementary_revision.Rmd:** R notebook complete with code to generate all the figures and analyses for the Supplementary Information from manuscript revision submission.
-* **empirical.Rmd:** R notebook complete with code to generate additional figures for PLOS ONE submission.
-* **figure1.Rmd:** R notebook with code to generate Figure 1 in the original main manuscript submission.
-* **figure1_revision.Rmd:** R notebook with code to generate Figure 1 in the main manuscript revision submission.
-* **data/:** folder with all the data that is used in supplementary.Rmd and for Figure 1.
-	* **revisions/:** additional data from our manuscript revision submission
+* **treeinform_PLoS_ONE.pdf:** pdf of manuscript submission to PLOS ONE.
+* **plos_one.Rmd:** R notebook to generate figures for PLOS ONE submission.
+* **bioinformatics_submission/:** folder with R notebooks and code for a prior submission to Bioinformatics
+* **data/:** folder with all the data that is used in plos_one.Rmd.
 * **code/:** folder with all the code that was used to generate **data/**. This is organized into:
-	* **agalma/:** bash scripts used to run Agalma1.0 on output from a previous genetree run from Agalma1.0, starting from treeinform with different thresholds up to the 2nd genetree run. The sqlite database storing the previous genetree run is not in this repository as it is 3.4GB; if you would like to access the database please email us.
+	* **1_drosophila_analysis/:** bash scripts used to run Agalma1.0 on Drosophila reads from SRA (accession numbers in the scripts) with different treeinform thresholds.
+	* **2_agalma_analysis/:** bash scripts used to run Agalma1.0 on Siphonophora reads from SRA (accession numbers in the scripts), JGI, NCBI-EST with different treeinform thresholds.
 	* **cafe/:** bash and python scripts used to run CAFE for initial estimates of lambda and mu in our mixture model.
 	* **phyldog/:** bash scripts used to run phyldog on the 2nd genetree run's output from Agalma1.0.
-	* **revisions/:** bash scripts for steps and programs run in our manuscript revision submission, which ran Agalma/1.1 and Trinity/2.5.1
-	* **functions.R:** functions accessed by supplementary.Rmd and supplementary_revision.Rmd.
-	* **with_internal.tre** and **species_chron.tre:** non-ultrametric and ultrametric tree files used to generate the calibration nodes and times used in supplementary.Rmd. Species_chron.tre was generated with ape::chronos on with_internal.tre.
-	* **runjags.txt:** mixture model structure and parameters specified in JAGS language, for use in runjags in supplementary.Rmd.
+	* **functions.R:** functions accessed by plos_one.Rmd
+	* **summary_stats.R:** additional functions accessed by plos_one.Rmd
+	* **with_internal.tre** and **species_chron.tre:** non-ultrametric and ultrametric tree files used to generate the calibration nodes and times used in plos_one.Rmd. Species_chron.tre was generated with ape::chronos on with_internal.tre.
+	* **runjags.txt:** mixture model structure and parameters specified in JAGS language, for use in runjags in plos_one.Rmd.
 
 # Bash scripts for Agalma1.0 and phyldog
 
