@@ -1,8 +1,8 @@
 # Revising assemblies with phylogenetic information
 
-This repository contains the code for our manuscript on using phylogenetic information to revise and improve transcriptome assemblies in [Agalma1.0](http://bitbucket.org/caseywdunn/agalma). It is described in this preprint:
+This repository contains the code for our work on using phylogenetic information to revise and improve transcriptome assemblies in [Agalma1.0](http://bitbucket.org/caseywdunn/agalma). It is described in this manuscript:
 
-Guang A, Howison M, Zapata F, Lawrence CE, Dunn CW. Revising transcriptome assemblies with phylogenetic information in Agalma 1.0. bioRxiv 202416; doi: [https://doi.org/10.1101/202416](https://doi.org/10.1101/202416)
+Guang A, Howison M, Zapata F, Lawrence C, Dunn CW (2021) Revising transcriptome assemblies with phylogenetic information. PLOS ONE 16(1): e0244202. https://doi.org/10.1371/journal.pone.0244202
 
 # Organization
 
